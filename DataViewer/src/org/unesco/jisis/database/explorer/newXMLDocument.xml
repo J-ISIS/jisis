@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : newXMLDocument.xml
+    Created on : 30 mars 2010, 15:10
+    Author     : jcd
+    Description:
+        Purpose of the document follows.
+-->
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <style>
+      .highlight {
+      background: yellow;
+      }
+      table.raw {
+      width: 95%;
+      margin: 0 auto;
+      font-family: Lucida Grande, Verdana, Helvetica, Arial, sans-serif;
+      font-size: .9em;
+      line-height: 1.4em;
+      border-collapse: collapse;
+      }
+      tr.raw {
+      border: 1px solid #666;
+      }
+      th.raw {
+      text-align: left;
+      border-left: 1px solid #333;
+      border-right: 1px solid #333;
+      border-top: 1px solid #333;
+      border-bottom: 3px double #333;
+      padding: 0 .5em;
+      }
+      td.raw {
+      color: #333;
+      border: 1px dotted #666;
+      padding: 0 .5em;
+      }
+   </style>
+</head>
+<body>
+<style type="text/css">p { font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 11px; color: #000080}td { font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 11px;color: #000080}a { font-family: Verdana, Arial, Helvetica, sans-serif;color: #009900;font-size: 11px;text-decoration:underline}a:hover { font-family: Verdana, Arial, Helvetica, sans-serif;color: #993300;font-size: 11px;text-decoration:underline}</style><br /><table border="0" cellpadding="10"><tr><td width="400" bgcolor="lightyellow" valign="top"><font color="#000080"><!-- description bibliographique --><p><b></b><br /></p><p><br /><br /></i><br /><br /><br /><a href="" target="_blank"></a><a href="" target="_blank"></a><br /><br /><br /></p><!-- indexation --><p><br /><i></i><br /><br /></font></td><!-- messages --><td width="400" valign="top" bgcolor="whitesmoke"><font color="#000080"><br /><!-- cote accès libre --><p><b><font size="2"></font></b>
+</p><p><!-- cote magasin --><br /><b></b><br /><br />* * * * *<br /><!-- informations prêt --></p></font></td></tr></table>
+</body>
+</html>

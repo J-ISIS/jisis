@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: UsersManagement
+OpenIDE-Module-Layer: UsersManagement/layer.xml
+OpenIDE-Module-Localizing-Bundle: UsersManagement/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="Tools">
+            <file name="UsersManagement-UsersManagementAction.instance">
+                <attr name="delegate" newvalue="UsersManagement.UsersManagementAction"/>
+                <attr name="displayName" bundlevalue="UsersManagement.Bundle#CTL_UsersManagementAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="noIconInMenu" boolvalue="false"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="UsersManagement-UsersManagementAction.instance">
+                <attr name="component" methodvalue="UsersManagement.UsersManagementTopComponent.findInstance"/>
+                <attr name="displayName" bundlevalue="UsersManagement.Bundle#CTL_UsersManagementAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Tools">
+            <file name="UsersManagement-UsersManagementAction-separatorAfter.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="875"/>
+            </file>
+            <file name="UsersManagement-UsersManagementAction-separatorBefore.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="825"/>
+            </file>
+            <file name="UsersManagement-UsersManagementAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Tools/UsersManagement-UsersManagementAction.instance"/>
+                <attr name="position" intvalue="850"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="UsersManagementAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/UsersManagement-UsersManagementAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="UsersManagementTopComponent.settings" url="UsersManagementTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="UsersManagementTopComponent.wstcref" url="UsersManagementTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

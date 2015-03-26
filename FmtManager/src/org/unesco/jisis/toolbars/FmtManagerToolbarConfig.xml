@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : FmtManagerToolbarConfig.xml
+    Created on : December 8, 2008, 7:04 PM
+    Author     : jc_dauphin
+    Description:
+        Purpose of the document follows.
+-->
+
+
+<?xml version="1.0"?>
+
+<!DOCTYPE Configuration PUBLIC "-//NetBeans IDE//DTD toolbar//EN"
+"http://www.netbeans.org/dtds/toolbar.dtd">
+
+<Configuration>
+    <Row>
+        <Toolbar name="View" />
+        <Toolbar name="Control" />
+        <Toolbar name="Indicator" />
+        <Toolbar name="Draw" />
+        <Toolbar name="Memory" />
+    </Row>
+
+
+</Configuration>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+   <attr name="Menu/Browse/DbViewAction.instance/position" intvalue="100"/>
+   <attr name="Menu/Browse/RecordDataBrowserAction.instance/position" intvalue="200"/>
+   <attr name="Menu/Browse/dictionaryAction.instance/position" intvalue="300"/>
+   <attr name="Menu/Browse/org-unesco-jisis-searchhistory-SearchHistoryAction-separatorAfter.instance/position" intvalue="350"/>
+   <attr name="Menu/Browse/SearchHistoryAction.instance/position" intvalue="400"/>
+   <attr name="Menu/Browse/org-unesco-jisis-searchhistory-SearchHistoryAction-separatorAfter.instance/position" intvalue="900"/>
+  
+    <folder name="Actions">
+        <folder name="Browse">
+            <file name="org-unesco-jisis-searchhistory-SearchHistoryAction.instance">
+                <attr name="delegate" newvalue="org.unesco.jisis.searchhistory.SearchHistoryAction"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.searchhistory.Bundle#CTL_SearchHistoryAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="noIconInMenu" boolvalue="false"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Browse">
+<!--            <attr name="org-unesco-jisis-searchhistory-SearchHistoryAction-separatorAfter.instance/DbViewAction.shadow" boolvalue="true"/>
+            <attr name="org-unesco-jisis-searchhistory-SearchHistoryAction-separatorBefore.instance/org-unesco-jisis-searchhistory-SearchHistoryAction.shadow" boolvalue="true"/>
+            <attr name="org-unesco-jisis-searchhistory-SearchHistoryAction.shadow/DbViewAction.shadow" boolvalue="true"/>
+            <attr name="org-unesco-jisis-searchhistory-SearchHistoryAction.shadow/org-unesco-jisis-searchhistory-SearchHistoryAction-separatorAfter.instance" boolvalue="true"/>-->
+            <file name="org-unesco-jisis-searchhistory-SearchHistoryAction-separatorAfter.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+            </file>
+            <file name="org-unesco-jisis-searchhistory-SearchHistoryAction-separatorBefore.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+            </file>
+            <file name="org-unesco-jisis-searchhistory-SearchHistoryAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Browse/org-unesco-jisis-searchhistory-SearchHistoryAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+</filesystem>

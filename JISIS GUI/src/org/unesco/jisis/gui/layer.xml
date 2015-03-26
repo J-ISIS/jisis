@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    
+    <attr name="Menu\Database\IndexDatabaseAction.shadow\position" intvalue="900"/>
+    <attr name="Menu\Database\Separator2.instance\position" intvalue="300"/>
+    <attr name="Menu\Database\Separator2_1.instance\position" intvalue="600"/>
+    <attr name="Menu\Database\Separator2_2.instance\position" intvalue="1200"/>
+    <attr name="Menu\Database\Separator2_3.instance\position" intvalue="950"/>
+    <attr name="Menu\Database\org-netbeans-core-actions-SystemExit.instance\position" intvalue="2000"/>
+    <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction-separatorAfter.instance\position" intvalue="800"/>
+    <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction.shadow\position" intvalue="700"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseAllDatabasesAction-separatorAfter.instance\position" intvalue="1900"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseAllDatabasesAction-separatorBefore.instance\position" intvalue="100"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseAllDatabasesAction.shadow\position" intvalue="1800"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseDatabaseAction-separatorAfter.instance\position" intvalue="800"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseDatabaseAction-separatorBefore.instance\position" intvalue="1500"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseDatabaseAction.shadow\position" intvalue="1600"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-connopen-connOpenWizardAction.shadow\position" intvalue="200"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-dbbackup-DbBackupAction.shadow\position" intvalue="1300"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-dbcreate-wizards-dbcreateAction.shadow\position" intvalue="500"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.shadow\position" intvalue="400"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-marc-expWizardAction.shadow\position" intvalue="1100"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-marc-ImportWizardAction.shadow\position" intvalue="1000"/>
+    <folder name="Actions">
+        <folder name="Database">
+            <file name="org-unesco-jisis-gui-SelectHitSortFileAction.instance">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.unesco.jisis.gui.Bundle"/>
+                <attr name="delegate" newvalue="org.unesco.jisis.gui.SelectHitSortFileAction"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.gui.Bundle#CTL_SelectHitSortFileAction"/>
+                <attr name="iconBase" stringvalue="org/unesco/jisis/gui/Table.png"/>
+                
+                <attr name="noIconInMenu" stringvalue="false"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Database"/>
+    </folder>
+    <folder name="OptionsDialog">
+        <folder name="JISISOptionsCategory">
+            <file name="org-unesco-jisis-gui-ParametersAdvancedOption.instance">
+                <attr name="controller" newvalue="org.unesco.jisis.gui.ParametersOptionsPanelController"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.gui.Bundle#AdvancedOption_DisplayName_Parameters"/>
+                <attr name="instanceCreate" methodvalue="org.netbeans.spi.options.AdvancedOption.createSubCategory"/>
+                <attr name="keywords" bundlevalue="org.unesco.jisis.gui.Bundle#AdvancedOption_Keywords_Parameters"/>
+                <attr name="keywordsCategory" stringvalue="JISISOptionsCategory/null"/>
+                <attr name="toolTip" bundlevalue="org.unesco.jisis.gui.Bundle#AdvancedOption_Tooltip_Parameters"/>
+            </file>
+        </folder>
+        <file name="JISISOptionsCategory.instance">
+            <attr name="advancedOptionsFolder" stringvalue="OptionsDialog/JISISOptionsCategory"/>
+            <attr name="categoryName" bundlevalue="org.unesco.jisis.gui.Bundle#OptionsCategory_Name_JISIS"/>
+            <attr name="iconBase" stringvalue="org/unesco/jisis/gui/WinISIS.png"/>
+            <attr name="instanceCreate" methodvalue="org.netbeans.spi.options.OptionsCategory.createCategory"/>
+            <attr name="keywords" bundlevalue="org.unesco.jisis.gui.Bundle#OptionsCategory_Keywords_JISIS"/>
+            <attr name="keywordsCategory" stringvalue="JISIS"/>
+            <attr name="title" bundlevalue="org.unesco.jisis.gui.Bundle#OptionsCategory_Title_JISIS"/>
+        </file>
+    </folder>
+    <folder name="Toolbars">
+        <folder name="File">
+            <file name="org-unesco-jisis-gui-SelectHitSortFileAction.instance">
+            <attr name="position" intvalue="300"/>
+            </file>
+        </folder>
+    </folder>
+</filesystem>

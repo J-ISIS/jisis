@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.windows.databases
+OpenIDE-Module-Implementation-Version: 6
+OpenIDE-Module-Layer: org/unesco/jisis/windows/databases/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/windows/databases/Bundle.properties
+OpenIDE-Module-Requires: org.netbeans.api.javahelp.Help
+

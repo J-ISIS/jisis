@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<filesystem>
+   
+    <attr name="Actions\Database\org-unesco-jisis-database-explorer-DbViewAction.instance\position" intvalue="200"/>
+    <attr name="Actions\Database\org-unesco-jisis-dataentry-DataEntryAction.instance\position" intvalue="300"/>
+    <attr name="Actions\Database\org-unesco-jisis-dictionary-dictionaryAction.instance\position" intvalue="400"/>
+    <attr name="Actions\Database\org-unesco-jisis-index-IndexDatabaseAction.instance\position" intvalue="500"/>
+    <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction-separatorAfter.instance\position" intvalue="382"/>
+    <folder name="Actions">
+        <folder name="Database">
+            <file name="org-unesco-jisis-wizards-connopen-connOpenWizardAction.instance" url="org-unesco-jisis-wizards-connopen-connOpenWizardAction.instance">
+                <attr name="position" intvalue="100"/>
+            </file>
+             <file name="org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.instance" url="org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.instance">
+                <attr name="position" intvalue="150"/>
+            </file>
+             <file name="org-unesco-jisis-wizards-dbcreate-DbCreateAction.instance" url="org-unesco-jisis-wizards-dbcreate-WizardAction.instance">
+                <attr name="position" intvalue="175"/>
+            </file>
+            <file name="org-unesco-jisis-wizards-marc-ImportWizardAction.instance" url="org-unesco-jisis-wizards-marc-ImportWizardAction.instance">
+                <attr name="position" intvalue="187"/>
+            </file>
+            <file name="org-unesco-jisis-wizards-marc-expWizardAction.instance" url="org-unesco-jisis-wizards-marc-expWizardAction.instance">
+                <attr name="position" intvalue="193"/>
+            </file>
+            <file name="org-unesco-jisis-wizards-dbbackup-DbBackupAction.instance" url="org-unesco-jisis-wizards-dbbackup-DbBackupAction.instance">
+                <attr name="position" intvalue="196"/>
+            </file>
+        </folder>
+    </folder>
+    
+    <folder name="Menu">
+        <folder name="Database">
+           <file name="org-netbeans-core-actions-SystemExit.instance" url="org-netbeans-core-actions-SystemExit_1.instance">
+                <attr name="position" intvalue="1900"/>
+            </file>
+            <file name="org-unesco-jisis-wizards-connopen-connOpenWizardAction.shadow" url="org-unesco-jisis-wizards-connopen-connOpenWizardAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-connopen-connOpenWizardAction.instance"/>
+                <attr name="position" intvalue="100"/>
+            </file>
+            <file name="Separator2.instance" url="Separator2.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="150"/>
+            </file>
+            <file name="org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.shadow" url="org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.instance"/>
+                <attr name="position" intvalue="200"/>
+            </file>
+            <file name="org-unesco-jisis-wizards-dbcreate-wizards-dbcreateAction.shadow" url="org-unesco-jisis-wizards-dbcreate-wizards-dbcreateAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-dbcreate-DbCreateAction.instance"/>
+                <attr name="position" intvalue="300"/>
+            </file>
+          
+            <file name="Separator2_1.instance" url="Separator2_1.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="350"/>
+            </file>
+            <file name="org-unesco-jisis-wizards-marc-ImportWizardAction.shadow" url="org-unesco-jisis-wizards-marc-ImportWizardAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-marc-ImportWizardAction.instance"/>
+                <attr name="position" intvalue="400"/>
+            </file>
+             <file name="org-unesco-jisis-wizards-marc-expWizardAction.shadow" url="org-unesco-jisis-wizards-marc-expWizardAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-marc-expWizardAction.instance"/>
+                <attr name="position" intvalue="500"/>
+            </file>
+            <file name="Separator2_2.instance" url="Separator2_2.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="550"/>
+            </file>
+            
+            
+            <file name="org-unesco-jisis-wizards-dbbackup-DbBackupAction.shadow" url="org-unesco-jisis-wizards-dbbackup-DbBackupAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-dbbackup-DbBackupAction.instance"/>
+                <attr name="position" intvalue="600"/>
+            </file>
+            
+           <file name="Separator2_3.instance" url="Separator2_3.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="650"/>
+            </file>
+            
+        </folder>
+       
+        <folder name="File_hidden"/>
+      
+    </folder>
+    <folder name="Services">
+        <folder name="JavaHelp">
+            <file name="dbcreatewizard-helpset.xml" url="dbcreatewizard-helpset.xml"/>
+        </folder>
+    </folder>
+    <folder name="Shortcuts">
+        <file name="D-O.shadow" url="D-O.shadow">
+            <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.instance"/>
+        </file>
+        <file name="D-N.shadow" url="D-N.shadow">
+            <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-dbcreate-DbCreateAction.instance"/>
+        </file>        
+    </folder>
+    <folder name="Toolbars">
+        <folder name="JisisToolbar">
+            <file name="org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.shadow" url="org-unesco-jisis-wizards-dbopen-DbOpenWizardAction_1.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.instance"/>
+            </file>
+
+            <file name="org-unesco-jisis-wizards-dbcreate-WizardAction.shadow" url="org-unesco-jisis-wizards-dbcreate-WizardAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-dbcreate-DbCreateAction.instance"/>
+            </file>
+            <!--
+            <attr name="org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.shadow/org-openide-actions-CutAction.instance" boolvalue="true"/>
+            -->
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="DbBackupTopComponent.settings" url="DbBackupTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+              <file name="DbBackupTopComponent.wstcref" url="DbBackupTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

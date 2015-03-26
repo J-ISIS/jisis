@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2010-11-03T11:21:09</date>
+  <millis>1288779669524</millis>
+  <sequence>16</sequence>
+  <logger>org.unesco.jisis.jisiscore</logger>
+  <level>INFO</level>
+  <class>org.unesco.jisis.jisiscore.JavaISIS</class>
+  <method>restored</method>
+  <thread>10</thread>
+  <message>Entry in JavaISIS restored</message>
+</record>
+<record>
+  <date>2010-11-03T11:21:09</date>
+  <millis>1288779669525</millis>
+  <sequence>17</sequence>
+  <logger>org.unesco.jisis.jisiscore</logger>
+  <level>FINER</level>
+  <class>org.unesco.jisis.jisiscore.JavaISIS</class>
+  <method>restored()</method>
+  <thread>10</thread>
+  <message>ENTRY</message>
+</record>
+<record>
+  <date>2010-11-03T11:21:09</date>
+  <millis>1288779669577</millis>
+  <sequence>69</sequence>
+  <logger>org.unesco.jisis.jisiscore</logger>
+  <level>INFO</level>
+  <class>org.unesco.jisis.jisiscore.JavaISIS</class>
+  <method>restored</method>
+  <thread>10</thread>
+  <message>Creating Reactor with port:0</message>
+</record>
+<record>
+  <date>2010-11-03T11:21:09</date>
+  <millis>1288779669578</millis>
+  <sequence>70</sequence>
+  <logger>org.unesco.jisis.jisiscore</logger>
+  <level>INFO</level>
+  <class>org.unesco.jisis.jisiscore.JavaISIS</class>
+  <method>restored</method>
+  <thread>10</thread>
+  <message>Reactor successfully created - Starting a new thread for the server</message>
+</record>
+<record>
+  <date>2010-11-03T11:21:09</date>
+  <millis>1288779669597</millis>
+  <sequence>79</sequence>
+  <logger>org.unesco.jisis.jisiscore</logger>
+  <level>INFO</level>
+  <class>org.unesco.jisis.jisiscore.JavaISIS</class>
+  <method>restored</method>
+  <thread>10</thread>
+  <message>Server Thread successfully started</message>
+</record>
+<record>
+  <date>2010-11-03T11:21:10</date>
+  <millis>1288779670343</millis>
+  <sequence>88</sequence>
+  <logger>org.unesco.jisis.jisiscore</logger>
+  <level>FINER</level>
+  <class>org.unesco.jisis.windows.connection.ConnTopComponent</class>
+  <method>ConnTopComponent Constructor</method>
+  <thread>13</thread>
+  <message>RETURN</message>
+</record>
+<record>
+  <date>2010-11-03T11:26:09</date>
+  <millis>1288779969585</millis>
+  <sequence>174</sequence>
+  <logger>org.unesco.jisis.jisiscore</logger>
+  <level>INFO</level>
+  <class>org.unesco.jisis.jisiscore.JavaISIS</class>
+  <method>close</method>
+  <thread>13</thread>
+  <message>Server Thread closed!</message>
+</record>
+<record>
+  <date>2010-11-03T11:26:09</date>
+  <millis>1288779969585</millis>
+  <sequence>175</sequence>
+  <logger>org.unesco.jisis.jisiscore</logger>
+  <level>INFO</level>
+  <class>org.unesco.jisis.jisiscore.JavaISIS</class>
+  <method>close</method>
+  <thread>13</thread>
+  <message>J-ISIS finished</message>
+</record>
+</log>

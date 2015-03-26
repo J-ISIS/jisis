@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.lucene470
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/lucene470/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

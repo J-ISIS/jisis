@@ -1,0 +1,53 @@
+/jisis-corelib/build/
+/JettyWebServer/build/
+/JISIS Utils/build/
+/JavaFX-Browser/build/
+/JISIS Core/build/
+/JISIS GUI/build/
+/swingx-all-1.6.3/build/
+/Search History/build/
+/Terms Dictionary/build/
+/FstManager/build/
+/FdtExplorer/build/
+/PrintSort/build/
+/Data Browser/build/
+/DB Import Export/build/
+/tika-app-1.5/build/
+/DataEntryExDl/build/
+/ConnectionsPool/build/
+/DataViewer/build/
+/Data Entry Ex/build/
+/Data Search/build/
+/DatabasesPool/build/
+/WebOutput/build/
+/FmtManager/build/
+/MRUDatabases/build/
+/GroovyConsole/build/
+/DB Display Font/build/
+/Z3950/build/
+/org-netbeans-swing-outline/build/
+/DataDefinition/build/
+/DatabaseWizards/build/
+/dist/
+/build/
+/looks-2_3_1/build/
+/Berkeley je-5.0.103/build/
+/java_cup/build/
+/usersmagement/build/
+/groovy-all-2.0.0/build/
+/iText-2.1.5/build/
+/icepdf-viewer/build/
+/lucene-4.7.0/build/
+/marc4j-2.4/build/
+/GlobalOperations/build/
+/GlobalOperations/nbproject/private/
+/FreeTextSearch/build/
+/FreeTextSearch/nbproject/private/
+/ValidationAPI/build/
+/ValidationAPI/nbproject/private/
+/itext-5.5.4/build/
+/itext-5.5.4/nbproject/private/
+/DataEntry/nbproject/private/
+/DbServerContentManager/nbproject/private/
+/nekohtml/nbproject/private/
+/usersmagement/nbproject/private/

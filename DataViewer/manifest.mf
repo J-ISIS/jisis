@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.database.explorer
+OpenIDE-Module-Implementation-Version: 9
+OpenIDE-Module-Layer: org/unesco/jisis/database/explorer/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/database/explorer/Bundle.properties
+OpenIDE-Module-Requires: org.netbeans.api.javahelp.Help
+

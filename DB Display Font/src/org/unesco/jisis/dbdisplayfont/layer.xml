@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="Database">
+            <file name="org-unesco-jisis-dbdisplayfont-DbDisplayFontAction.instance">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.unesco.jisis.dbdisplayfont.Bundle"/>
+                <attr name="delegate" newvalue="org.unesco.jisis.dbdisplayfont.DbDisplayFontAction"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.dbdisplayfont.Bundle#CTL_DbDisplayFontAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="noIconInMenu" stringvalue="false"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Database">
+            <file name="org-unesco-jisis-dbdisplayfont-DbDisplayFontAction-separatorAfter.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="1275"/>
+            </file>
+            <file name="org-unesco-jisis-dbdisplayfont-DbDisplayFontAction-separatorBefore.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="1225"/>
+            </file>
+            <file name="org-unesco-jisis-dbdisplayfont-DbDisplayFontAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-dbdisplayfont-DbDisplayFontAction.instance"/>
+                <attr name="position" intvalue="1250"/>
+            </file>
+        </folder>
+    </folder>
+</filesystem>

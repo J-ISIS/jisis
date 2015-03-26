@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.dbcreatewizard
+OpenIDE-Module-Implementation-Version: 3
+OpenIDE-Module-Layer: org/unesco/jisis/wizards/dbcreate/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/wizards/dbcreate/Bundle.properties
+OpenIDE-Module-Requires: org.netbeans.api.javahelp.Help
+

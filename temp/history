@@ -1,0 +1,22 @@
+[CDS_txtMfns]
+10-11
+5-6
+3-4
+1,2
+[CDS_outputFileName]
+test4.html
+test3.html
+test2.html
+test1.html
+[PATR_txtMfns]
+6
+1
+[PATR_outputFileName]
+PATR-test2.html
+PATR-test1.html
+[PATR_txtOutputDir]
+C:\\J-ISIS 2014\\jisis\\work
+[CDS_FreeTextSearch]
+V0:\'Africa\'\n
+[CDS_txtOutputDir]
+C:\\J-ISIS 2014\\jisis\\work

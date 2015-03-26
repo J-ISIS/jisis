@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.dbdisplayfont
+OpenIDE-Module-Layer: org/unesco/jisis/dbdisplayfont/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/dbdisplayfont/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

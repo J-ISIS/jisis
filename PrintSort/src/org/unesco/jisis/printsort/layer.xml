@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="Database">
+            <file name="org-unesco-jisis-printsort-PrintSortAction.instance">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.unesco.jisis.printsort.Bundle"/>
+                <attr name="delegate" newvalue="org.unesco.jisis.printsort.PrintSortAction"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.printsort.Bundle#CTL_PrintSortAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="noIconInMenu" stringvalue="false"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="org-unesco-jisis-printsort-PrintSortAction.instance"/>
+               
+            
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Database">
+            <file name="org-unesco-jisis-printsort-PrintSortAction-separatorBefore.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="1531"/>
+            </file>
+            <file name="org-unesco-jisis-printsort-PrintSortAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-printsort-PrintSortAction.instance"/>
+                <attr name="position" intvalue="1537"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="PrintSortAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/org-unesco-jisis-printsort-PrintSortAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="PrintSortTopComponent.settings" url="PrintSortTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="PrintSortTopComponent.wstcref" url="PrintSortTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

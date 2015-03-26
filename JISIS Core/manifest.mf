@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.jisiscore
+OpenIDE-Module-Layer: org/unesco/jisis/jisiscore/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/jisiscore/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+OpenIDE-Module-Install: org/unesco/jisis/jisiscore/JavaISIS.class
+

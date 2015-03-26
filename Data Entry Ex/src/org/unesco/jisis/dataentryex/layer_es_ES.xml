@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<filesystem>
+    <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction-separatorAfter.instance\position" intvalue="382"/>
+    <folder name="Actions">
+        <folder name="Window">
+            <file name="org-unesco-jisis-dataentryex-OutlineAction.instance"/>
+        </folder>
+        
+        <folder name="Edit">
+            <attr name="displayName" bundlevalue="org.unesco.jisis.dataentryex.Bundle_es_ES#Actions/Edit"/>
+            <file name="org-unesco-jisis-dataentryex-OutlineAction.instance">
+                <attr name="position" intvalue="0"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Menu">
+       <folder name="Edit">
+          <attr name="displayName" bundlevalue="org.unesco.jisis.dataentryex.Bundle_es_ES#Menu/Edit"/>
+            <file name="OutlineAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/org-unesco-jisis-dataentryex-OutlineAction.instance"/>
+                <attr name="position" intvalue="0"/>
+            </file>
+            <file name="Separator3_1.instance" url="Separator3_1.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="50"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="OutlineAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/org-unesco-jisis-dataentryex-OutlineAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="OutlineTopComponent.settings" url="OutlineTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="OutlineTopComponent.wstcref" url="OutlineTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

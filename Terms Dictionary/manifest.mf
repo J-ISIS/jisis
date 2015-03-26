@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.dictionary
+OpenIDE-Module-Layer: org/unesco/jisis/dictionary/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/dictionary/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

@@ -1,0 +1,157 @@
+import java_cup.runtime.*;
+
+parser code {:
+    
+   
+    public void report_error(String message, Object info) {
+   
+        StringBuffer m = new StringBuffer("Error");
+   
+        if (info instanceof java_cup.runtime.Symbol) {
+           
+            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);   
+            
+            if (s.left >= 0) {                
+
+                m.append(" in line "+(s.left));   
+                
+                if (s.right >= 0)                    
+                    
+                    m.append(", column "+(s.right));
+            }
+        }
+   
+        m.append(" : "+message);
+   
+        System.err.println(m);
+    }
+   
+   
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+:};
+
+
+terminal		OR,AND,NOT,LPAREN,RPAREN,G_OP,F_OP,DOT,AMP,COMMA,SLASH;
+
+terminal String		TERM;
+
+terminal Integer	NUMBER;
+
+non terminal Expr or,and_not,group,f_def;
+
+non terminal Expr dot_amp,amp_op,dot_op,g_op,f_op;
+
+non terminal SearchTerm term;
+
+non terminal AnyTerm aterm;
+
+non terminal Counter dots,amps;
+
+non terminal FieldList field_list,op_q;
+
+
+or ::=	        or:a OR and_not:b
+		{:	RESULT = new OrExpr(a,b); :}
+		|
+		and_not:a
+		{:	RESULT = a;	:}
+		;
+
+
+and_not ::=	and_not:a AND group:b
+		{:	RESULT = new AndExpr(a,b); :}
+		|
+		and_not:a NOT group:b
+		{:	RESULT = new NotExpr(a,b); :}
+		|
+		group:a
+		{:	RESULT = a; :}
+		;
+
+group ::=	LPAREN or:a RPAREN /* (search expr) */
+		{: RESULT = a; :}
+		|
+		f_def:a
+		{:	RESULT = a; :};
+
+f_def ::=	g_op:a op_q:b /* term /(t1,t2,t3) */
+		{:	RESULT = new FdQual(a,b);:}
+		|
+		g_op:a
+		{:	RESULT = new FdQual(a); :} // All fields
+		;
+
+g_op ::=	g_op:a G_OP f_op:b   /* term (G) term */
+		{: RESULT = new GExpr(a,b); :}
+		|
+		f_op:a
+		{: RESULT = a; :}
+		;
+
+f_op ::=	f_op:a F_OP dot_amp:b /* term (F) term */
+		{:	RESULT = new FExpr(a,b); :}
+		|
+		dot_amp:a
+		{:	RESULT = a; :};
+
+
+
+dot_amp ::=	dot_amp:a amps:b term:c
+		{: RESULT = new AmpExpr(b.getCount(),a,c); :}
+		|
+		dot_amp:a dots:b term:c
+		{:	RESULT = new DotExpr(b.getCount(),a,c); :}
+		|
+		term:a
+		{:	RESULT = a; :}
+                |
+                aterm:a
+                {:	RESULT = a; :}
+		;
+		
+
+
+term ::=        TERM:t
+                {: 
+
+                        RESULT= new SearchTerm(t); 
+                :}	
+                ;
+
+
+aterm ::=     AMP TERM:t AMP
+                {:	
+
+                    RESULT = new AnyTerm(t); 
+                :}
+                ;
+
+
+op_q ::=	SLASH LPAREN field_list:d RPAREN /*  /(1,2,4,5) */
+		{:	RESULT = d; :}
+		;
+
+field_list ::=	field_list:d COMMA NUMBER:n
+		{:	RESULT = d.add(n); :}
+		|
+		NUMBER:n
+		{:	RESULT = new FieldList(n);:}
+		;
+
+amps ::=	amps:a AMP
+		{:
+			RESULT = a.add(); :}
+		|
+		AMP
+		{: RESULT = new Counter(); :}
+		;
+
+dots ::=	dots:d DOT
+		{: RESULT = d.add(); :}
+		|
+		DOT
+		{: RESULT = new Counter(); :}
+		;

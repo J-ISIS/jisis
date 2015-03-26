@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="Window">
+            <file name="org-unesco-jisis-windows-connection-ConnAction.instance"/>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Window">
+            <file name="ConnAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/org-unesco-jisis-windows-connection-ConnAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Services">
+        <folder name="JavaHelp">
+            <file name="connection-helpset.xml" url="connection-helpset.xml"/>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="ConnTopComponent.settings" url="ConnTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="leftSlidingSide">
+                <file name="ConnTopComponent.wstcref" url="ConnTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

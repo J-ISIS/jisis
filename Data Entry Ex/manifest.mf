@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.dataentryex
+OpenIDE-Module-Layer: org/unesco/jisis/dataentryex/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/dataentryex/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

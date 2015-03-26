@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="Tools">
+            <file name="org-unesco-jisis-dbservercontentmanager-DbServerContentManagerAction.instance">
+                <attr name="delegate" newvalue="org.unesco.jisis.dbservercontentmanager.DbServerContentManagerAction"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.dbservercontentmanager.Bundle#CTL_DbServerContentManagerAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="noIconInMenu" boolvalue="false"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="org-unesco-jisis-dbservercontentmanager-DbServerContentManagerAction.instance"/>
+                
+            
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Tools">
+            <file name="org-unesco-jisis-dbservercontentmanager-DbServerContentManagerAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Tools/org-unesco-jisis-dbservercontentmanager-DbServerContentManagerAction.instance"/>
+                <attr name="position" intvalue="0"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="DbServerContentManagerAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/org-unesco-jisis-dbservercontentmanager-DbServerContentManagerAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="DbServerContentManagerTopComponent.settings" url="DbServerContentManagerTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="output">
+                <file name="DbServerContentManagerTopComponent.wstcref" url="DbServerContentManagerTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="Window">
+            
+             <file name="org-unesco-jisis-weboutput-WebOutputAction.instance">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.unesco.jisis.weboutput.Bundle"/>
+                <attr name="component" methodvalue="org.unesco.jisis.weboutput.WebOutputTopComponent.findInstance"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.weboutput.Bundle#CTL_WebOutputAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
+            </file>
+          
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Window">
+            <file name="WebOutputAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/org-unesco-jisis-weboutput-WebOutputAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="WebOutputTopComponent.settings" url="WebOutputTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="output">
+                <file name="WebOutputTopComponent.wstcref" url="WebOutputTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

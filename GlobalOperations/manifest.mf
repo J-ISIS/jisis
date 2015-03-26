@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: org.unesco.jisis.global
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/global/Bundle.properties
+OpenIDE-Module-Requires: 
+  org.openide.windows.IOProvider,
+  org.openide.windows.WindowManager
+OpenIDE-Module-Specification-Version: 1.0
+

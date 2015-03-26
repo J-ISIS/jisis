@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<filesystem>
+    <attr name="Menu\Database\Separator2_1.instance\position" intvalue="328"/>
+    <attr name="Menu\Database\Separator2_3.instance\position" intvalue="387"/>
+    <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction.shadow\position" intvalue="356"/>
+    <folder name="Actions">
+        <folder name="Search">
+            <file name="org-unesco-jisis-datasearch-guidedSrcAction.instance"/>
+            <file name="org-unesco-jisis-datasearch-srchAction.instance"/>
+        </folder>
+        <folder name="Database">
+            <file name="org-unesco-jisis-index-IndexDatabaseAction.instance"/>
+        </folder>
+    </folder>
+    <folder name="Menu">
+       <folder name="Database">
+          <file name="IndexDatabaseAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-index-IndexDatabaseAction.instance"/>
+                <attr name="position" intvalue="375"/>
+            </file>
+       </folder>
+        <folder name="Search">
+            <file name="srchAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Search/org-unesco-jisis-datasearch-srchAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="guidedSrcTopComponent.settings" url="guidedSrcTopComponentSettings.xml"/>
+            <file name="srchTopComponent.settings" url="srchTopComponentSettings.xml"/>
+        </folder> 
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="guidedSrcTopComponent.wstcref" url="guidedSrcTopComponentWstcref.xml"/>
+                <file name="srchTopComponent.wstcref" url="srchTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

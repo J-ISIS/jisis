@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <attr name="Menu\Tools\Separator1.instance\position" intvalue="500"/>
+    <attr name="Menu\Tools\Separator2.instance\position" intvalue="900"/>
+    <attr name="Menu\Tools\Separator3.instance\position" intvalue="1100"/>
+    <attr name="Menu\Tools\org-netbeans-modules-autoupdate-ui-actions-PluginManagerAction.shadow\position" intvalue="1000"/>
+    <attr name="Menu\Tools\org-netbeans-modules-favorites-templates-TemplatesAction.instance\position" intvalue="800"/>
+    <attr name="Menu\Tools\org-netbeans-modules-options-OptionsWindowAction.shadow\position" intvalue="1300"/>
+    <attr name="Menu\Tools\org-openide-actions-ToolsAction.instance\position" intvalue="400"/>
+    <attr name="Menu\Tools\org-unesco-jisis-FmtManager-FmtManagerAction-separatorAfter.instance\position" intvalue="700"/>
+    <attr name="Menu\Tools\org-unesco-jisis-FmtManager-FmtManagerAction.shadow\position" intvalue="600"/>
+    <attr name="Menu\Tools\org-unesco-jisis-database-explorer-separatorBefore.instance\position" intvalue="100"/>
+    <attr name="Menu\Tools\org-unesco-jisis-fstmanager-FstManagerAction-separatorAfter.instance\position" intvalue="300"/>
+    <attr name="Menu\Tools\org-unesco-jisis-fstmanager-FstManagerAction.shadow\position" intvalue="200"/>
+    <folder name="Actions">
+        
+        <folder name="Tools">
+            <file name="org-unesco-jisis-GroovyConsole-GroovyConsoleAction.instance">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.unesco.jisis.GroovyConsole.Bundle"/>
+                <attr name="delegate" newvalue="org.unesco.jisis.GroovyConsole.GroovyConsoleAction"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.GroovyConsole.Bundle#CTL_GroovyConsoleAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="noIconInMenu" stringvalue="false"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="org-unesco-jisis-GroovyConsole-GroovyConsoleAction.instance">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.unesco.jisis.GroovyConsole.Bundle"/>
+                <attr name="component" methodvalue="org.unesco.jisis.GroovyConsole.GroovyConsoleTopComponent.findInstance"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.GroovyConsole.Bundle#CTL_GroovyConsoleAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Window">
+            <file name="GroovyConsoleAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/org-unesco-jisis-GroovyConsole-GroovyConsoleAction.instance"/>
+            </file>
+        </folder>
+        <folder name="Tools">
+            <file name="org-unesco-jisis-GroovyConsole-GroovyConsoleAction-separatorAfter.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="775"/>
+            </file>
+            <file name="org-unesco-jisis-GroovyConsole-GroovyConsoleAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Tools/org-unesco-jisis-GroovyConsole-GroovyConsoleAction.instance"/>
+                <attr name="position" intvalue="750"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="GroovyConsoleTopComponent.settings" url="GroovyConsoleTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="GroovyConsoleTopComponent.wstcref" url="GroovyConsoleTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

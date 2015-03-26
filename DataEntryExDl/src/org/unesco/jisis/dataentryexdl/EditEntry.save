@@ -1,0 +1,1147 @@
+/*
+ * EditEntry.java
+ *
+ * Created on July 12, 2006, 8:07 AM
+ *
+ * To change this template, choose Tools | Template Manager
+ * and open the template in the editor.
+ */
+package org.unesco.jisis.dataentryexdl;
+
+import java.io.IOException;
+import javax.xml.transform.TransformerConfigurationException;
+import org.apache.tika.exception.TikaException;
+import org.openide.util.Exceptions;
+import org.openide.util.ImageUtilities;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+
+
+import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
+import org.apache.tika.io.IOUtils;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.sax.BodyContentHandler;
+import org.apache.tika.sax.ContentHandlerDecorator;
+import org.apache.tika.sax.XHTMLContentHandler;
+import org.unesco.jisis.corelib.common.FieldDefinitionTable;
+import org.unesco.jisis.corelib.common.Global;
+import org.unesco.jisis.corelib.common.IDatabase;
+import org.unesco.jisis.corelib.common.WorksheetDef;
+import org.unesco.jisis.corelib.exceptions.DbException;
+import org.unesco.jisis.corelib.exceptions.FormattingException;
+import org.unesco.jisis.corelib.exceptions.GeneralDatabaseException;
+import org.unesco.jisis.corelib.pft.ISISFormatter;
+import org.unesco.jisis.corelib.record.IField;
+import org.unesco.jisis.corelib.record.IRecord;
+import org.unesco.jisis.corelib.record.Record;
+import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+import org.apache.tika.parser.DefaultParser;
+import org.unesco.jisis.corelib.client.DatabasePool;
+import org.unesco.jisis.corelib.server.HomeManager;
+//import org.netbeans.api.progress.ProgressUtils;
+import org.openide.util.Cancellable;
+
+import java.io.FileOutputStream;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.PrintStream;
+import java.io.OutputStream;
+import java.util.*;
+
+/**
+ *
+ * @author rustam
+ */
+
+public class EditEntrySave extends JPanel implements ActionListener, FocusListener {
+
+  static final String ADD_PATH = "org/unesco/jisis/dataentryexdl/add.png";
+  static final String DEL_PATH = "org/unesco/jisis/dataentryexdl/remove.png";
+  static final String GET_FILE_CONTENT = "org/unesco/jisis/dataentryexdl/get-file-content-16x16.png";
+  private IField fld_ = null;
+  private WorksheetDef.WorksheetField wksFld_ = null;
+  private WorksheetDef wksDef_ = null;
+  private IRecord rec_ = null;
+  private IDatabase db_ = null;
+  private FieldDefinitionTable fdt_ = null;
+  private Object fieldValue_ = null;
+  private java.util.List<RepeatableField> fieldEntries_ = null;
+  private ComponentOrientation orientation_ = ComponentOrientation.LEFT_TO_RIGHT;
+  public static Logger logger = null;
+   static {
+       logger = Logger.getRootLogger();
+       logger.setLevel(Level.OFF);
+     
+      }
+
+   
+ 
+  /**
+     * Captures requested embedded images
+     */
+    private final ImageSavingParser imageParser=null;
+    private ClientDatabaseProxy dbp_;  //?
+    IDatabase db = DatabasePool.getDefaultDatabase();  //?
+    private HomeManager hm=new HomeManager();  //?
+  
+    /** Creates a new instance of EditEntry */
+  public EditEntrySave(WorksheetDef wd, WorksheetDef.WorksheetField wf, IField f, IRecord rec,
+          IDatabase db, FieldDefinitionTable fdt) {
+    fld_ = f;
+    wksFld_ = wf;
+    wksDef_ = wd;
+    rec_ = rec;
+    db_ = db;
+    fdt_ = fdt;
+    //FieldFactory.setDatabase(db);
+    fieldEntries_ = new ArrayList<RepeatableField>();
+    redraw();
+  }
+
+  public void actionPerformed(ActionEvent e) {
+    String actCmd = e.getActionCommand();
+    if (actCmd.equals("actDel")) {
+      try {
+        DeleteButton de = (DeleteButton) e.getSource();
+        fld_.removeOccurrence(de.getID());
+        redraw();
+      } catch (DbException ex) {
+        new GeneralDatabaseException(ex).displayWarning();
+      }
+      this.applyComponentOrientation(orientation_);
+      // new NotImplemented().displayWarning();
+    } else if (actCmd.equals("actAdd")) {
+      try {
+        if (fld_.getType() == Global.FIELD_TYPE_BLOB) {
+          RepeatableField rp = new RepeatableField(0);
+          Object value = rp.getValue();
+          fld_.setOccurrence(fld_.getOccurrenceCount(), (byte[]) value);
+        } else {
+          String val = "";
+          if (wksFld_.getDefaultValue() != null) {
+            String defaultValue = wksFld_.getDefaultValue();
+            // Execute the PFT
+            String value = fieldDefaultValue(defaultValue);
+            if (value != null) {
+              val = value;
+            }
+          }
+
+          fld_.setOccurrence(fld_.getOccurrenceCount(), val);
+        }
+        redraw();
+        this.applyComponentOrientation(orientation_);
+
+      } catch (DbException ex) {
+        new GeneralDatabaseException(ex).displayWarning();
+      }
+    } else if (actCmd.equals("actUrl")) {
+        try{
+            File f = getUrlFile();
+            //Tika tika = new Tika();
+            if (f != null) {  
+                
+                                if (db instanceof ClientDatabaseProxy) {
+                                dbp_ = (ClientDatabaseProxy) db;
+                                } else {
+                                 throw new RuntimeException("ExpMODSVisualPanel: Cannot cast DB to ClientDatabaseProxy");
+                                } 
+           
+                                 String dbhome =dbp_.getDbHome();
+                                 String dbname = dbp_.getDatabaseName() ;
+                                 String dbhomepath = hm.getDbHomePath(dbhome);
+                                 System.out.println("This is the path to dbhome:" + hm.getDbHomePath(dbhome) );
+                                 int tag = wksFld_.getTag();
+                                 int type;
+                                type = fdt_.getFieldByTag(tag).getType();
+                                //System.out.println("the type of the field is:" + type);
+                                File file = new File(f.toString());
+                                File dir = new File(dbhomepath + "//" + dbname + "//idocs//"+ file.getName());
+                               
+                                try{
+                                copy(file,dir);
+                                }catch(Exception err)
+                                {
+                                    err.getMessage();
+                                }
+
+
+                                //System.out.println("dbhome is:" + dbhome);
+                               // System.out.println("dbname is:" + dbname);
+                                //System.out.println("directory path string" + dir.toString());
+                                File directory = new File(dbhomepath + "//" + dbname + "//idocs");
+                                //System.out.println("the directory name is:" + directory.getName());
+                                //System.out.println("the field type is:" + type);
+                                 if(type == 16)
+                                 {
+                                     String path= "<a href="  + dir.toString() +  " target=new >" + "click here to access the orginal document" + "</a>";
+                                     fld_.setOccurrence(fld_.getOccurrenceCount(),path);
+                                     redraw();
+                                     this.applyComponentOrientation(orientation_);
+                                 }
+                                  else
+                                 {
+
+                                          FileNameExtensionFilter ff = this.new  FileNameExtensionFilter();
+                                          String fname= "";
+                                          String ext= "";
+                                          int mid= f.getName().lastIndexOf(".");
+                                          fname=f.getName().substring(0,mid);
+                                          ext=f.getName().substring(mid+1,f.getName().length());
+                                          //System.out.println("the file extension is:"+ ext);
+                                          //System.out.println("the file name is " + fname );
+                                          Metadata metadata = new Metadata();
+                                          metadata.set(Metadata.RESOURCE_NAME_KEY,
+                                                  f.getCanonicalPath());
+                                          InputStream   is = new FileInputStream(f);
+
+                                          String filepath = dbhomepath + "\\"  + dbname + "\\idocs\\" + fname + "." + "txt";
+                                          PrintStream ps = new PrintStream(new FileOutputStream(filepath ,false));
+
+                                          Parser parser = new AutoDetectParser();
+                                          ContentHandler handler = new BodyContentHandler(-1);
+                                          String text = null;
+
+                                          try {
+                                               // text = tika.parseToString(is);
+                                              parser.parse(is, handler, metadata);
+                                             } catch (IOException ex) {
+                                                 Exceptions.printStackTrace(ex);
+                                              } catch (TikaException ex) {
+                                                Exceptions.printStackTrace(ex);
+                                               }
+
+                                              text = handler.toString();
+                                              ps.print(text);
+                                              is.close();
+                                              ps.close();
+
+                                              BufferedReader reader = new BufferedReader(new FileReader(filepath));
+                                              StringBuffer contents = new StringBuffer();
+                                              String textcon = reader.readLine();
+                                              while(textcon != null)
+                                              {
+                                                contents.append(textcon);
+                                                textcon = reader.readLine();
+                                              }
+                                             reader.close();
+                                             
+                                             String fulltext = contents.toString();
+                                             fld_.setOccurrence(fld_.getOccurrenceCount(),fulltext);
+                                             redraw();
+                                             this.applyComponentOrientation(orientation_);
+                                     }
+                                }
+          }  catch(Exception ex){
+         ex.getStackTrace();
+         }
+    }
+  }
+
+  public static void copy(File source, File destination)
+   throws IOException
+{
+   // Open file to be copied
+   InputStream in = new FileInputStream(source);
+
+   // And where to copy it to
+   OutputStream out = new FileOutputStream(destination);
+ 
+   // Read bytes and write to destination until eof
+ 
+   byte[] buf = new byte[1024];
+   int len = 0;
+    while ((len = in.read(buf)) >= 0)
+   {
+      out.write(buf, 0, len);
+   }
+ 
+   // close both streams
+ 
+   in.close();
+   out.close();
+}
+//    public String convertDocumentToHtml(File f) {
+//        Tika tika = new Tika();
+//        tika.setMaxStringLength(-1);
+//
+//        TikaConfig tikaConfig = TikaConfig.getDefaultConfig();
+//
+//        Metadata metadata = new Metadata();
+//
+//        InputStream stream = null;
+//        try {
+//            stream = TikaInputStream.get(f);
+//            //stream = new FileInputStream(f);
+//        } catch (final FileNotFoundException ex) {
+//            Exceptions.printStackTrace(ex);
+//        }
+//
+//        Parser parser = new AutoDetectParser(tikaConfig);
+//
+//        StringWriter sw = null;
+//
+//        /*
+//         * HTML Output handler
+//         */
+//        ContentHandler bodyHandler = null;
+//        TransformerHandler transformerHandler = null;
+//        SAXTransformerFactory factory =
+//                (SAXTransformerFactory) TransformerFactory.newInstance();
+//        try {
+//            bodyHandler = factory.newTransformerHandler();
+//            transformerHandler = (TransformerHandler) bodyHandler;
+//
+//
+//            transformerHandler.getTransformer().setOutputProperty(OutputKeys.METHOD, "html");
+//            transformerHandler.getTransformer().setOutputProperty(OutputKeys.INDENT, "no");
+//            transformerHandler.getTransformer().setOutputProperty(OutputKeys.ENCODING, "utf-8");
+//
+//            // We will write the HTML output to a StringWriter
+//            sw = new StringWriter();
+//            transformerHandler.setResult(new StreamResult(sw));
+//
+//        } catch (TransformerConfigurationException e1) {
+//            bodyHandler = new BodyContentHandler(100000000);
+//        }
+//        try {
+//            parser.parse(stream, transformerHandler, metadata,
+//                    new ParseContext());
+//            stream.close();
+//
+//        } catch (IOException e) {
+//            Exceptions.printStackTrace(e);
+//
+//        } catch (SAXException e) {
+//            Exceptions.printStackTrace(e);
+//
+//        } catch (TikaException e) {
+//            Exceptions.printStackTrace(e);
+//
+//        }
+//        // Get the ouput html
+//        String html = sw.toString();
+//        System.out.println("tika html output" + html);
+//        return html;
+//    }
+//  
+  
+//   public static String extractTextFromDocument(InputStream in)  {
+//     
+//  
+//
+//    Logger.getRootLogger().setLevel(Level.OFF);
+//  
+//    Tika tika = new Tika();
+//    tika.setMaxStringLength(-1);
+//
+//    String text = null;
+//        try {
+//            text = tika.parseToString(in);
+//        } catch (IOException ex) {
+//            Exceptions.printStackTrace(ex);
+//        } catch (TikaException ex) {
+//            Exceptions.printStackTrace(ex);
+//        }
+//   
+//    return text;
+//  }
+  public void setOrientation(ComponentOrientation orientation) {
+    orientation_ = orientation;
+  }
+
+  void setJTextPanetFont(Font font) {
+    int n = fieldEntries_.size();
+
+    for (int i = 0; i < n; ++i) {
+      RepeatableField rf = fieldEntries_.get(i);
+      rf.setJTextPaneFont(font);
+      rf.updateUI();
+    }
+
+  }
+
+  private boolean fieldValidation() {
+    try {
+      String valFormat = wksFld_.getValidationFormat();
+      if ((valFormat != null) && (valFormat.length() > 0)) {
+        ISISFormatter formatter = ISISFormatter.getFormatter(valFormat);
+        if (formatter == null) {
+          GuiGlobal.output(ISISFormatter.getParsingError());
+          return false;
+        } else if (formatter.hasParsingError()) {
+          GuiGlobal.output(ISISFormatter.getParsingError());
+          return false;
+        }
+
+        formatter.setRecord(db_, rec_);
+        formatter.eval();
+        String result = formatter.getText();
+        if (result.length() > 0) {
+          new ValidationFailedException(result).displayWarning();
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    } catch (RuntimeException re) {
+      new FormattingException(re.getMessage()).displayWarning();
+      return false;
+    }
+  }
+
+  private String fieldDefaultValue(String defaultValue) {
+    try {
+
+      if ((defaultValue != null) && (defaultValue.length() > 0)) {
+        ISISFormatter formatter = ISISFormatter.getFormatter(defaultValue);
+        if (formatter == null) {
+          GuiGlobal.output(ISISFormatter.getParsingError());
+          return null;
+        } else if (formatter.hasParsingError()) {
+          GuiGlobal.output(ISISFormatter.getParsingError());
+          return null;
+        }
+        IRecord record = Record.createRecord();
+        formatter.setRecord(db_, record);
+        formatter.eval();
+        String result = formatter.getText();
+
+        return result;
+
+      } else {
+        return null;
+      }
+    } catch (RuntimeException re) {
+      new DefaultFormattingException(re.getMessage()).displayWarning();
+      return null;
+    }
+  }
+
+  /**
+   * On focus gained, we
+   * @param e
+   */
+  public void focusGained(FocusEvent e) {
+    if (fld_.hasOccurrences()) {
+      RepeatableField source = (RepeatableField) e.getSource();
+      fieldValue_ = source.getValue();
+    } else {
+      JTextPane source = (JTextPane) e.getSource();
+      fieldValue_ = source.getText();
+    }
+  }
+
+  public void focusLost(FocusEvent e) {
+    try {
+      if (fld_.hasOccurrences()) {
+        RepeatableField source = (RepeatableField) e.getSource();
+        switch (source.getType()) {
+          case Global.FIELD_TYPE_ALPHABETIC:
+          case Global.FIELD_TYPE_ALPHANUMERIC:
+          case Global.FIELD_TYPE_NUMERIC:
+          case Global.FIELD_TYPE_PATTERN:
+          case Global.FIELD_TYPE_STRING:
+          case Global.FIELD_TYPE_BOOLEAN:
+          case Global.FIELD_TYPE_CHAR:
+          case Global.FIELD_TYPE_BYTE:
+          case Global.FIELD_TYPE_SHORT:
+          case Global.FIELD_TYPE_INT:
+          case Global.FIELD_TYPE_FLOAT:
+          case Global.FIELD_TYPE_LONG:
+          case Global.FIELD_TYPE_DOUBLE:
+          case Global.FIELD_TYPE_DATE:
+          case Global.FIELD_TYPE_URL:// new added field type
+          case Global.FIELD_TYPE_DOC:// new added field type
+          case Global.FIELD_TYPE_TIME:
+
+            String newValue = source.getText();
+            if (!fieldValue_.equals(newValue) && fieldValidation() && recordValidation()) {
+              fld_.setOccurrence(source.getID(), source.getText());
+            }
+            break;
+          case Global.FIELD_TYPE_BLOB:
+
+            fld_.setOccurrence(source.getID(), source.getValue());
+            break;
+        }
+      } else {
+        // No Occurrences
+        JTextArea source = (JTextArea) e.getSource();
+        String newValue = source.getText();
+        if (!fieldValue_.equals(newValue) && fieldValidation() && recordValidation()) {
+          fld_.setFieldValue(source.getText());
+        }
+      }
+    } catch (DbException ex) {
+      new GeneralDatabaseException(ex).displayWarning();
+    }
+  }
+
+  private boolean recordValidation() {
+    try {
+      String valFormat = wksDef_.getRecordValidationFormat();
+      if ((valFormat != null) && (valFormat.length() > 0)) {
+        ISISFormatter formatter = ISISFormatter.getFormatter(valFormat);
+        if (formatter == null) {
+          GuiGlobal.output(ISISFormatter.getParsingError());
+          return false;
+        } else if (formatter.hasParsingError()) {
+          GuiGlobal.output(ISISFormatter.getParsingError());
+          return false;
+        }
+
+        formatter.setRecord(db_, rec_);
+        formatter.eval();
+        String result = formatter.getText();
+        if (result.length() > 0) {
+          new ValidationFailedException(result).displayWarning();
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    } catch (RuntimeException re) {
+      new FormattingException(re.getMessage()).displayWarning();
+      return false;
+    }
+  }
+
+  private void redraw() {
+    fieldEntries_.clear();
+    ClientDatabaseProxy database = (ClientDatabaseProxy) db_;
+    // Remove components from the JPanel container
+    this.removeAll();
+    this.setBorder(BorderFactory.createEtchedBorder());
+    this.setLayout(new GridBagLayout());
+    GridBagConstraints c = new GridBagConstraints();
+    // initialize the constraints parameters
+    c.gridx = 1;
+    c.gridy = 1;
+    c.anchor = GridBagConstraints.FIRST_LINE_START;
+    JLabel fieldDesc = new JLabel(wksFld_.getDescription());
+    fieldDesc.setPreferredSize(new Dimension(200, 25));
+    this.add(fieldDesc, c);
+    Object value[] = {""};
+    if (fld_ == null) {
+      value[0] = "";
+      if (wksFld_.getDefaultValue() != null) {
+        String defaultValue = wksFld_.getDefaultValue();
+        // Execute the PFT
+        String val = fieldDefaultValue(defaultValue);
+        if (val != null) {
+          value[0] = val;
+        }
+      }
+
+    } else {
+      if (!fld_.hasOccurrences()) {
+        value[0] = fld_.getFieldValue();
+      } else {
+        int repCount = fld_.getOccurrenceCount();
+        Object[] repData = new Object[repCount];
+        for (int i = 0; i < repCount; i++) {
+          repData[i] = fld_.getOccurrenceValue(i);
+        }
+        value = repData;
+      }
+    }
+    // String[] values = (String[]) value;
+    // create a panel to contain all occurrences
+    JPanel panel = new JPanel();
+    // panel.setPreferredSize(new Dimension(300, 25));
+    panel.setLayout(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    // initialize the constraints parameters
+    gbc.gridy = 1;
+    gbc.gridx = 1;
+    gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+    gbc.fill = gbc.NONE;
+    gbc.insets = new Insets(5, 5, 5, 5);
+    int tag = wksFld_.getTag();
+    int type = 0;
+
+    type = fdt_.getFieldByTag(tag).getType();
+
+    switch (type) {
+      case Global.FIELD_TYPE_ALPHABETIC:
+      case Global.FIELD_TYPE_ALPHANUMERIC:
+      case Global.FIELD_TYPE_NUMERIC:
+      case Global.FIELD_TYPE_PATTERN:
+      case Global.FIELD_TYPE_STRING:
+      case Global.FIELD_TYPE_BOOLEAN:
+      case Global.FIELD_TYPE_CHAR:
+      case Global.FIELD_TYPE_BYTE:
+      case Global.FIELD_TYPE_SHORT:
+      case Global.FIELD_TYPE_INT:
+      case Global.FIELD_TYPE_FLOAT:
+      case Global.FIELD_TYPE_LONG:
+      case Global.FIELD_TYPE_DOUBLE:
+      case Global.FIELD_TYPE_DATE:
+      case Global.FIELD_TYPE_TIME:
+        for (int i = 0; i < value.length; i++) {
+          RepeatableField fieldEntry = new RepeatableField((String) value[i], i);
+          // Change the font if needed
+          if (database.getDisplayFont() != null) {
+            fieldEntry.setJTextPaneFont(database.getDisplayFont());
+          }
+          fieldEntries_.add(fieldEntry);
+//            TextDataEntryDocument doc = new TextDataEntryDocument();
+//            doc.addDocumentListener(fieldEntry);
+//            fieldEntry.setDocument(doc);
+//            fieldEntry.setValue((String)value[i]);
+          fieldEntry.addFocusListener(this);
+          // fieldEntry.setPreferredSize(new Dimension(325, 100));
+          JScrollPane scrollPane = new JScrollPane(fieldEntry);
+          scrollPane.setPreferredSize(new Dimension(650, 100));
+          // fieldEntry.setPreferredSize(new Dimension(100, 50));
+          gbc.gridx = 1;
+          panel.add(scrollPane /* fieldEntry */, gbc);
+          DeleteButton btnDel = new DeleteButton(i);
+          btnDel.setIcon(new ImageIcon(ImageUtilities.loadImage(DEL_PATH, true)));
+          btnDel.setActionCommand("actDel");
+          btnDel.addActionListener(this);
+          btnDel.setPreferredSize(new Dimension(25, 25));
+          gbc.gridx++;
+          panel.add(btnDel, gbc);
+          gbc.gridy++;
+        }
+        c.gridx++;
+        this.add(panel, c);
+        c.gridy++;
+        c.gridx = 2;
+        JButton btnAdd = new JButton();
+        btnAdd.setIcon(new ImageIcon(ImageUtilities.loadImage(ADD_PATH, true)));
+        btnAdd.setActionCommand("actAdd");
+        btnAdd.addActionListener(this);
+        btnAdd.setPreferredSize(new Dimension(25, 25));
+        this.add(btnAdd, c);
+
+        c.gridx = 100;
+        JButton btnUrl = new JButton();
+        btnUrl.setIcon(new ImageIcon(ImageUtilities.loadImage(GET_FILE_CONTENT, true)));
+        btnUrl.setActionCommand("actUrl");
+        btnUrl.addActionListener(this);
+        btnUrl.setPreferredSize(new Dimension(25, 25));
+        this.add(btnUrl, c);
+        break;
+      case Global.FIELD_TYPE_BLOB:
+        for (int i = 0; i < value.length; i++) {
+          RepeatableField fieldEntry = new RepeatableField(i);
+          if (database.getDisplayFont() != null) {
+            fieldEntry.setJTextPaneFont(database.getDisplayFont());
+          }
+          fieldEntries_.add(fieldEntry);
+          fieldEntries_.add(fieldEntry);
+          byte[] bytes = null;
+          if (value[i] instanceof String) {
+            bytes = ((String) value[i]).getBytes();
+          } else {
+            bytes = (byte[]) value[i];
+          }
+          fieldEntry.setValue(bytes);
+
+          fieldEntry.addFocusListener(this);
+          // fieldEntry.setPreferredSize(new Dimension(325, 100));
+          JScrollPane scrollPane = new JScrollPane(fieldEntry);
+          scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+          scrollPane.setPreferredSize(new Dimension(650, 250));
+          // fieldEntry.setPreferredSize(new Dimension(100, 50));
+          gbc.gridx = 1;
+          panel.add(scrollPane /* fieldEntry */, gbc);
+          DeleteButton btnDel = new DeleteButton(i);
+          btnDel.setIcon(new ImageIcon(ImageUtilities.loadImage(GET_FILE_CONTENT, true)));
+          btnDel.setActionCommand("actDel");
+          btnDel.addActionListener(this);
+          btnDel.setPreferredSize(new Dimension(25, 25));
+          gbc.gridx++;
+          panel.add(btnDel, gbc);
+          gbc.gridy++;
+        }
+        c.gridx++;
+        this.add(panel, c);
+        c.gridy++;
+        c.gridx = 2;
+        btnAdd = new JButton();
+        btnAdd.setIcon(new ImageIcon(ImageUtilities.loadImage(ADD_PATH, true)));
+        btnAdd.setActionCommand("actAdd");
+        btnAdd.addActionListener(this);
+        btnAdd.setPreferredSize(new Dimension(25, 25));
+        this.add(btnAdd, c);
+
+        c.gridx = 100;
+        btnUrl = new JButton();
+        btnUrl.setIcon(new ImageIcon(ImageUtilities.loadImage(ADD_PATH, true)));
+        btnUrl.setActionCommand("actUrl");
+        btnUrl.addActionListener(this);
+        btnUrl.setPreferredSize(new Dimension(25, 25));
+        this.add(btnUrl, c);
+        break;
+          //new field type
+          case Global.FIELD_TYPE_DOC:
+              for (int i = 0; i < value.length; i++) {
+              RepeatableField fieldEntry = new RepeatableField((String) value[i], i);
+              if (database.getDisplayFont() != null) {
+                fieldEntry.setJTextPaneFont(database.getDisplayFont());
+              }
+              fieldEntries_.add(fieldEntry);         
+              fieldEntry.addFocusListener(this);
+             
+              JScrollPane scrollPane = new JScrollPane(fieldEntry);
+              scrollPane.setPreferredSize(new Dimension(650, 100));
+              gbc.gridx = 1;
+              panel.add(scrollPane /* fieldEntry */, gbc);
+              DeleteButton btnDel = new DeleteButton(i);
+              btnDel.setIcon(new ImageIcon(ImageUtilities.loadImage(DEL_PATH, true)));
+              btnDel.setActionCommand("actDel");
+              btnDel.addActionListener(this);
+              btnDel.setPreferredSize(new Dimension(25, 25));
+              gbc.gridx++;
+              panel.add(btnDel, gbc);
+              gbc.gridy++;
+            }
+            c.gridx++;
+            this.add(panel, c);
+            c.gridx = 100;
+            btnUrl = new JButton();
+            btnUrl.setIcon(new ImageIcon(ImageUtilities.loadImage(GET_FILE_CONTENT, true)));
+            btnUrl.setActionCommand("actUrl");
+            btnUrl.addActionListener(this);
+            btnUrl.setPreferredSize(new Dimension(25, 25));
+            this.add(btnUrl, c);
+            break;
+          
+          case Global.FIELD_TYPE_URL:// new field type
+            
+                  for (int i = 0; i < value.length; i++) {
+                  RepeatableField fieldEntry = new RepeatableField((String) value[i], i);
+                  // Change the font if needed
+                  if (database.getDisplayFont() != null) {
+                    fieldEntry.setJTextPaneFont(database.getDisplayFont());
+                  }
+                  fieldEntries_.add(fieldEntry);
+                  fieldEntry.addFocusListener(this);
+                  JScrollPane scrollPane = new JScrollPane(fieldEntry);
+                  scrollPane.setPreferredSize(new Dimension(650, 100));
+                  gbc.gridx = 1;
+                  panel.add(scrollPane /* fieldEntry */, gbc);
+                  DeleteButton btnDel = new DeleteButton(i);
+                  btnDel.setIcon(new ImageIcon(ImageUtilities.loadImage(DEL_PATH, true)));
+                  btnDel.setActionCommand("actDel");
+                  btnDel.addActionListener(this);
+                  btnDel.setPreferredSize(new Dimension(25, 25));
+                  gbc.gridx++;
+                  panel.add(btnDel, gbc);
+                  gbc.gridy++;
+                }
+                c.gridx++;
+                this.add(panel, c);
+               
+                c.gridx = 100;
+                btnUrl = new JButton();
+                btnUrl.setIcon(new ImageIcon(ImageUtilities.loadImage(GET_FILE_CONTENT, true)));
+                btnUrl.setActionCommand("actUrl");
+                btnUrl.addActionListener(this);
+                btnUrl.setPreferredSize(new Dimension(25, 25));
+                this.add(btnUrl, c);
+                break;
+
+      default:
+        JTextArea fieldEntry = new JTextArea();
+        fieldEntry.setText((value == null)
+                ? ""
+                : value.toString());
+        JScrollPane scrollPane = new JScrollPane(fieldEntry);
+        // fieldEntry.setPreferredSize(new Dimension(350, 100));
+        scrollPane.setPreferredSize(new Dimension(650, 100));
+        fieldEntry.addFocusListener(this);
+        c.gridx++;
+        this.add(scrollPane /* fieldEntry */, c);
+        break;
+    }
+    this.updateUI();
+  }
+
+  public void refresh() {
+
+    int ncomponents = this.getComponentCount();
+    for (int i = 0; i < ncomponents; ++i) {
+      Component c = this.getComponent(i);
+
+      if (c instanceof RepeatableField) {
+        RepeatableField rf = (RepeatableField) c;
+        rf.updateUI();
+      }
+
+    }
+  }
+
+   static class CancellableProgress implements Cancellable {
+      private boolean cancelled = false;
+
+    @Override
+      public boolean cancel() {
+         cancelled = true;
+         return true;
+      }
+
+      public boolean cancelRequested() {
+         return cancelled;
+      }
+   }
+  private File getUrlFile() {
+
+    File f = null;
+    JFileChooser fileChooser = new javax.swing.JFileChooser();
+    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("doc", "(MS Word Document)"));
+    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("pdf", "(Adobe Portable Document Format)"));
+    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("docx", "MS docxfiles"));
+    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("xls", "(MS Excel Document)"));
+    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("ppt", "(MS PowerPoint Document)"));
+    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("rtf", "(Rich Text Format)"));
+    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("html", "(HTML Format)"));
+    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("xhtml", "(XHTML Format)"));
+    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("odf", "(OpenDocument)"));
+    fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("txt", "(Plain Text)"));
+  
+//Image Formats 	.bmp
+//  	.gif
+//  	.png
+//  	.jpeg
+//  	.tiff
+//Audio Formats 	.mp3
+//  	.aiff
+//  	.au
+//  	.midi
+//  	.wav
+    fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+    fileChooser.setDialogTitle("Select the file to load");
+    //fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+    fileChooser.setAcceptAllFileFilterUsed(true);
+
+    Dimension dialogSize = fileChooser.getPreferredSize();
+    Dimension frameSize = getSize();
+    Point loc = getLocation();
+    fileChooser.setLocation((frameSize.width - dialogSize.width) / 2 + loc.x, (frameSize.height - dialogSize.height) / 2 + loc.y);
+    //if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+     if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+       f = fileChooser.getSelectedFile();
+    }
+    return f;
+
+  }
+  @SuppressWarnings("unused")
+  private static String TYPE_UNKNOWN = "Type Unknown";
+  @SuppressWarnings("unused")
+  private static String HIDDEN_FILE = "Hidden File";
+
+  private class FileNameExtensionFilter extends FileFilter {
+
+    private Map<String, FileNameExtensionFilter> filters = null;
+    private String description = null;
+    private String fullDescription = null;
+    private boolean useExtensionsInDescription = true;
+
+    public FileNameExtensionFilter() {
+      this.filters = new HashMap<String, FileNameExtensionFilter>();
+    }
+
+    public FileNameExtensionFilter(String extension) {
+      this(extension, null);
+    }
+
+    public FileNameExtensionFilter(String extension, String description) {
+      this();
+      if (extension != null) {
+        addExtension(extension);
+      }
+      if (description != null) {
+        setDescription(description);
+      }
+    }
+
+    public FileNameExtensionFilter(String[] filters) {
+      this(filters, null);
+    }
+
+    public FileNameExtensionFilter(String[] filters, String description) {
+      this();
+      for (String filter : filters) {
+        // add filters one by one
+        addExtension(filter);
+      }
+      if (description != null) {
+        setDescription(description);
+      }
+    }
+
+    @Override
+    public boolean accept(File f) {
+      if (f != null) {
+        if (f.isDirectory()) {
+          return true;
+        }
+        String extension = getExtension(f);
+        if (extension != null && filters.get(getExtension(f)) != null) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    public String getExtension(File f) {
+      if (f != null) {
+        String filename = f.getName();
+        int i = filename.lastIndexOf('.');
+        if (i > 0 && i < filename.length() - 1) {
+          return filename.substring(i + 1).toLowerCase();
+        }
+      }
+      return null;
+    }
+
+    public void addExtension(String extension) {
+      if (filters == null) {
+        filters = new HashMap<String, FileNameExtensionFilter>(5);
+      }
+      filters.put(extension.toLowerCase(), this);
+      fullDescription = null;
+    }
+
+    @Override
+    public String getDescription() {
+      if (fullDescription == null) {
+        if (description == null || isExtensionListInDescription()) {
+          fullDescription = description == null ? "(" : description
+                  + " (";
+          // build the description from the extension list
+          Set<String> extensions = filters.keySet();
+          if (extensions != null) {
+            Iterator<String> it = extensions.iterator();
+            fullDescription += "*." + it.next();
+            while (it.hasNext()) {
+              fullDescription += ", *." + it.next();
+            }
+          }
+          fullDescription += ")";
+        } else {
+          fullDescription = description;
+        }
+      }
+      return fullDescription;
+    }
+
+    String[] getExtensions() {
+      String ext[] = new String[filters.size()];
+      int i = 0;
+      for (String str : filters.keySet()) {
+        String[] split = str.split(" ");
+        ext[i] = split[0];
+        i++;
+      }
+      return ext;
+    }
+
+    public void setDescription(String description) {
+      this.description = description;
+      fullDescription = null;
+    }
+
+    public void setExtensionListInDescription(boolean b) {
+      useExtensionsInDescription = b;
+      fullDescription = null;
+    }
+
+    public boolean isExtensionListInDescription() {
+      return useExtensionsInDescription;
+    }
+  }
+   
+/**
+     * Create ContentHandler that transforms SAX events into textual HTML output,
+     * and writes it out to <writer> - typically this is a StringWriter.
+     * 
+     * @param writer Where to write resulting HTML text.
+     * @return ContentHandler suitable for passing to parse() methods.
+     * @throws Exception
+     */
+    private ContentHandler makeHtmlTransformer(Writer writer) throws Exception {
+        SAXTransformerFactory factory = (SAXTransformerFactory)SAXTransformerFactory.newInstance();
+        TransformerHandler handler = factory.newTransformerHandler();
+        handler.getTransformer().setOutputProperty(OutputKeys.METHOD, "html");
+        handler.getTransformer().setOutputProperty(OutputKeys.INDENT, "no");
+        handler.getTransformer().setOutputProperty(OutputKeys.ENCODING, "utf-8");
+        handler.setResult(new StreamResult(writer));
+        return handler;
+    }
+
+  /**
+     * Creates and returns a content handler that turns XHTML input to
+     * simplified HTML output that can be correctly parsed and displayed
+     * by {@link JEditorPane}.
+     * <p>
+     * The returned content handler is set to output <code>html</code>
+     * to the given writer. The XHTML namespace is removed from the output
+     * to prevent the serializer from using the &lt;tag/&gt; empty element
+     * syntax that causes extra "&gt;" characters to be displayed.
+     * The &lt;head&gt; tags are dropped to prevent the serializer from
+     * generating a &lt;META&gt; content type tag that makes
+     * {@link JEditorPane} fail thinking that the document character set
+     * is inconsistent.
+     * <p>
+     * Additionally, it will use ImageSavingParser to re-write embedded:(image) 
+     * image links to be file:///(temporary file) so that they can be loaded.
+     *
+     * @param writer output writer
+     * @return HTML content handler
+     * @throws TransformerConfigurationException if an error occurs
+     */
+    private ContentHandler getHtmlHandler(Writer writer)
+            throws TransformerConfigurationException {
+        SAXTransformerFactory factory = (SAXTransformerFactory)
+            SAXTransformerFactory.newInstance();
+        TransformerHandler handler = factory.newTransformerHandler();
+        handler.getTransformer().setOutputProperty(OutputKeys.METHOD, "html");
+        handler.setResult(new StreamResult(writer));
+        return new ContentHandlerDecorator(handler) {
+            @Override
+            public void startElement(
+                    String uri, String localName, String name, Attributes atts)
+                    throws SAXException {
+                if (XHTMLContentHandler.XHTML.equals(uri)) {
+                    uri = null;
+                }
+                if (!"head".equals(localName)) {
+                    if("img".equals(localName)) {
+                       AttributesImpl newAttrs;
+                       if(atts instanceof AttributesImpl) {
+                          newAttrs = (AttributesImpl)atts;
+                       } else {
+                          newAttrs = new AttributesImpl(atts);
+                       }
+                       
+                       for(int i=0; i<newAttrs.getLength(); i++) {
+                          if("src".equals(newAttrs.getLocalName(i))) {
+                             String src = newAttrs.getValue(i);
+                             if(src.startsWith("embedded:")) {
+                                String filename = src.substring(src.indexOf(':')+1);
+                                try {
+                                   File img = imageParser.requestSave(filename);
+                                   String newSrc = img.toURI().toString();
+                                   newAttrs.setValue(i, newSrc);
+                                } catch(IOException e) {
+                                   System.err.println("Error creating temp image file " + filename);
+                                   // The html viewer will show a broken image too to alert them
+                                }
+                             }
+                          }
+                       }
+                       super.startElement(uri, localName, name, newAttrs);
+                    } else {
+                       super.startElement(uri, localName, name, atts);
+                    }
+                }
+            }
+            @Override
+            public void endElement(String uri, String localName, String name)
+                    throws SAXException {
+                if (XHTMLContentHandler.XHTML.equals(uri)) {
+                    uri = null;
+                }
+                if (!"head".equals(localName)) {
+                    super.endElement(uri, localName, name);
+                }
+            }
+            @Override
+            public void startPrefixMapping(String prefix, String uri) {
+            }
+            @Override
+            public void endPrefixMapping(String prefix) {
+            }
+        };
+    }
+  
+    /**
+     * A recursive parser that saves certain images into the temporary
+     *  directory, and delegates everything else to another downstream
+     *  parser.
+     */
+    private static class ImageSavingParser extends DefaultParser {
+      private Map<String,File> wanted = new HashMap<String,File>();
+      private Parser downstreamParser;
+      private File tmpDir;
+      
+      private ImageSavingParser(Parser downstreamParser) {
+         this.downstreamParser = downstreamParser;
+         
+         try {
+            File t = File.createTempFile("tika", ".test");
+            tmpDir = t.getParentFile();
+         } catch(IOException e) {}
+      }
+      
+      public File requestSave(String embeddedName) throws IOException {
+         String suffix = embeddedName.substring(embeddedName.lastIndexOf('.'));
+         File tmp = File.createTempFile("tika-embedded-", suffix);
+         wanted.put(embeddedName, tmp);
+         return tmp;
+      }
+      
+      public Set<MediaType> getSupportedTypes(ParseContext context) {
+         // Never used in an auto setup
+         return null;
+      }
+
+      public void parse(InputStream stream, ContentHandler handler,
+            Metadata metadata, ParseContext context) throws IOException,
+            SAXException, TikaException {
+         String name = metadata.get(Metadata.RESOURCE_NAME_KEY);
+         if(name != null && wanted.containsKey(name)) {
+            FileOutputStream out = new FileOutputStream(wanted.get(name));
+            IOUtils.copy(stream, out);
+            out.close();
+         } else {
+            if(downstreamParser != null) {
+               downstreamParser.parse(stream, handler, metadata, context);
+            }
+         }
+      }
+
+    }
+
+}

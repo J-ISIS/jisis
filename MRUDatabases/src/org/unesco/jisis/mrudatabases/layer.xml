@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<filesystem>
+    <attr name="Menu\Database\Separator2_1.instance\position" intvalue="382"/>
+    <folder name="Actions">
+        <folder name="Database">
+            <file name="org-unesco-jisis-mrudatabases-MRUDatabasesAction.instance"/>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Database">
+            <file name="org-unesco-jisis-mrudatabases-MRUDatabasesAction-separatorAfter.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="363"/>
+            </file>
+            <file name="org-unesco-jisis-mrudatabases-MRUDatabasesAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-mrudatabases-MRUDatabasesAction.instance"/>
+                <attr name="position" intvalue="365"/>
+            </file>
+        </folder>
+    </folder>
+</filesystem>

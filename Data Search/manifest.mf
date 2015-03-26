@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.datasearch
+OpenIDE-Module-Implementation-Version: 6
+OpenIDE-Module-Layer: org/unesco/jisis/datasearch/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/datasearch/Bundle.properties
+

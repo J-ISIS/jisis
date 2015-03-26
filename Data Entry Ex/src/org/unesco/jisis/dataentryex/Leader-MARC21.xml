@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<leader tag="000" length="24">
+      <element pos="05" name="Record status">
+         <code value="a" text="Increase in encoding level" />
+         <code value="c" text="Corrected or revised" />
+         <code value="d" text="Deleted" />
+         <code value="n" text="New" />
+         <code value="p" text="Increase in encoding level from prepublication" />
+      </element> 
+
+      <element pos="06" name="Type of record" >
+         <code value="a" text="Language material" />
+         <code value="c" text="Notated music" />
+         <code value="d" text="Manuscript notated music" />
+         <code value="e" text="Cartographic material" />
+         <code value="f" text="Manuscript cartographic material" />
+         <code value="g" text="Projected media" />
+         <code value="i" text="Nonmusical sound recording" />
+         <code value="j" text="Musical sound recording" />
+         <code value="k" text="Two-dimensional nonprojectable graphic" />
+         <code value="m" text="Computer file" />
+         <code value="o" text="Kit" />
+         <code value="p" text="Mixed material" />
+         <code value="r" text="Three-dimensional artifact or naturally occurring object" />
+      </element> 
+
+      <element pos="07" name="Bibliographic level">
+         <code value="a" text="Monographic component part" />
+         <code value="b" text="Serial component part" />
+         <code value="c" text="Collection" />
+         <code value="d" text="Subunit" />
+         <code value="i" text="Integrating resource" />
+         <code value="m" text="Monograph/item" />
+         <code value="s" text="Serial" />
+
+      </element> 
+
+      <element pos="08" name="Type of control (archival)" >
+         <code value="#" text="No specific type" />
+         <code value="a" text="Archival" />
+      </element> 
+      <element pos="09" name="Character coding scheme" >
+         <code value="#" text="MARC-8" />
+         <code value="a" text="UCS/Unicode" /> 
+      </element> 
+
+
+      <element pos="17" name= "Encoding level" >
+         <code value=" " text="Full level" />
+         <code value="1" text="Full record, material not examined" />
+         <code value="2" text="Less-than-full level, material not examined" />
+         <code value="3" text="Abbreviated title" />
+         <code value="4" text="Core level" />
+         <code value="5" text="Partial (preliminary) level" />
+         <code value="7" text="Minimal level" />
+         <code value="8" text="Prepublication level" />
+         <code value="u" text="Unknown" />
+         <code value="z" text="Not applicable" />
+      </element>
+
+      <element pos="18" name="Descriptive cataloging form">
+         <code value=" " text="Non-ISBD" />
+         <code value="a" text="AACR2" />
+         <code value="i"    text="ISBD" />
+         <code value="u"    text="unknown" />
+
+      </element>
+ 
+      <element pos="19" name="Linked record requirement">
+         <code value=" " text="Related record not required" />
+         <code value="r" text="Related record required" />
+      </element> 
+
+</leader>
+
+

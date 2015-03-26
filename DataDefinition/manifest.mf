@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.datadefinition
+OpenIDE-Module-Implementation-Version: 2
+OpenIDE-Module-Layer: org/unesco/jisis/datadefinition/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/datadefinition/Bundle.properties
+OpenIDE-Module-Requires: org.netbeans.api.javahelp.Help
+

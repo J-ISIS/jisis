@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="Tools">
+           <attr name="SystemFileSystem.localizingBundle" stringvalue="org.unesco.jisis.z3950.Bundle_es_ES"/>
+            <file name="org-unesco-jisis-z3950-Z3950ClientAction.instance">
+                <attr name="delegate" newvalue="org.unesco.jisis.z3950.Z3950ClientAction"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.z3950.Bundle_es_ES#CTL_Z3950ClientAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="noIconInMenu" boolvalue="false"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="org-unesco-jisis-z3950-Z3950Action.instance">
+                <attr name="component" methodvalue="org.unesco.jisis.z3950.Z3950TopComponent.findInstance"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.z3950.Bundle_es_ES#CTL_Z3950Action"/>
+                <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        
+        <folder name="Tools">
+           <attr name="SystemFileSystem.localizingBundle" stringvalue="org.unesco.jisis.z3950.Bundle_es_ES"/>
+            <file name="org-unesco-jisis-z3950-Z3950ClientAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Tools/org-unesco-jisis-z3950-Z3950ClientAction.instance"/>
+                <attr name="position" intvalue="-100"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="Z3950Action.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/org-unesco-jisis-z3950-Z3950Action.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="Z3950TopComponent.settings" url="Z3950TopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="Z3950TopComponent.wstcref" url="Z3950TopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

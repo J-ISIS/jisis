@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: outline
+OpenIDE-Module-Localizing-Bundle: outline/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

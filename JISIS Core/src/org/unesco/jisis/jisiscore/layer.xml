@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    
+    <attr name="Menu\Database\IndexDatabaseAction.shadow\position" intvalue="900"/>
+    <attr name="Menu\Database\Separator2.instance\position" intvalue="300"/>
+    <attr name="Menu\Database\Separator2_1.instance\position" intvalue="600"/>
+    <attr name="Menu\Database\Separator2_2.instance\position" intvalue="1200"/>
+    <attr name="Menu\Database\Separator2_3.instance\position" intvalue="950"/>
+    <attr name="Menu\Database\org-netbeans-core-actions-SystemExit.instance\position" intvalue="2000"/>
+    <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction-separatorAfter.instance\position" intvalue="800"/>
+    <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction.shadow\position" intvalue="700"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseAllDatabasesAction-separatorAfter.instance\position" intvalue="1900"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseAllDatabasesAction-separatorBefore.instance\position" intvalue="100"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseAllDatabasesAction.shadow\position" intvalue="1800"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseDatabaseAction-separatorAfter.instance\position" intvalue="800"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseDatabaseAction-separatorBefore.instance\position" intvalue="1500"/>
+    <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseDatabaseAction.shadow\position" intvalue="1600"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-connopen-connOpenWizardAction.shadow\position" intvalue="200"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-dbbackup-DbBackupAction.shadow\position" intvalue="1300"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-dbcreate-wizards-dbcreateAction.shadow\position" intvalue="500"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.shadow\position" intvalue="400"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-marc-expWizardAction.shadow\position" intvalue="1100"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-marc-ImportWizardAction.shadow\position" intvalue="1000"/>
+   
+    <folder name="Menu">
+        <folder name="Window">
+            <file name="FdtExplorerAction.shadow_hidden"/>
+            <file name="FdtViewAction.shadow_hidden"/>
+            <file name="FmtManagerAction.shadow_hidden"/>
+            <file name="FstManagerAction.shadow_hidden"/>
+            <file name="OutlineAction.shadow_hidden"/>
+            <file name="PrintSortAction.shadow_hidden"/>
+            <file name="SwitchToRecentDocumentAction.shadow_hidden"/>
+            <file name="Tools_hidden"/>
+            <file name="WKSEditExAction.shadow_hidden"/>
+            <file name="WebOutputAction.shadow_hidden"/>
+            <file name="Web_hidden"/>
+            <file name="Z3950Action.shadow_hidden"/>
+            <file name="org-netbeans-modules-favorites-View.shadow_hidden"/>
+            <file name="org-unesco-jisis-freetextsearch-FreeSearchTopComponent.shadow_hidden"/>
+            <file name="org-unesco-jisis-global-GlobalOperationsTopComponent.shadow_hidden"/>
+        </folder>
+    </folder>
+</filesystem>

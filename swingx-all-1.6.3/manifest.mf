@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.swingx
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/swingx/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

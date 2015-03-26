@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: QueryBuilder
+OpenIDE-Module-Layer: QueryBuilder/layer.xml
+OpenIDE-Module-Localizing-Bundle: QueryBuilder/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

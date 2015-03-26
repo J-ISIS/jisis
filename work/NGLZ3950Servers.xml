@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ZServers>
+  <ZServer>
+    <Name>Australian National University</Name>
+    <Category>f</Category>
+    <Type>Z3950</Type>
+    <Zurl>
+      <BaseURL>library.anu.edu.au</BaseURL>
+      <Port>8080</Port>
+      <DataBase>INNOPAC</DataBase>
+    </Zurl>
+    <Location>France</Location>
+    <Syntax>XML</Syntax>
+    <Active>YES</Active>
+  </ZServer>
+</ZServers>
+

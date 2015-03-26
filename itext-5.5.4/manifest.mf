@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: org.unesco.jisis.iText554
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/iText554/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

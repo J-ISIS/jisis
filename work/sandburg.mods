@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><modsCollection xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3">
+<mods version="3.4">
+<titleInfo>
+<title>Arithmetic</title>
+</titleInfo>
+<name type="personal" usage="primary">
+<namePart>Sandburg, Carl</namePart>
+<namePart type="date">1878-1967</namePart>
+</name>
+<name type="personal">
+<namePart>Rand, Ted</namePart>
+<role>
+<roleTerm type="text">ill.</roleTerm>
+</role>
+</name>
+<typeOfResource>text</typeOfResource>
+<originInfo>
+<place>
+<placeTerm type="code" authority="marccountry">cau</placeTerm>
+</place>
+<place>
+<placeTerm type="text">San Diego</placeTerm>
+</place>
+<publisher>Harcourt Brace Jovanovich</publisher>
+<dateIssued>c1993</dateIssued>
+<dateIssued encoding="marc">1993</dateIssued>
+<edition>1st ed.</edition>
+<issuance>monographic</issuance>
+</originInfo>
+<language>
+<languageTerm authority="iso639-2b" type="code">eng</languageTerm>
+</language>
+<physicalDescription>
+<form authority="marcform">print</form>
+<extent>1 v. (unpaged) : ill. (some col.) ; 26 cm.</extent>
+</physicalDescription>
+<abstract type="Summary">A poem about numbers and their characteristics. Features anamorphic, or distorted, drawings which can be restored to normal by viewing from a particular angle or by viewing the image's reflection in the provided Mylar cone.</abstract>
+<targetAudience authority="marctarget">juvenile</targetAudience>
+<note type="statement of responsibility" altRepGroup="00">Carl Sandburg ; illustrated as an anamorphic adventure by Ted Rand.</note>
+<note>One Mylar sheet included in pocket.</note>
+<subject authority="lcsh">
+<topic>Arithmetic</topic>
+<topic>Juvenile poetry</topic>
+</subject>
+<subject authority="lcsh">
+<topic>Children's poetry, American</topic>
+</subject>
+<subject authority="lcshac">
+<topic>Arithmetic</topic>
+<topic>Poetry</topic>
+</subject>
+<subject authority="lcshac">
+<topic>American poetry</topic>
+</subject>
+<subject authority="lcshac">
+<topic>Visual perception</topic>
+</subject>
+<classification authority="lcc">PS3537.A618 A88 1993</classification>
+<classification authority="ddc" edition="20">811/.52</classification>
+<identifier type="isbn">0152038655 :</identifier>
+<identifier type="lccn">92005291</identifier>
+<recordInfo>
+<descriptionStandard>aacr</descriptionStandard>
+<recordContentSource authority="marcorg">DLC</recordContentSource>
+<recordCreationDate encoding="marc">920219</recordCreationDate>
+<recordChangeDate encoding="iso8601">19930521155141.9</recordChangeDate>
+<recordIdentifier source="DLC">   92005291 </recordIdentifier>
+<recordOrigin>Converted from MARCXML to MODS version 3.4 using MARC21slim2MODS3-4.xsl
+				(Revision 1.93 2014/01/31)</recordOrigin>
+</recordInfo>
+</mods>
+</modsCollection>

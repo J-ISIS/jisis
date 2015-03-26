@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.unesco.jisis.dataentry
+OpenIDE-Module-Implementation-Version: 5
+OpenIDE-Module-Layer: org/unesco/jisis/dataentry/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/unesco/jisis/dataentry/Bundle.properties
+OpenIDE-Module-Requires: org.netbeans.api.javahelp.Help
+

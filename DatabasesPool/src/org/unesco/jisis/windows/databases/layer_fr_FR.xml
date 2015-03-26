@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-connopen-connOpenWizardAction.shadow\position" intvalue="100"/>
+    <attr name="Actions\Database\org-unesco-jisis-wizards-connopen-connOpenWizardAction.instance\position" intvalue="200"/>
+    <attr name="Actions\Database\org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.instance\position" intvalue="300"/>
+    <attr name="Actions\Database\org-unesco-jisis-wizards-dbcreate-DbCreateAction.instance\position" intvalue="400"/>
+    <attr name="Actions\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction.instance\position" intvalue="450"/>
+    <attr name="Actions\Database\org-unesco-jisis-index-IndexDatabaseAction.instance\position" intvalue="800"/>
+    
+    
+    <attr name="Actions\Database\org-unesco-jisis-wizards-dbbackup-DbBackupAction.instance\position" intvalue="700"/>
+
+  
+    <attr name="Actions\Database\org-unesco-jisis-wizards-marc-expWizardAction.instance\position" intvalue="600"/>
+    <attr name="Actions\Database\org-unesco-jisis-wizards-marc-ImportWizardAction.instance\position" intvalue="500"/>
+    
+    <attr name="Menu\Database\Separator2.instance\position" intvalue="200"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.shadow\position" intvalue="300"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-dbcreate-wizards-dbcreateAction.shadow\position" intvalue="400"/>
+    <attr name="Menu\Database\Separator2_1.instance\position" intvalue="500"/>
+    
+    <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction.shadow\position" intvalue="700"/>
+    <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction-separatorAfter.instance\position" intvalue="800"/>
+    <attr name="Menu\Database\IndexDatabaseAction.shadow\position" intvalue="900"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-marc-expWizardAction.shadow\position" intvalue="1200"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-marc-ImportWizardAction.shadow\position" intvalue="1100"/>
+    <attr name="Menu\Database\Separator2_2.instance\position" intvalue="1300"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-dbbackup-DbBackupAction.shadow\position" intvalue="1400"/>
+    <attr name="Menu\Database\Separator2_3.instance\position" intvalue="1000"/>
+    <attr name="Menu\Database\org-netbeans-core-actions-SystemExit.instance\position" intvalue="2000"/>
+    <folder name="Actions">
+        <folder name="Database">
+            
+            <file name="org-unesco-jisis-windows-databases-CloseDatabaseAction.instance">
+                <attr name="position" intvalue="1000"/>
+            </file>
+            <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseDatabaseAction.shadow\position" intvalue="1600"/>
+
+            <file name="org-unesco-jisis-windows-databases-CloseAllDatabasesAction.instance">
+                <attr name="position" intvalue="900"/>
+            </file>
+            <file name="org-openide-actions-PrintAction.instance">
+                <attr name="position" intvalue="950"/>
+            </file>
+            <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseAllDatabasesAction.shadow\position" intvalue="1700"/>
+            <file name="org-unesco-jisis-windows-databases-DatabaseConfigurationAction.instance">
+                <attr name="delegate" newvalue="org.unesco.jisis.windows.databases.DatabaseConfigurationAction"/>
+                <attr name="displayName" bundlevalue="org.unesco.jisis.windows.databases.Bundle#CTL_DatabaseConfigurationAction"/>
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="noIconInMenu" boolvalue="false"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="org-unesco-jisis-windows-databases-DbAction.instance"/>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Database">
+            <attr name="SystemFileSystem.localizingBundle" stringvalue="org.unesco.jisis.windows.databases.Bundle_fr_FR"/>
+            <file name="org-unesco-jisis-windows-databases-CloseDatabaseAction-separatorBefore.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="1600"/>
+            </file>
+            <file name="org-unesco-jisis-windows-databases-CloseDatabaseAction.shadow">
+                 
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-windows-databases-CloseDatabaseAction.instance"/>
+                <attr name="position" intvalue="1550"/>
+            </file>
+             <file name="org-unesco-jisis-windows-databases-CloseAllDatabasesAction-separatorAfter.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="1525"/>
+            </file>
+            <file name="org-unesco-jisis-windows-databases-CloseAllDatabasesAction-separatorBefore.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                <attr name="position" intvalue="1800"/>
+            </file>
+            <file name="org-unesco-jisis-windows-databases-CloseAllDatabasesAction.shadow">
+                  
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-windows-databases-CloseAllDatabasesAction.instance"/>
+                <attr name="position" intvalue="1750"/>
+            </file>
+            <file name="org-openide-actions-PrintAction.instance">
+            <attr name="position" intvalue="1770"/>
+            </file>
+            <file name="org-unesco-jisis-windows-databases-DatabaseConfigurationAction.shadow">
+                  
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-windows-databases-DatabaseConfigurationAction.instance"/>
+                <attr name="position" intvalue="2100"/>
+            </file>
+        </folder>
+        <folder name="Window">
+             <attr name="SystemFileSystem.localizingBundle" stringvalue="org.unesco.jisis.windows.databases.Bundle"/>
+            <file name="DbAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/org-unesco-jisis-windows-databases-DbAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Services">
+        <folder name="JavaHelp">
+            <file name="databases-helpset.xml" url="databases-helpset.xml"/>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="DbTopComponent.settings" url="DbTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="leftSlidingSide">
+                <file name="DbTopComponent.wstcref" url="DbTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+    
+</filesystem>

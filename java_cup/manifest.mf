@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: java_cup
+OpenIDE-Module-Implementation-Version: 5
+OpenIDE-Module-Localizing-Bundle: java_cup/Bundle.properties
+
