@@ -13,6 +13,7 @@ import java.util.Observer;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
+import org.slf4j.LoggerFactory;
 import org.unesco.jisis.corelib.client.ConnectionPool;
 import org.unesco.jisis.corelib.client.ClientDatabaseInfo;
 import org.unesco.jisis.corelib.client.RemoteDatabase;
@@ -24,6 +25,7 @@ import org.unesco.jisis.corelib.picklist.PickListData;
 import org.unesco.jisis.corelib.picklist.ValidationData;
 import org.unesco.jisis.corelib.record.IRecord;
 import org.unesco.jisis.corelib.record.Record;
+import org.unesco.jisis.corelib.server.HandleDbRequest;
 import org.unesco.jisis.corelib.server.RecordLock;
 
 public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
@@ -55,7 +57,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
    private int hitSortResultNumber_ = 0;
    
 
-
+     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HandleDbRequest.class);
 
 
     private ClientDatabaseProxy() {
@@ -243,7 +245,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
    public void getDatabase(String dbHome, String dbName, int bulkWrite) throws DbException {
       db_.getDatabase(dbHome, dbName, bulkWrite);
       if (db_.getErrorMsg() != null) {
-         GuiGlobal.output(db_.getErrorMsg());
+         GuiGlobal.outputErr(db_.getErrorMsg());
       }
       fillDatabaseInfo();
       /* register the DB for this connection */
@@ -256,7 +258,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
    public boolean createDatabase(CreateDbParams createDbParam, int bulkWrite) throws DbException {
       boolean ret = db_.createDatabase(createDbParam, bulkWrite);
        if (db_.getErrorMsg() != null) {
-         GuiGlobal.output(db_.getErrorMsg());
+         GuiGlobal.outputErr(db_.getErrorMsg());
       }
       return ret;
    }
@@ -265,6 +267,30 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
    public int getID() {
       int dbId = db_.getID();
       return dbId;
+   }
+   
+   /**
+    * Close all the TopComponents built for this database - This method only affects the GUI components
+    * @return
+    * @throws DbException 
+    */
+    public void closeTopComponents() throws DbException {
+      /*
+       *  We need to clone the array because the close function in the
+       * TopComponent will remove it from the windows_ ArrayList
+       */
+      ArrayList<TopComponent> windowsClone = (ArrayList<TopComponent>) windows_.clone();
+      for (int i = 0; i < windowsClone.size(); i++) {
+         TopComponent topComponent = windowsClone.get(i);
+         LOGGER.debug("Database: "+ db_.getClientDatabaseInfo().getDbName()+
+                               "Close Window i="+i+" TopComponent="+topComponent.getName());
+         boolean status = topComponent.close();
+         if (!status) {
+            LOGGER.error("CLIENT - TopComponent not Closed!!!");
+         }
+      }
+      windows_.clear();
+     
    }
 
    @Override
@@ -276,16 +302,21 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
       ArrayList<TopComponent> windowsClone = (ArrayList<TopComponent>) windows_.clone();
       for (int i = 0; i < windowsClone.size(); i++) {
          TopComponent topComponent = windowsClone.get(i);
-         System.out.println("Close Window i="+i+" TopComponent="+topComponent.getName());
+         LOGGER.debug("Database: "+ db_.getClientDatabaseInfo().getDbName()+
+                               "Close Window i="+i+" TopComponent="+topComponent.getName());
          boolean status = topComponent.close();
          if (!status) {
-            System.out.println("TopComponent not Closed!!!");
+            LOGGER.error("CLIENT - TopComponent not Closed!!!");
          }
       }
       windows_.clear();
+      /**
+       * Close Database on server
+       */
       boolean ret = db_.close();
+      
        if (db_.getErrorMsg() != null) {
-         GuiGlobal.output(db_.getErrorMsg());
+         GuiGlobal.outputErr(db_.getErrorMsg());
       }
      
       return ret;
@@ -404,11 +435,11 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public IRecord addNewRecord() throws DbException {
         IRecord record = db_.addNewRecord();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         long recordsCount = db_.getRecordsCount();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = record.getMfn();
         db_.getClientDatabaseInfo().setRecordsCount(recordsCount);
@@ -434,7 +465,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public Record addRecord(final Record record) throws Exception {
         Record rec = db_.addRecord(record);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = rec.getMfn();
         /**
@@ -451,7 +482,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public Record updateRecord(Record record) throws Exception {
         Record rec = db_.updateRecord(record);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = record.getMfn();
         updateDatabaseInfo();
@@ -463,7 +494,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public Record updateRecordEx(Record record) throws Exception {
         Record rec = db_.updateRecordEx(record);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = record.getMfn();
           /**
@@ -481,7 +512,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public boolean deleteRecord(final long mfn) throws DbException {
         IRecord record = db_.getRecordCursor(mfn);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         record = db_.getPrev();
         if (record == null) {
@@ -500,7 +531,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
         checkIndexFormatVersion();
         boolean ret = db_.buildIndex();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         updateDatabaseInfo();
         return ret;
@@ -511,7 +542,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
         checkIndexFormatVersion();
         boolean ret = db_.clearIndex();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         updateDatabaseInfo();
         return ret;
@@ -526,7 +557,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public boolean saveFieldDefinitionTable(final FieldDefinitionTable fdt) throws DbException {
         boolean ret = db_.saveFieldDefinitionTable(fdt);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (ret) {
             updateDbInfoForDb();
@@ -539,7 +570,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public boolean saveFieldSelectionTable(final FieldSelectionTable fst) throws DbException {
         final boolean ret = db_.saveFieldSelectionTable(fst);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (ret) {
             updateDbInfoForFsts();
@@ -552,7 +583,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public void saveDefaultPrintFormat(final String format) throws DbException {
         db_.saveDefaultPrintFormat(format);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         updateDbInfoForPfts();
         setPftChanged();
@@ -562,7 +593,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public boolean removePrintFormat(final String name) throws DbException {
         final boolean ret = db_.removePrintFormat(name);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (ret) {
             updateDbInfoForPfts();
@@ -575,7 +606,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public boolean savePrintFormat(final String name, final String format) throws DbException {
         final boolean ret = db_.savePrintFormat(name, format);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (ret) {
             updateDbInfoForPfts();
@@ -588,7 +619,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public boolean removeWorksheetDef(final String worksheetName) throws DbException {
         final boolean ret = db_.removeWorksheetDef(worksheetName);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (ret) {
             updateDbInfoForWks();
@@ -601,7 +632,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public boolean saveWorksheetDef(final WorksheetDef wkDef) throws DbException {
         final boolean ret = db_.saveWorksheetDef(wkDef);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (ret) {
             updateDbInfoForWks();
@@ -623,7 +654,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public IConnection getConnection() {
         IConnection connection = db_.getConnection();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return connection;
     }
@@ -668,7 +699,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
 
         fdt = db_.getFieldDefinitionTable();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
 
         return fdt;
@@ -678,7 +709,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public FieldSelectionTable getFieldSelectionTable() throws DbException {
         FieldSelectionTable fst = db_.getFieldSelectionTable();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return fst;
     }
@@ -687,7 +718,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public String getDefaultPrintFormat() throws DbException {
         String defaultPft = db_.getDefaultPrintFormat();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return defaultPft;
     }
@@ -702,7 +733,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public String getPrintFormat(final String name) throws DbException {
         final String pft = db_.getPrintFormat(name);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return pft;
     }
@@ -711,7 +742,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public String getPrintFormatAnsi(final String name) throws DbException {
         final String pft = db_.getPrintFormatAnsi(name);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return pft;
     }
@@ -720,7 +751,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public String[] getPrintFormatNames() throws DbException {
         String[] pftNames = db_.getPrintFormatNames();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return pftNames;
     }
@@ -751,7 +782,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
 
             record = db_.getFirst();
             if (db_.getErrorMsg() != null) {
-                GuiGlobal.output(db_.getErrorMsg());
+                GuiGlobal.outputErr(db_.getErrorMsg());
             }
         }
         currentRecordMfn_ = (record == null) ? 0 : record.getMfn();
@@ -763,7 +794,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public IRecord getLast() throws DbException {
         IRecord record = db_.getLast();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = (record == null) ? 0 : record.getMfn();
 
@@ -774,7 +805,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public IRecord getNext() throws DbException {
         IRecord record = db_.getNext();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (record != null) {
             currentRecordMfn_ = record.getMfn();
@@ -787,7 +818,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public IRecord getPrev() throws DbException {
         IRecord record = db_.getPrev();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (record != null) {
             currentRecordMfn_ = record.getMfn();
@@ -800,7 +831,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public IRecord getCurrent() throws DbException {
         IRecord record = db_.getCurrent();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (record != null) {
             currentRecordMfn_ = record.getMfn();
@@ -813,7 +844,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public IRecord getRecord(long mfn) throws DbException {
         IRecord record = db_.getRecord(mfn);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (record != null) {
             currentRecordMfn_ = record.getMfn();
@@ -826,7 +857,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public IRecord getRecordCursor(long mfn) throws DbException {
         IRecord record = db_.getRecordCursor(mfn);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (record != null) {
             currentRecordMfn_ = record.getMfn();
@@ -839,12 +870,12 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public List<DictionaryTerm> getDictionaryTermsChunck(int from, int to) throws DbException {
         boolean ret = db_.checkIndexFormatVersion();
         if (!ret && db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
             return Collections.<DictionaryTerm>emptyList();
         }
         List<DictionaryTerm> list = db_.getDictionaryTermsChunck(from, to);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return list;
     }
@@ -853,12 +884,12 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public List<DictionaryTerm> getTermSuggestions(String prefix, String[] fieldNames, int maxTerms) throws Exception {
         boolean ret = db_.checkIndexFormatVersion();
         if (!ret && db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
             return Collections.<DictionaryTerm>emptyList();
         }
         List<DictionaryTerm> list = db_.getTermSuggestions(prefix, fieldNames, maxTerms);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return list;
     }
@@ -867,12 +898,12 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public List<DictionaryTerm> getTermSuggestions(JisisParams params) throws Exception {
         boolean ret = db_.checkIndexFormatVersion();
         if (!ret && db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
             return Collections.<DictionaryTerm>emptyList();
         }
         List<DictionaryTerm> list = db_.getTermSuggestions(params);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return list;
     }
@@ -882,12 +913,12 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
         throws DbException {
         boolean ret = db_.checkIndexFormatVersion();
         if (!ret && db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
             return Collections.<DictionaryTerm>emptyList();
         }
         List<DictionaryTerm> list = db_.getDictionaryTermsChunckEx(from, n);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return list;
     }
@@ -897,12 +928,12 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
         throws DbException {
         boolean ret = db_.checkIndexFormatVersion();
         if (!ret && db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
             return Collections.<DictionaryTerm>emptyList();
         }
         List<DictionaryTerm> list = db_.getSortedDictionaryTermsChunck(from, to);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return list;
     }
@@ -911,7 +942,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public void setDictionarySorting(int[] iSort) throws DbException {
         db_.setDictionarySorting(iSort);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
     }
 
@@ -919,13 +950,13 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public boolean reIndex() throws DbException {
         boolean ret = db_.checkIndexFormatVersion();
         if (!ret && db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
             GuiGlobal.output(NbBundle.getMessage(ClientDatabaseProxy.class, "MSG_IndexFormatTooOld"));
             return ret;
         }
         ret = db_.reIndex();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         updateDatabaseInfo();
         setIndexChanged();
@@ -936,13 +967,13 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public long[] search(String query) throws DbException {
         boolean ret = db_.checkIndexFormatVersion();
         if (!ret && db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
             GuiGlobal.output(NbBundle.getMessage(ClientDatabaseProxy.class, "MSG_IndexFormatTooOld"));
             return null;
         }
         long[] mfn = db_.search(query);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         db_.getClientDatabaseInfo().setLastQuery(query);
         db_.getClientDatabaseInfo().setResultLastQuery(mfn);
@@ -954,13 +985,13 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public long[] searchLucene(String query) throws DbException {
         boolean ret = db_.checkIndexFormatVersion();
         if (!ret && db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
             GuiGlobal.output(NbBundle.getMessage(ClientDatabaseProxy.class, "MSG_IndexFormatTooOld"));
             return null;
         }
         long[] mfn = db_.searchLucene(query);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         db_.getClientDatabaseInfo().setLastLuceneQuery(query);
         db_.getClientDatabaseInfo().setResultLastLuceneQuery(mfn);
@@ -972,13 +1003,13 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public List<DictionaryTerm> getDictionaryTerms() throws DbException {
         boolean ret = db_.checkIndexFormatVersion();
         if (!ret && db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
             GuiGlobal.output(NbBundle.getMessage(ClientDatabaseProxy.class, "MSG_IndexFormatTooOld"));
             return Collections.<DictionaryTerm>emptyList();
         }
         List<DictionaryTerm> list = db_.getDictionaryTerms();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return list;
     }
@@ -987,7 +1018,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
    public IndexInfo getIndexInfo() throws DbException {
       boolean ret = db_.checkIndexFormatVersion();
       if (!ret && db_.getErrorMsg() != null) {
-         GuiGlobal.output(db_.getErrorMsg());
+         GuiGlobal.outputErr(db_.getErrorMsg());
          GuiGlobal.output(NbBundle.getMessage(ClientDatabaseProxy.class, "MSG_IndexFormatTooOld") );
          return null;
       }
@@ -1011,7 +1042,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public boolean saveFst(String name, FieldSelectionTable fst) throws Exception {
         boolean ret = db_.saveFst(name, fst);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         if (ret) {
             db_.getClientDatabaseInfo().setFstNames(db_.getFstNames());
@@ -1024,7 +1055,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public FieldSelectionTable getFst(String name) throws DbException {
         FieldSelectionTable fst = db_.getFst(name);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return fst;
     }
@@ -1033,7 +1064,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public boolean removeFst(String name) throws DbException {
         db_.removeFst(name);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         db_.getClientDatabaseInfo().getFst();
         setFstChanged();
@@ -1044,7 +1075,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public String getDefaultFstName() throws DbException {
         String name = db_.getDefaultFstName();
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return name;
     }
@@ -1053,7 +1084,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public List<Record> getRecordChunck(int from, int to) throws DbException {
         List<Record> list = db_.getRecordChunck(from, to);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return list;
     }
@@ -1062,7 +1093,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public List<Record> getRecordChunck(long[] mfnChunck) throws DbException {
         List<Record> list = db_.getRecordChunck(mfnChunck);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return list;
     }
@@ -1071,7 +1102,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public List<Record> getRecordChunck(long fromMfn, int nRecords) throws DbException {
         List<Record> list = db_.getRecordChunck(fromMfn, nRecords);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         return list;
     }
@@ -1354,7 +1385,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public FormattedRecord getRecordFmt(long mfn, String pftName) throws DbException {
         FormattedRecord formattedRecord = db_.getRecordFmt(mfn, pftName);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = (formattedRecord == null) ? -1L : formattedRecord.getMfn();
         return formattedRecord;
@@ -1364,7 +1395,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public FormattedRecord getRecordCursorFmt(long mfn, String pftName) throws DbException {
         FormattedRecord formattedRecord = db_.getRecordCursorFmt(mfn, pftName);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = (formattedRecord == null) ? -1L : formattedRecord.getMfn();
         return formattedRecord;
@@ -1374,7 +1405,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public FormattedRecord getFirstFmt(String pftName) throws DbException {
         FormattedRecord formattedRecord = db_.getFirstFmt(pftName);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = (formattedRecord == null) ? -1L : formattedRecord.getMfn();
         return formattedRecord;
@@ -1384,7 +1415,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public FormattedRecord getNextFmt(String pftName) throws DbException {
         FormattedRecord formattedRecord = db_.getNextFmt(pftName);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = (formattedRecord == null) ? -1L : formattedRecord.getMfn();
         return formattedRecord;
@@ -1394,7 +1425,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public FormattedRecord getPrevFmt(String pftName) throws DbException {
         FormattedRecord formattedRecord = db_.getPrevFmt(pftName);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = (formattedRecord == null) ? -1L : formattedRecord.getMfn();
         return formattedRecord;
@@ -1404,7 +1435,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public FormattedRecord getLastFmt(String pftName) throws DbException {
         FormattedRecord formattedRecord = db_.getLastFmt(pftName);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = (formattedRecord == null) ? -1L : formattedRecord.getMfn();
         return formattedRecord;
@@ -1414,7 +1445,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public FormattedRecord getCurrentFmt(String pftName) throws DbException {
         FormattedRecord formattedRecord = db_.getCurrentFmt(pftName);
         if (db_.getErrorMsg() != null) {
-            GuiGlobal.output(db_.getErrorMsg());
+            GuiGlobal.outputErr(db_.getErrorMsg());
         }
         currentRecordMfn_ = (formattedRecord == null) ? -1L : formattedRecord.getMfn();
         return formattedRecord;
@@ -1444,7 +1475,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
        if (b) {
           // pass
       } else {
-         GuiGlobal.output(db_.getErrorMsg());
+         GuiGlobal.outputErr(db_.getErrorMsg());
          GuiGlobal.output(NbBundle.getMessage(ClientDatabaseProxy.class, "MSG_IndexFormatTooOld") );
       }
       return b;

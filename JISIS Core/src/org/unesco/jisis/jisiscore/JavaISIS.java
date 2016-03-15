@@ -9,11 +9,16 @@ import java.awt.Font;
 import java.io.File;
 import java.util.prefs.Preferences;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.config.IniSecurityManagerFactory;
+
+
+
 import org.apache.shiro.util.Factory;
 import org.openide.DialogDisplayer;
+import org.openide.LifecycleManager;
 import org.openide.NotifyDescriptor;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Exceptions;
@@ -50,7 +55,7 @@ public class JavaISIS extends ModuleInstall  {
         System.out.println("Entry in JavaISIS restored");
         LOGGER.info("Entry in JavaISIS restored");
         System.out.println(Thread.currentThread().getContextClassLoader());
-        if (!isJavaGE17()) {
+        if (!isJavaGE18()) {
 
             String msg = NbBundle.getMessage(JavaISIS.class, "MSG_JavaLessThan17", System.getProperty("java.version"));
             NotifyDescriptor d = new NotifyDescriptor.Message(msg);
@@ -85,8 +90,21 @@ public class JavaISIS extends ModuleInstall  {
              * Should be enable to re-create the users database
              */
             //UserDB.createUserDatabase();
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
+            WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+                @Override
+                public void run() {
+
+                    JPanel panel = new JPanel();
+                    JOptionPane.showMessageDialog(
+                        panel, "Error: " + ex.toString(),
+                        "Error", JOptionPane.ERROR_MESSAGE
+                    );
+
+                }
+            });
             Exceptions.printStackTrace(ex);
+            LifecycleManager.getDefault().exit();
         }
         System.out.println("exiting restored()");
 
@@ -190,7 +208,8 @@ public class JavaISIS extends ModuleInstall  {
       Global.setClientTempPath(getClientTempPath());
    }
 
-    /** User's current working directory */
+    /** User's current working directory
+    * @return  */
     public static String getHome() {
         return System.getProperty("user.dir");
     }
@@ -216,8 +235,8 @@ public class JavaISIS extends ModuleInstall  {
         return DbServerService.getJIsisHome() + File.separator + "temp" ;
     }
        
-       public static boolean isJavaGE17() {
-          boolean b = Integer.parseInt(System.getProperty("java.version").split("\\.")[1]) >= 7;
+       public static boolean isJavaGE18() {
+          boolean b = Integer.parseInt(System.getProperty("java.version").split("\\.")[1]) >= 8;
           return b;
        }
        

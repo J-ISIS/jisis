@@ -120,7 +120,7 @@ public class UserDB {
         
         db.put(null,theKey,theData);
         
-        UserInfo user = new UserInfo("admin","admin");
+        UserInfo user = new UserInfo("admin","admin", null);
         user.setIsAdmin(true);
         try {
             UserDbHandle userDbHandler = new UserDbHandle();

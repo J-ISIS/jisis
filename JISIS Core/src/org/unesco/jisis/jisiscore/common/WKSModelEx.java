@@ -27,20 +27,22 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
         NbBundle.getMessage(WKSModelEx.class, "MSG_WksTagLabel"),
         NbBundle.getMessage(WKSModelEx.class, "MSG_WksDescription"),
         NbBundle.getMessage(WKSModelEx.class, "MSG_WksDisplay"),
+        NbBundle.getMessage(WKSModelEx.class, "MSG_WksSize"),
         NbBundle.getMessage(WKSModelEx.class, "MSG_WksDefault"),
         NbBundle.getMessage(WKSModelEx.class, "MSG_WksHelpMessage"),
         NbBundle.getMessage(WKSModelEx.class, "MSG_WksValidation"),
         NbBundle.getMessage(WKSModelEx.class, "MSG_WksPickList")
     };
     static final private Class columnClasses[] = {
-        Integer.class, String.class, String.class, String.class, String.class, String.class,
+        Integer.class, String.class, String.class, String.class, String.class, String.class, String.class,
         String.class
     };
     static final public ColumnData wksColumns[] = {
-        new ColumnData(NbBundle.getMessage(WKSModelEx.class, "MSG_WksTagLabel"), 30, JLabel.RIGHT),
+        new ColumnData(NbBundle.getMessage(WKSModelEx.class, "MSG_WksTagLabel"), 15, JLabel.RIGHT),
         new ColumnData(NbBundle.getMessage(WKSModelEx.class, "MSG_WksDescription"), 150,
                        JLabel.LEFT),
         new ColumnData(NbBundle.getMessage(WKSModelEx.class, "MSG_WksDisplay"), 30, JLabel.LEFT),
+        new ColumnData(NbBundle.getMessage(WKSModelEx.class, "MSG_WksSize"), 30, JLabel.RIGHT),
         new ColumnData(NbBundle.getMessage(WKSModelEx.class, "MSG_WksDefault"), 150, JLabel.LEFT),
         new ColumnData(NbBundle.getMessage(WKSModelEx.class, "MSG_WksHelpMessage"), 150,
                        JLabel.LEFT),
@@ -52,10 +54,11 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
     public static final int TAG_COLUMN_INDEX         = 0;
     public static final int DESCRIPTION_COLUMN_INDEX = 1;
     public static final int DISPLAY_COLUMN_INDEX     = 2;
-    public static final int DEFAULT_COLUMN_INDEX     = 3;
-    public static final int HELP_COLUMN_INDEX        = 4;
-    public static final int VALIDATION_COLUMN_INDEX  = 5;
-    public static final int PICKLIST_COLUMN_INDEX    = 6;
+    public static final int SIZE_INDEX               = 3;
+    public static final int DEFAULT_COLUMN_INDEX     = 4;
+    public static final int HELP_COLUMN_INDEX        = 5;
+    public static final int VALIDATION_COLUMN_INDEX  = 6;
+    public static final int PICKLIST_COLUMN_INDEX    = 7;
 
     /** The data structure used to store the worksheet data */
     private WorksheetDef    workSheetDef_            = null;
@@ -72,18 +75,18 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
         fireTableDataChanged();
     }
 
-    public void addRow(int tag, String desc, String display, String defVal, String hlpMsg,
+    public void addRow(int tag, String desc, String display, String size, String defVal, String hlpMsg,
                        String valid, String pickList) {
-        addRow(tag, desc, display, defVal, hlpMsg, valid, pickList, false);
+        addRow(tag, desc, display, size, defVal, hlpMsg, valid, pickList, false);
     }
 
-    private void addRow(int tag, String desc, String display, String defVal, String hlpMsg,
+    private void addRow(int tag, String desc, String display, String size, String defVal, String hlpMsg,
                         String valid, String pickList, boolean renderOnly) {
         if ((workSheetDef_ != null) &&!renderOnly) {
             
                 workSheetDef_.addField(tag, false, false,
                         Global.FIELD_TYPE_ALPHANUMERIC,
-                        desc, display, defVal, hlpMsg, valid, pickList);
+                        desc, display, size, defVal, hlpMsg, valid, pickList);
                 tableDataChanged();
            
         }
@@ -101,6 +104,28 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
             tableDataChanged();
         }
     }
+    
+    public boolean moveRowUp(int rowIndex) {
+        if (workSheetDef_ == null) {
+            return false;
+        }
+        boolean isMoveDone = workSheetDef_.moveFieldUp(rowIndex);
+        if (isMoveDone) {
+            tableDataChanged();
+        }
+        return isMoveDone;
+    }
+
+    public boolean moveRowDown(int rowIndex) {
+        if (workSheetDef_ == null) {
+            return false;
+        }
+        boolean isMoveDone = workSheetDef_.moveFieldDown(rowIndex);
+        if (isMoveDone) {
+            tableDataChanged();
+        }
+        return isMoveDone;
+    }
 
     public String[] getColumns() {
         return columnName;
@@ -110,10 +135,12 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
         return columnClasses;
     }
 
+    @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return columnIndex > 1;
     }
 
+    @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (workSheetDef_ != null) {
             
@@ -122,10 +149,11 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
                                                           0).toString());
                 String                      desc    = getValueAt(rowIndex, 1).toString();
                 String                      display = getValueAt(rowIndex, 2).toString();
-                String                      def     = getValueAt(rowIndex, 3).toString();
-                String                      help    = getValueAt(rowIndex, 4).toString();
-                String                      val     = getValueAt(rowIndex, 5).toString();
-                String                      pick    = getValueAt(rowIndex, 6).toString();
+                String                      size    = getValueAt(rowIndex, 3).toString();
+                String                      def     = getValueAt(rowIndex, 4).toString();
+                String                      help    = getValueAt(rowIndex, 5).toString();
+                String                      val     = getValueAt(rowIndex, 6).toString();
+                String                      pick    = getValueAt(rowIndex, 7).toString();
                 switch (columnIndex) {
                 case TAG_COLUMN_INDEX: {
                     tag = Integer.parseInt(aValue.toString());
@@ -133,6 +161,10 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
                 }
                 case DESCRIPTION_COLUMN_INDEX : {
                     desc = aValue.toString();
+                    break;
+                }
+                 case SIZE_INDEX : {
+                    size = aValue.toString();
                     break;
                 }
                 case DISPLAY_COLUMN_INDEX: {
@@ -158,7 +190,7 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
                 }
                 workSheetDef_.addField(tag, false,false,
                         Global.FIELD_TYPE_ALPHANUMERIC,
-                        desc, display, def, help, val, pick);
+                        desc, display, size, def, help, val, pick);
            
             tableDataChanged();
         }
@@ -168,6 +200,7 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
         return workSheetDef_;
     }
 
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (workSheetDef_ == null) {
             return null;
@@ -175,7 +208,7 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
         WorksheetDef.WorksheetField wf = workSheetDef_.getFieldByIndex(rowIndex);
         switch (columnIndex) {
         case TAG_COLUMN_INDEX:    // Tag
-            return new Integer(wf.getTag());
+            return wf.getTag();
         case DESCRIPTION_COLUMN_INDEX :    // Description
             return (wf.getDescription() == null)
                    ? ""
@@ -184,6 +217,10 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
             return (wf.getDisplayControl() == null)
                    ? ""
                    : wf.getDisplayControl();
+       case SIZE_INDEX :               // visual size
+            return (wf.getSize() == null)
+                   ? ""
+                   : wf.getSize();
         case DEFAULT_COLUMN_INDEX :    // Default value
             return (wf.getDefaultValue() == null)
                    ? ""
@@ -204,18 +241,22 @@ public class WKSModelEx extends AbstractTableModel implements TableModel, Reorde
         return "";
     }
 
+    @Override
     public int getRowCount() {
         return workSheetDef_.getFieldsCount();
     }
 
+    @Override
     public int getColumnCount() {
         return getColumns().length;
     }
 
+    @Override
     public String getColumnName(int columnIndex) {
         return getColumns()[columnIndex];
     }
 
+    @Override
     public Class getColumnClass(int columnIndex) {
         return getColumnClasses()[columnIndex];
     }
