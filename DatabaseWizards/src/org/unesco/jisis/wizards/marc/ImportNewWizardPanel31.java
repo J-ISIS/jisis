@@ -28,24 +28,24 @@ import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
  *
  * @author jc_dauphin
  */
-public class ImportNewWizardPanel31 implements WizardDescriptor.Panel {
+public class ImportNewWizardPanel31 implements WizardDescriptor.Panel<WizardDescriptor> {
    /**
-    * The visual component that displays this panel. If you need to access the
-    * component from this class, just use getComponent().
+    * The visual component_ that displays this panel. If you need to access the
+ component_ from this class, just use getComponent().
     */
-   private ImportNewVisualPanel31 component;
+   private ImportNewVisualPanel31 component_;
    private String lastMfn_;
    
 
-   // Get the visual component for the panel. In this template, the component
+   // Get the visual component_ for the panel. In this template, the component_
    // is kept separate. This can be more efficient: if the wizard is created
    // but never displayed, or not all panels are displayed, it is better to
    // create only those which really need to be visible.
-   public Component getComponent() {
-      if (component == null) {
-         component = new ImportNewVisualPanel31();
+   public ImportNewVisualPanel31 getComponent() {
+      if (component_ == null) {
+         component_ = new ImportNewVisualPanel31();
       }
-      return component;
+      return component_;
    }
 
    public HelpCtx getHelp() {
@@ -96,22 +96,22 @@ public class ImportNewWizardPanel31 implements WizardDescriptor.Panel {
    // settings object will be the WizardDescriptor, so you can use
    // WizardDescriptor.getProperty & putProperty to store information entered
    // by the user.
-   public void readSettings(Object settings) {
+   public void readSettings(WizardDescriptor wd) {
       try {
          IConnection conn = ConnectionPool.getDefaultConnection();
          // conn.echo();
          String[] dbHomes = conn.getDbHomes();
-         component.fillDbHomes(dbHomes);
+         component_.fillDbHomes(dbHomes);
       } catch (DbException ex) {
-         component.fillDbHomes(new String[] { "" });
+         component_.fillDbHomes(new String[] { "" });
          throw new org.openide.util.NotImplementedException("Not Implemented");
       } catch (Exception ex) {
          ex.printStackTrace();
       }
    }
-private static void doShowBusyCursor(boolean busy) {
-        JFrame mainWindow = (JFrame)WindowManager.getDefault().getMainWindow();
-        if(busy){
+    private static void doShowBusyCursor(boolean busy) {
+        JFrame mainWindow = (JFrame) WindowManager.getDefault().getMainWindow();
+        if (busy) {
             RepaintManager.currentManager(mainWindow).paintDirtyRegions();
             mainWindow.getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             mainWindow.getGlassPane().setVisible(true);
@@ -122,37 +122,34 @@ private static void doShowBusyCursor(boolean busy) {
             mainWindow.repaint();
         }
     }
-   public void storeSettings(Object settings) {
-      
-         WizardDescriptor wd = (WizardDescriptor) settings;
-         ImportNewVisualPanel31 panel = (ImportNewVisualPanel31) getComponent();
-         String dbHome = panel.getDbHome();
-         String dbName = panel.getDbName();
-         wd.putProperty("dbHome", dbHome);
-         wd.putProperty("dbName", dbName);
-         IConnection conn = null;
-         conn = ConnectionPool.getDefaultConnection();
-         // Open the Database
-         Component waitingComponent = this.getComponent();
-      try {
 
-         waitingComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-         ClientDatabaseProxy db = new ClientDatabaseProxy(conn);
-         db.getDatabase(dbHome, dbName, Global.DATABASE_BULK_WRITE);
-         long lastMfn = db.getLastMfn();
-         wd.putProperty("lastMfn", ""+lastMfn);
-         lastMfn_ = Long.toString(lastMfn);
+    public void storeSettings(WizardDescriptor wd) {
+
+        ImportNewVisualPanel31 panel = (ImportNewVisualPanel31) getComponent();
+        String dbHome = panel.getDbHome();
+        String dbName = panel.getDbName();
+        wd.putProperty("dbHome", dbHome);
+        wd.putProperty("dbName", dbName);
+        IConnection conn = null;
+        conn = ConnectionPool.getDefaultConnection();
+        // Open the Database
+        Component waitingComponent = this.getComponent();
+        try {
+            waitingComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            ClientDatabaseProxy db = new ClientDatabaseProxy(conn);
+            db.getDatabase(dbHome, dbName, Global.DATABASE_DURABILITY_WRITE);
+            long lastMfn = db.getLastMfn();
+            wd.putProperty("lastMfn", "" + lastMfn);
+            lastMfn_ = Long.toString(lastMfn);
          //db.close();
-         
-      } catch (DbException ex) {
-         Exceptions.printStackTrace(ex);
-      } finally {
-         waitingComponent.setCursor(null);
 
-      }
+        } catch (DbException ex) {
+            Exceptions.printStackTrace(ex);
+        } finally {
+            waitingComponent.setCursor(null);
+        }
 
-
-   }
+    }
 
    public String getLastMfn() {
       return lastMfn_;

@@ -110,7 +110,7 @@ public final class ImportWizardAction extends CallableSystemAction {
       if (idb != null) {
          try {
             idb.close();
-            ConnectionPool.closeDatabase(idb);
+            ConnectionPool.removeDatabase(idb);
          } catch (DbException ex) {
             Exceptions.printStackTrace(ex);
          }
@@ -151,6 +151,10 @@ public final class ImportWizardAction extends CallableSystemAction {
                db_ = new ClientDatabaseProxy(conn_);
                ImpExpTool.createEmptyDB(db_, dbHome, dbName);
             }
+            
+            /**
+             * 
+             */
 
             // Open the Database
 
@@ -170,7 +174,7 @@ public final class ImportWizardAction extends CallableSystemAction {
 
             db_ = new ClientDatabaseProxy(conn_);
             try {
-               db_.getDatabase(dbHome, dbName, Global.DATABASE_BULK_WRITE);
+               db_.getDatabase(dbHome, dbName, Global.DATABASE_DURABILITY_WRITE);
             } catch (DbException ex) {
                Exceptions.printStackTrace(ex);
             }

@@ -96,16 +96,19 @@ public final class connOpenWizardAction extends CallableSystemAction {
          StatusDisplayer.getDefault().setStatusText("Connection to Server Please Wait ...");
          RepaintManager.currentManager(mainWin).paintDirtyRegions();
          IdeCursor.changeCursorWaitStatus(true);
-         IConnection connection = null;
-         if (Global.useNIO_) {
-            connection =
-                    new ConnectionNIO(hostname, Integer.parseInt(port), username, password);
-         } else {
-//              connection =
-//               new Connection(hostname, Integer.parseInt(port), username, password);
-            throw new RuntimeException("Connection doesn't use NIO!!");
-         }
-         ConnectionPool.addConnection(connection);
+         ConnectionNIO connection =   (ConnectionNIO) ConnectionNIO.connect(hostname, Integer.parseInt(port));
+        
+         /**
+          * Try to authenticate on server side
+          */
+          boolean success = connection.authenticate(username, password);
+          if (success) {
+              ConnectionPool.addConnection(connection);
+          } else {
+              String errorMsg = "Cannot Authenticate the User Name/Password pair\nPlease Try again";
+              DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(errorMsg));
+              connection.close();
+          }
       } catch (DbException ex) {
          String errorMsg = ex.getMessage();
          DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(errorMsg));

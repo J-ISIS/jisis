@@ -6,6 +6,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.TableModel;
 
 import org.openide.WizardDescriptor;
+import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.unesco.jisis.corelib.client.ConnectionPool;
 import org.unesco.jisis.corelib.common.IConnection;
@@ -31,7 +32,7 @@ public class FSTWizardPanel implements WizardDescriptor.Panel {
     // but never displayed, or not all panels are displayed, it is better to
     // create only those which really need to be visible.
     public Component getComponent() {
-        IConnection conn = null;
+        IConnection conn;
         try {
             conn = ConnectionPool.getDefaultConnection();
             if(conn!= null && !conn.getUserInfo().getIsAdmin()){
@@ -42,7 +43,7 @@ public class FSTWizardPanel implements WizardDescriptor.Panel {
                 }
             }
         } catch (NoPermissionException ex) {
-            ex.printStackTrace();
+            Exceptions.printStackTrace(ex);
         } 
         return component;
     }
