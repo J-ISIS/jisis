@@ -11,6 +11,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+import java.awt.Dimension;
 
 import java.awt.EventQueue;
 import java.io.*;
@@ -347,6 +348,8 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
 
         printSortTabbedPane.setName("Print..."); // NOI18N
 
+        printPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(PrintSortTopComponent.class, "PrintSortTopComponent.jPanel2.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(PrintSortTopComponent.class, "PrintSortTopComponent.jLabel3.text")); // NOI18N
@@ -504,7 +507,7 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cmbMarked, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtMfns, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+                            .addComponent(txtMfns, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
                             .addComponent(cmbSearch, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(113, 113, 113))))
         );
@@ -651,11 +654,12 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                     .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(698, Short.MAX_VALUE))
+                .addContainerGap(101, Short.MAX_VALUE))
         );
         printPanelLayout.setVerticalGroup(
             printPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(printPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -663,12 +667,16 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(225, 225, 225))
         );
 
         scrollPanePrint.setViewportView(printPanel);
 
         printSortTabbedPane.addTab(org.openide.util.NbBundle.getMessage(PrintSortTopComponent.class, "PrintSortTopComponent.scrollPanePrint.TabConstraints.tabTitle"), scrollPanePrint); // NOI18N
+
+        scrollPaneSort.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        sortPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         selectPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(PrintSortTopComponent.class, "PrintSortTopComponent.selectPanel.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
 
@@ -878,20 +886,14 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
         sorKeysPanelLayout.setHorizontalGroup(
             sorKeysPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sorKeysPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(sorKeysPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(sorKeysPanelLayout.createSequentialGroup()
-                        .addGap(106, 106, 106)
-                        .addGroup(sorKeysPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel18)
-                            .addComponent(jLabel17)
-                            .addComponent(jLabel19)))
-                    .addGroup(sorKeysPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 891, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(sorKeysPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnSort)))
-                .addContainerGap(143, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 891, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSort)
+                    .addComponent(jLabel18)
+                    .addComponent(jLabel17)
+                    .addComponent(jLabel19))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         sorKeysPanelLayout.setVerticalGroup(
             sorKeysPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -904,9 +906,9 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                 .addComponent(jLabel17)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel19)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout sortPanelLayout = new javax.swing.GroupLayout(sortPanel);
@@ -919,7 +921,7 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                     .addComponent(selectPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(headingPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(sorKeysPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(626, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
         sortPanelLayout.setVerticalGroup(
             sortPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -928,16 +930,16 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                 .addComponent(selectPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(headingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(sorKeysPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(357, Short.MAX_VALUE))
+                .addGap(30, 30, 30))
         );
 
         scrollPaneSort.setViewportView(sortPanel);
 
         printSortTabbedPane.addTab(org.openide.util.NbBundle.getMessage(PrintSortTopComponent.class, "PrintSortTopComponent.scrollPaneSort.TabConstraints.tabTitle"), scrollPaneSort); // NOI18N
 
-        add(printSortTabbedPane, java.awt.BorderLayout.PAGE_START);
+        add(printSortTabbedPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
    private void cmbSelectFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSelectFormatActionPerformed
@@ -1767,12 +1769,14 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
 
                                    KeyInfo[] keys = getSortKeyInfo();
                                    if (keys == null) {
+                                       GuiGlobal.outputErr("Sorting Interrupted - Sort keys are not defined");                                      
                                        return;
                                    }
 
                                    final SortDatabase sortDB = new SortDatabase(db_, keys);
 
                                    if (sortDB.getErrorCount() > 0) {
+                                       GuiGlobal.outputErr("Sorting Interrupted due to errors in the sort keys");
                                        return;
                                    }
                                    sortDB.setMfnRange(mfnRanges);
@@ -1801,8 +1805,10 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                            = new NotifyDescriptor.Message(NbBundle.getMessage(PrintSortTopComponent.class,
                                    "MSG_PRINTING_DONE"));
                        DialogDisplayer.getDefault().notify(d);
-                       // Make the pdf
-                       createPdf(getOutputFile());
+                       // Make the pdf only if HTML output
+                       if (getOutputFormat().equals("HTML")) {
+                           createPdf(getOutputFile());
+                       }
                    }
                }
            };
