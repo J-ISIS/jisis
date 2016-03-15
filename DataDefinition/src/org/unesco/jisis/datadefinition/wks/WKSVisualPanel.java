@@ -2,14 +2,14 @@ package org.unesco.jisis.datadefinition.wks;
 
 
 import java.awt.Cursor;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.Rectangle;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import org.unesco.jisis.jisiscore.common.WKSModelEx;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import org.openide.util.ImageUtilities;
 import org.unesco.jisis.gui.GuiUtils;
@@ -55,8 +55,20 @@ public final class WKSVisualPanel extends JPanel  {
         initComponents();
         createFdtTableColumns();
         createWksTableColumns();
+        setUpWksDisplayColumn();
         GuiUtils.TweakJTable(tblWKS);
         GuiUtils.TweakJTable(tblAvail);
+        
+       tblWKS.clearSelection();
+       btnAdd.setEnabled(true);
+       btnAddAll.setEnabled(true);
+       btnRemove.setEnabled(false);
+       btnRemoveAll.setEnabled(false);
+       btnUpWks.setEnabled(false);
+       btnDownWks.setEnabled(false);
+        if (tblAvail.getRowCount() > 0) {
+            tblAvail.setRowSelectionInterval(0, 0);
+        }
 
         // Handle the listeners
       
@@ -70,6 +82,8 @@ public final class WKSVisualPanel extends JPanel  {
                 btnAddAll.setEnabled(true);
                 btnRemove.setEnabled(false);
                 btnRemoveAll.setEnabled(false);
+                btnUpWks.setEnabled(false);
+                btnDownWks.setEnabled(false);
             }
         });
 
@@ -81,12 +95,9 @@ public final class WKSVisualPanel extends JPanel  {
                 btnAddAll.setEnabled(false);
                 btnRemove.setEnabled(true);
                 btnRemoveAll.setEnabled(true);
-                 int selRow = tblWKS.getSelectedRow();
-//        if (selRow != -1) {
-//            WKSModelEx wksModel = (WKSModelEx) tblWKS.getModel();
-//            wksModel.removeRow(selRow);
-//            wksModel.fireTableDataChanged();
-//        }
+                btnUpWks.setEnabled(true);
+                btnDownWks.setEnabled(true);
+             
             }
         });
         
@@ -117,10 +128,10 @@ public final class WKSVisualPanel extends JPanel  {
 
          String recValFormat = wdf.getRecordValidationFormat();
          validationEditorPane.setText(recValFormat);
-
-        
+       
         createFdtTableColumns();
         createWksTableColumns();
+        setUpWksDisplayColumn();
         GuiUtils.TweakJTable(tblWKS);
         
         tblWKS.setDragEnabled(true);
@@ -133,7 +144,14 @@ public final class WKSVisualPanel extends JPanel  {
         btnAddAll.setIcon(new ImageIcon(ImageUtilities.loadImage(TWO_DOWN_PATH, true)));
         btnRemoveAll.setIcon(new ImageIcon(ImageUtilities.loadImage(TWO_UP_PATH, true)));
 
-         // List Selection Listeners
+       tblWKS.clearSelection();
+       btnAdd.setEnabled(true);
+       btnAddAll.setEnabled(true);
+       btnRemove.setEnabled(false);
+       btnRemoveAll.setEnabled(false);
+       btnUpWks.setEnabled(false);
+       btnDownWks.setEnabled(false);
+       // List Selection Listeners
         tblAvail.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 tblWKS.clearSelection();
@@ -141,25 +159,25 @@ public final class WKSVisualPanel extends JPanel  {
                 btnAddAll.setEnabled(true);
                 btnRemove.setEnabled(false);
                 btnRemoveAll.setEnabled(false);
+                btnUpWks.setEnabled(false);
+                btnDownWks.setEnabled(false);
             }
         });
 
 
-        tblWKS.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                tblAvail.clearSelection();
-                 btnAdd.setEnabled(false);
-                btnAddAll.setEnabled(false);
-                btnRemove.setEnabled(true);
-                btnRemoveAll.setEnabled(true);
-                 int selRow = tblWKS.getSelectedRow();
-//        if (selRow != -1) {
-//            WKSModelEx wksModel = (WKSModelEx) tblWKS.getModel();
-//            wksModel.removeRow(selRow);
-//            wksModel.fireTableDataChanged();
-//        }
-            }
-            });
+       tblWKS.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+          public void valueChanged(ListSelectionEvent e) {
+             tblAvail.clearSelection();
+             btnAdd.setEnabled(false);
+             btnAddAll.setEnabled(false);
+             btnRemove.setEnabled(true);
+             btnRemoveAll.setEnabled(true);
+             btnUpWks.setEnabled(true);
+             btnDownWks.setEnabled(true);
+
+          }
+       });
+       tblAvail.setRowSelectionInterval(0, 0);
     }
 
     private void createFdtTableColumns() {
@@ -202,7 +220,42 @@ public final class WKSVisualPanel extends JPanel  {
          tblWKS.addColumn(tc);
       }
    }
-    
+      public void setUpWksDisplayColumn() {
+        //Set up the editor for the sport cells.
+        JComboBox comboBox = new JComboBox();
+        comboBox.addItem(""); 
+        comboBox.addItem("Text/Textarea");          // 1
+        comboBox.addItem("Text(fixed length)");     // 2
+        comboBox.addItem("Table");                  // 3
+        comboBox.addItem("PasswordS");              // 4 
+        comboBox.addItem("Date");                   // 5
+        comboBox.addItem("Select simple");          // 6
+        comboBox.addItem("Select multiple");        // 7
+        comboBox.addItem("Checkbox");               // 8
+        comboBox.addItem("Radio Button");           // 9
+        comboBox.addItem("HTML Area");              // 10 
+         comboBox.addItem("External HTML");         // 11
+        comboBox.addItem("Upload File");            // 12
+        comboBox.addItem("URL");                    // 13
+        comboBox.addItem("Read Only");              // 14
+       
+        TableColumn displayColumn = tblWKS.getColumnModel().getColumn(WKSModelEx.DISPLAY_COLUMN_INDEX);
+        displayColumn.setCellEditor(new DefaultCellEditor(comboBox));
+
+        //Set up tool tips for the sport cells.
+        DefaultTableCellRenderer renderer =
+                new DefaultTableCellRenderer();
+        renderer.setToolTipText("Click for combo box");
+        displayColumn.setCellRenderer(renderer);
+    }
+
+    private void ensureRowIsVisible(int row) {
+      Rectangle vis = getVisibleRect();
+      Rectangle cellBounds = tblWKS.getCellRect(row, 0, true);
+      vis.y = cellBounds.y;
+      vis.height = cellBounds.height;
+      tblWKS.scrollRectToVisible(vis);
+   }
     public void load(IDatabase db, String wksName) {
         
         try {
@@ -245,6 +298,8 @@ public final class WKSVisualPanel extends JPanel  {
         btnRemove = new javax.swing.JButton();
         btnAddAll = new javax.swing.JButton();
         btnRemoveAll = new javax.swing.JButton();
+        btnUpWks = new javax.swing.JButton();
+        btnDownWks = new javax.swing.JButton();
 
         tblAvail.setAutoCreateColumnsFromModel(false);
         tblAvail.setModel(fdtModel_);
@@ -309,6 +364,22 @@ public final class WKSVisualPanel extends JPanel  {
         });
         jToolBar1.add(btnRemoveAll);
 
+        btnUpWks.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/unesco/jisis/datadefinition/wks/1uparrow.png"))); // NOI18N
+        btnUpWks.setToolTipText("Move Up Selected WKS Entry");
+        btnUpWks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpWksActionPerformed(evt);
+            }
+        });
+
+        btnDownWks.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/unesco/jisis/datadefinition/wks/1downarrow.png"))); // NOI18N
+        btnDownWks.setToolTipText("Move Down Selected WKS Entry");
+        btnDownWks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownWksActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -316,17 +387,25 @@ public final class WKSVisualPanel extends JPanel  {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(wksScrollPane, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(availScrollPane, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblAvail, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(availScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(lblRecVal)
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(lblWKS)
-                        .addGap(29, 29, 29)
-                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblAvail, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(lblWKS)
+                                .addGap(29, 29, 29)
+                                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(wksScrollPane)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnUpWks, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDownWks, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -341,7 +420,13 @@ public final class WKSVisualPanel extends JPanel  {
                     .addComponent(lblWKS)
                     .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(wksScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(wksScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(btnUpWks)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDownWks)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -360,6 +445,7 @@ public final class WKSVisualPanel extends JPanel  {
             wksModel.removeRow(selRow);
             wksModel.fireTableDataChanged();
             setWksChanged(true);
+            tblWKS.setRowSelectionInterval(selRow,selRow);
         }
     }//GEN-LAST:event_btnRemoveActionPerformed
     
@@ -370,7 +456,7 @@ public final class WKSVisualPanel extends JPanel  {
             String desc = tblAvail.getModel().getValueAt(selRow, 1).toString();
             
             WKSModelEx wksModel = (WKSModelEx) tblWKS.getModel();
-            wksModel.addRow(tag, desc, "", "", "", "", "");
+            wksModel.addRow(tag, desc, "","", "", "", "", "");
             wksModel.fireTableDataChanged();
             setWksChanged(true);
             
@@ -385,7 +471,7 @@ public final class WKSVisualPanel extends JPanel  {
             int tag = Integer.parseInt(tblAvail.getModel().getValueAt(i, 0).toString());
             String desc = tblAvail.getModel().getValueAt(i, 1).toString();
                
-            wksModel.addRow(tag, desc, "", "", "", "", "");
+            wksModel.addRow(tag, desc, "", "", "", "", "", "");
         }
         wksModel.fireTableDataChanged();
         setWksChanged(true);       
@@ -396,15 +482,52 @@ public final class WKSVisualPanel extends JPanel  {
        wksModel.removeAll();
        wksModel.fireTableDataChanged();
        setWksChanged(true);
+       tblAvail.setRowSelectionInterval(0,0);
 }//GEN-LAST:event_btnRemoveAllActionPerformed
+
+    /**
+     * Move down the selected entry in the table if The Up Arrow is clicked 
+     * @param evt 
+     */
+    private void btnUpWksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpWksActionPerformed
+           int selRow = tblWKS.getSelectedRow();
+        if (selRow != -1) {
+            WKSModelEx wksModel = (WKSModelEx) tblWKS.getModel();
+            if (wksModel.moveRowDown(selRow)) {
+                wksModel.fireTableDataChanged();
+                ensureRowIsVisible(selRow-1);
+                tblWKS.setRowSelectionInterval(selRow - 1, selRow - 1);
+                setWksChanged(true);
+            }
+        }
+    }//GEN-LAST:event_btnUpWksActionPerformed
+    /**
+     * Move up the selected entry in the table if The Down Arrow is clicked 
+     * @param evt 
+     */
+    private void btnDownWksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownWksActionPerformed
+          int selRow = tblWKS.getSelectedRow();
+        if (selRow != -1) {
+            WKSModelEx wksModel = (WKSModelEx) tblWKS.getModel();
+            if (wksModel.moveRowUp(selRow)) {
+                wksModel.fireTableDataChanged();
+                ensureRowIsVisible(selRow+1);
+                // Select the moved row
+                tblWKS.setRowSelectionInterval(selRow + 1, selRow + 1);
+                setWksChanged(true);
+            }
+        } 
+    }//GEN-LAST:event_btnDownWksActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane availScrollPane;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnAddAll;
+    private javax.swing.JButton btnDownWks;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnRemoveAll;
+    private javax.swing.JButton btnUpWks;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblAvail;

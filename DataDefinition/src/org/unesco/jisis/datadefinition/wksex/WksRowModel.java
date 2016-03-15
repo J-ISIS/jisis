@@ -27,9 +27,12 @@ public class WksRowModel implements RowModel {
          case 4:
             // Type of field
             return JComboBox.class;
+             
+          case 7:   // Display control
+               return JComboBox.class;
          case 5:
          case 6:
-         case 7:
+        
          case 8:
          case 9:
          case 10:

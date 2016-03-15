@@ -202,25 +202,55 @@ public final class WKSVisualPanel extends JPanel {
             tc.setPreferredWidth(300);
          } else if (i == rowModel.getColumnIndex("displayControl")) {
             tc.setPreferredWidth(100);
+            setUpWksDisplayColumn();
          } else if (i == rowModel.getColumnIndex("helpMsg")) {
             tc.setPreferredWidth(150);
          }
          else if (i == rowModel.getColumnIndex("valFormat") 
                || i == rowModel.getColumnIndex("pickList")
                || i == rowModel.getColumnIndex("defaultValue")) {
-            DefaultCellEditor editor = null;
-            EditorDlgActionTableCellEditor actionEditor = null;
+           
+          
             JTextField textField = new JTextField();
             textField.setBorder(BorderFactory.createEmptyBorder());
-            editor = new DefaultCellEditor(textField);
+            DefaultCellEditor editor = new DefaultCellEditor(textField);
             editor.setClickCountToStart(1);
-            actionEditor = new EditorDlgActionTableCellEditor(editor);
+            EditorDlgActionTableCellEditor actionEditor = new EditorDlgActionTableCellEditor(editor);
             tc.setCellEditor(actionEditor);
             tc.setPreferredWidth(250);
          }
       }
 
    }
+   
+     public void setUpWksDisplayColumn() {
+        //Set up the editor for the sport cells.
+        JComboBox comboBox = new JComboBox();
+        comboBox.addItem("");
+        comboBox.addItem("Text/Textarea");          // 1
+        comboBox.addItem("Text(fixed length)");     // 2
+        comboBox.addItem("Table");                  // 3
+        comboBox.addItem("PasswordS");              // 4 
+        comboBox.addItem("Date");                   // 5
+        comboBox.addItem("Select simple");          // 6
+        comboBox.addItem("Select multiple");        // 7
+        comboBox.addItem("Checkbox");               // 8
+        comboBox.addItem("Radio Button");           // 9
+        comboBox.addItem("HTML Area");              // 10 
+         comboBox.addItem("External HTML");         // 11
+        comboBox.addItem("Upload File");            // 12
+        comboBox.addItem("URL");                    // 13
+        comboBox.addItem("Read Only");              // 14
+       
+        TableColumn displayColumn = outline.getColumnModel().getColumn(rowModel.getColumnIndex("displayControl"));
+        displayColumn.setCellEditor(new DefaultCellEditor(comboBox));
+
+        //Set up tool tips for the sport cells.
+        DefaultTableCellRenderer renderer =
+                new DefaultTableCellRenderer();
+        renderer.setToolTipText("Click for combo box");
+        displayColumn.setCellRenderer(renderer);
+    }
     
     public void load(IDatabase db, String wksName) {
         wksName_ = wksName;
@@ -469,7 +499,7 @@ public final class WKSVisualPanel extends JPanel {
              wksField = new WorksheetDef.WorksheetField(tag,false, false,
                      (Integer)(tblAvail.getModel().getValueAt(selRow, 2)),
                      (String) (tblAvail.getModel().getValueAt(selRow, 1)), // Description
-                     "",
+                     "","",
                      "", "", "", "");
           } else {
              // TODO
@@ -576,7 +606,7 @@ public final class WKSVisualPanel extends JPanel {
                   false,
                   fdtEntry.getType(),
                   fdtEntry.getName(), // Description
-                  "",
+                  "","",
                   "", "", "", "");
 
           WksTreeNode node = treeModel.fillModelFromField(wksField, fdtEntry);
@@ -634,6 +664,7 @@ public final class WKSVisualPanel extends JPanel {
       String fieldType = "";
       String description = "";
       String displayControl = "";
+      String size = "";
       String defaultValue = "";
       String helpMsg = "";
       String valFormat = "";
@@ -649,6 +680,7 @@ public final class WKSVisualPanel extends JPanel {
          repeatable = (data.getProperty("repeatable").equals("true")) ? true : false;
          description = data.getProperty("description");
          displayControl = data.getProperty("displayControl");
+         size = data.getProperty("size");
          defaultValue = data.getProperty("defaultValue");
          helpMsg = data.getProperty("helpMsg");
          valFormat = data.getProperty("valFormat");
@@ -657,7 +689,7 @@ public final class WKSVisualPanel extends JPanel {
 
          wksField = new WorksheetDef.WorksheetField(tag, repeatable, descriptors,
                  Global.fiedType(fieldType), description,
-                 displayControl, defaultValue, helpMsg,
+                 displayControl, size,defaultValue, helpMsg,
                  valFormat, pickList);
 
          // Subfiels?
@@ -672,6 +704,7 @@ public final class WKSVisualPanel extends JPanel {
             description = data.getProperty("description");
             fieldType = data.getProperty("fieldType");
             displayControl = data.getProperty("displayControl");
+            size = data.getProperty("size");
             defaultValue = data.getProperty("defaultValue");
             helpMsg = data.getProperty("helpMsg");
             valFormat = data.getProperty("valFormat");
@@ -680,7 +713,7 @@ public final class WKSVisualPanel extends JPanel {
 
             wksSubfield = new WorksheetDef.WorksheetSubField(tag, subfieldCode,
                     repeatable, Global.fiedType(fieldType),
-                    description, displayControl, defaultValue,
+                    description, displayControl, size, defaultValue,
                     helpMsg, valFormat, pickList);
             wksField.addSubField(wksSubfield);
          }

@@ -21,6 +21,7 @@ public class MyTableNode {
    protected String defaultValue;
    protected String description;
    protected String displayControl;
+   protected String size;
    protected String helpMsg;
    protected String pickList;
    protected String valFormat;
@@ -33,6 +34,7 @@ public class MyTableNode {
       defaultValue = "";
       description = "";
       displayControl = "";
+      size = "";
       helpMsg = "";
       pickList = "";
       valFormat = "";
@@ -50,6 +52,7 @@ public class MyTableNode {
       defaultValue = new String(node.defaultValue);
       description = new String(node.description);
       displayControl = new String(node.displayControl);
+      size = new String(node.size);
       helpMsg = new String(node.helpMsg);
       pickList = new String(node.pickList);
       valFormat = new String(node.valFormat);

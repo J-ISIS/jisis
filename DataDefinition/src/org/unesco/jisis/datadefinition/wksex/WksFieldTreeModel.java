@@ -31,6 +31,7 @@ public class WksFieldTreeModel extends AbstractTreeModel {
       nameMap.setProperty("defaultValue", "");
       nameMap.setProperty("description", "");
       nameMap.setProperty("displayControl", "");
+      nameMap.setProperty("size", "");
       nameMap.setProperty("helpMsg", "");
       nameMap.setProperty("pickList", "");
       nameMap.setProperty("valFormat", "");
@@ -68,6 +69,7 @@ public class WksFieldTreeModel extends AbstractTreeModel {
       nameMap.setProperty("defaultValue", wksField.getDefaultValue());
       
       nameMap.setProperty("displayControl", wksField.getDisplayControl());
+      nameMap.setProperty("size", wksField.getSize());
       nameMap.setProperty("helpMsg", wksField.getHelpMessage());
       nameMap.setProperty("pickList", wksField.getPickList());
       nameMap.setProperty("valFormat", wksField.getValidationFormat());
@@ -84,6 +86,14 @@ public class WksFieldTreeModel extends AbstractTreeModel {
          data.setProperty("indicators", "false" );
          data.setProperty("repeatable", "false" );
          data.setProperty("firstSubfield", "false");
+    
+         data.setProperty("defaultValue", "");
+         data.setProperty("displayControl", "");
+         data.setProperty("size", "");
+         data.setProperty("helpMsg", "");
+         data.setProperty("pickList", "");
+         data.setProperty("valFormat", "");
+         
          subNodeRow.setUserObject(data);
          nodeRow.add(subNodeRow);
 
@@ -95,6 +105,14 @@ public class WksFieldTreeModel extends AbstractTreeModel {
          data.setProperty("indicators", "false" );
          data.setProperty("repeatable", "false" );
          data.setProperty("firstSubfield", "false");
+         
+         data.setProperty("defaultValue", "");
+         data.setProperty("displayControl", "");
+         data.setProperty("size", "");
+         data.setProperty("helpMsg", "");
+         data.setProperty("pickList", "");
+         data.setProperty("valFormat", "");
+         
          subNodeRow.setUserObject(data);
          nodeRow.add(subNodeRow);
       }
@@ -108,6 +126,14 @@ public class WksFieldTreeModel extends AbstractTreeModel {
          data.setProperty("indicators", "false" );
          data.setProperty("repeatable", "false" );
          data.setProperty("firstSubfield", "false");
+         
+          data.setProperty("defaultValue", "");
+         data.setProperty("displayControl", "");
+         data.setProperty("size", "");
+         data.setProperty("helpMsg", "");
+         data.setProperty("pickList", "");
+         data.setProperty("valFormat", "");
+         
          subNodeRow.setUserObject(data);
       
          nodeRow.add(subNodeRow);
@@ -128,6 +154,14 @@ public class WksFieldTreeModel extends AbstractTreeModel {
          data.setProperty("firstSubfield", "false");
          data.setProperty("description", "V"+data.getProperty("tag")+Global.SUBFIELD_SEPARATOR+subfieldCode);
          data.setProperty("fieldType", Global.fiedType(Global.FIELD_TYPE_ALPHANUMERIC));
+         
+         data.setProperty("defaultValue", "");
+         data.setProperty("displayControl", "");
+         data.setProperty("size", "");
+         data.setProperty("helpMsg", "");
+         data.setProperty("pickList", "");
+         data.setProperty("valFormat", "");
+         
          subNodeRow.setUserObject(data);
         
          nodeRow.add(subNodeRow);
@@ -150,6 +184,7 @@ public class WksFieldTreeModel extends AbstractTreeModel {
       nameMap.setProperty("defaultValue", wksField.getDefaultValue());
 
       nameMap.setProperty("displayControl", wksField.getDisplayControl());
+      nameMap.setProperty("size", wksField.getSize());
       nameMap.setProperty("helpMsg", wksField.getHelpMessage());
       nameMap.setProperty("pickList", wksField.getPickList());
       nameMap.setProperty("valFormat", wksField.getValidationFormat());
@@ -180,6 +215,7 @@ public class WksFieldTreeModel extends AbstractTreeModel {
          data.setProperty("defaultValue", wksSubfield.getDefaultValue());
 
          data.setProperty("displayControl", wksSubfield.getDisplayControl());
+         data.setProperty("size", wksSubfield.getSize());
          data.setProperty("helpMsg", wksSubfield.getHelpMessage());
          data.setProperty("pickList", wksSubfield.getPickList());
          data.setProperty("valFormat", wksSubfield.getValidationFormat());
