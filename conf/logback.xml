@@ -1,11 +1,9 @@
                                          
 <configuration>
-   <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="RootFileAppender">
+   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
       <file>J-ISIS-log.txt</file>
+
       <append>true</append>
-      <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-         <level>debug</level>
-      </filter>
       <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
          <fileNamePattern>J-ISIS-log.%i</fileNamePattern>
          <maxIndex>2</maxIndex>
@@ -13,13 +11,22 @@
       <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
          <maxFileSize>100000</maxFileSize>
       </triggeringPolicy>
-      <layout class="ch.qos.logback.classic.PatternLayout">
-         <pattern>%d{yyyy-MM-dd HH:mm:ss},%p,%c,%F,%L,%C{1},%M %m%n</pattern>
-      </layout>
+      <encoder>
+         <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+      </encoder>
    </appender>
-   <root>
-      <level value="debug"/>
-      <appender-ref ref="RootFileAppender"/>
+   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+      <!-- encoders are assigned the type
+      ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+      <encoder>
+         <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      </encoder>
+   </appender>
+
+   <root level="ALL">
+      <appender-ref ref="FILE" />
+      <appender-ref ref="STDOUT" />
    </root>
+  
   
 </configuration>
