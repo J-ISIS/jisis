@@ -114,20 +114,23 @@ public class FmtDocumentEx extends DefaultStyledDocument implements FmtParserCon
    
    private Element rootElement;
    private boolean multiLineComment;
-   private final MutableAttributeSet normal = DEFAULT_NORMAL;;
-   private final MutableAttributeSet keyword = DEFAULT_KEYWORD;
-   private final MutableAttributeSet comment = DEFAULT_COMMENT;
-   private final MutableAttributeSet doubleQuote = DEFAULT_COND_LITER;
-   private final MutableAttributeSet singleQuote = DEFAULT_UNCOND_LITER;
-   private final MutableAttributeSet repeatLiteral = DEFAULT_REP_LITER;
-   private final MutableAttributeSet fields = DEFAULT_FIELD;
-   private final MutableAttributeSet execution = DEFAULT_EXECUTION;
-   private final MutableAttributeSet select = DEFAULT_EXECUTION;
-   private final MutableAttributeSet normalBold = DEFAULT_NORMAL_BOLD;
+   private final MutableAttributeSet normal = new SimpleAttributeSet(DEFAULT_NORMAL);;
+   private final MutableAttributeSet keyword = new SimpleAttributeSet(DEFAULT_KEYWORD);
+   private final MutableAttributeSet comment = new SimpleAttributeSet(DEFAULT_COMMENT);
+   private final MutableAttributeSet doubleQuote = new SimpleAttributeSet(DEFAULT_COND_LITER);
+   private final MutableAttributeSet singleQuote = new SimpleAttributeSet(DEFAULT_UNCOND_LITER);
+   private final MutableAttributeSet repeatLiteral = new SimpleAttributeSet(DEFAULT_REP_LITER);
+   private final MutableAttributeSet fields = new SimpleAttributeSet(DEFAULT_FIELD);
+   private final MutableAttributeSet execution = new SimpleAttributeSet(DEFAULT_EXECUTION);
+   private final MutableAttributeSet select = new SimpleAttributeSet(DEFAULT_EXECUTION);
+   private final MutableAttributeSet normalBold = new SimpleAttributeSet(DEFAULT_NORMAL_BOLD);
+   
+   private int fontSize_;
   
     public FmtDocumentEx() {
         doc = this;
 
+        fontSize_ = DEFAULT_FONT_SIZE ;
         rootElement = doc.getDefaultRootElement();
         putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
         if (Global.getApplicationFont() != null) {
@@ -569,24 +572,22 @@ public class FmtDocumentEx extends DefaultStyledDocument implements FmtParserCon
 //         Exceptions.printStackTrace(ex);
 //      }
 
+      MutableAttributeSet multiAttributeSet = normal;
       switch (type) {
          /* Literals */
          case COND_LITER:
             if (!isAlreadyColored(startAttrs, endAttrs, "doubleQuote")) {
-               doc.setCharacterAttributes(startOffset, len,
-                       doubleQuote, true);
+                 multiAttributeSet = doubleQuote;
             }
             break;
          case UNCOND_LITER:
             if (!isAlreadyColored(startAttrs, endAttrs, "singleQuote")) {
-               doc.setCharacterAttributes(startOffset, len,
-                       singleQuote, true);
+                 multiAttributeSet = singleQuote;             
             }
             break;
          case REP_LITER:
             if (!isAlreadyColored(startAttrs, endAttrs, "repeatLiteral")) {
-               doc.setCharacterAttributes(startOffset, len,
-                       repeatLiteral, true);
+                 multiAttributeSet = repeatLiteral;
             }
             break;
 
@@ -600,14 +601,14 @@ public class FmtDocumentEx extends DefaultStyledDocument implements FmtParserCon
          case AND:   // "and"
          case OR:    // "or"
             if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-               doc.setCharacterAttributes(startOffset, len, keyword, true);
+                 multiAttributeSet = keyword;
             }
             break;
          case ASSIGN:  // ":="
          case SEL:     // "->"
          case DOT_DOT: // ".."
             if (!isAlreadyColored(startAttrs, endAttrs, "normalBold")) {
-               doc.setCharacterAttributes(startOffset, len, normalBold, true);
+                multiAttributeSet = normalBold;
             }
             break;
          case FIELD:
@@ -618,7 +619,7 @@ public class FmtDocumentEx extends DefaultStyledDocument implements FmtParserCon
          case FIELD_FRAG_2:
          case FIELD_FRAG_3:
             if (!isAlreadyColored(startAttrs, endAttrs, "fields")) {
-               doc.setCharacterAttributes(startOffset, len, fields, true);
+                multiAttributeSet = fields;
             }
             break;
          case IF:
@@ -627,13 +628,13 @@ public class FmtDocumentEx extends DefaultStyledDocument implements FmtParserCon
          case FI:
          case WHILE:
             if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-               doc.setCharacterAttributes(startOffset, len, keyword, true);
+                multiAttributeSet = keyword;
             }
             break;
          case INT:
          case NUMBER:
             if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-               doc.setCharacterAttributes(startOffset, len, keyword, true);
+                multiAttributeSet = keyword;
             }
             break;
 
@@ -642,7 +643,7 @@ public class FmtDocumentEx extends DefaultStyledDocument implements FmtParserCon
          case CMD_C:
          case CMD_X:
             if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-               doc.setCharacterAttributes(startOffset, len, keyword, true);
+                multiAttributeSet = keyword;
             }
             break;
          case MHU:
@@ -652,23 +653,23 @@ public class FmtDocumentEx extends DefaultStyledDocument implements FmtParserCon
          case MPU:
          case MPL:
             if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-               doc.setCharacterAttributes(startOffset, len, keyword, true);
+                multiAttributeSet = keyword;
             }
             break;
          case VAR_E:
          case VAR_S:
             if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-               doc.setCharacterAttributes(startOffset, len, keyword, true);
+                multiAttributeSet = keyword;
             }
             break;
          case EXT_FUNC:
             if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-               doc.setCharacterAttributes(startOffset, len, keyword, true);
+                multiAttributeSet = keyword;
             }
             break;
          case EXT_FMT:
             if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-               doc.setCharacterAttributes(startOffset, len, keyword, true);
+                multiAttributeSet = keyword;
             }
             break;
          case FNC_VAL:
@@ -693,7 +694,7 @@ public class FmtDocumentEx extends DefaultStyledDocument implements FmtParserCon
          case FNC_A:
          case FNC_P:
             if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-               doc.setCharacterAttributes(startOffset, len, keyword, true);
+                multiAttributeSet = keyword;
             }
             break;
          case FONTS:
@@ -717,14 +718,18 @@ public class FmtDocumentEx extends DefaultStyledDocument implements FmtParserCon
          case CMD_COLOR:
          case LINK:
             if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-               doc.setCharacterAttributes(startOffset, len, keyword, true);
+                multiAttributeSet = keyword;
             }
             break;
          default:
             if (!isAlreadyColored(startAttrs, endAttrs, "normal")) {
-               doc.setCharacterAttributes(startOffset, len, normal, true);
+                multiAttributeSet = normal;
             }
       }
+        if (fontSize_ != DEFAULT_FONT_SIZE) {
+            StyleConstants.setFontSize(multiAttributeSet, fontSize_);
+        }
+        doc.setCharacterAttributes(startOffset, len, multiAttributeSet, false);
    }
 
    /**
@@ -795,4 +800,9 @@ public class FmtDocumentEx extends DefaultStyledDocument implements FmtParserCon
       int end = lineElement.getEndOffset();
       return content.substring(start, end - 1);
    }
+
+    void setFontSize(int fontSize) {
+        fontSize_ = fontSize;
+       
+    }
 }
