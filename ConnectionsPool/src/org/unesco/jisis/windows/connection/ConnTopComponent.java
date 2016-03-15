@@ -5,10 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.swing.tree.TreePath;
 import org.openide.ErrorManager;
+import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -18,6 +21,11 @@ import org.slf4j.LoggerFactory;
 import org.unesco.jisis.corelib.client.ConnectionInfo;
 import org.unesco.jisis.corelib.client.ConnectionPool;
 import org.unesco.jisis.corelib.common.IConnection;
+import org.unesco.jisis.corelib.common.IDatabase;
+import org.unesco.jisis.corelib.exceptions.DbException;
+import org.unesco.jisis.corelib.exceptions.TechnicalException;
+import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisiscore.client.GuiGlobal;
 
 /**
  * Top component which displays something.
@@ -198,22 +206,44 @@ public final class ConnTopComponent extends TopComponent {
         connPoolTree.updateUI();
     }
     
-    
     private void closeSelectedConnection() {
+        LOGGER.debug("---------CLIENT - Close Connection-------------------\n" );
         TreePath node = connPoolTree.getSelectionPath();
         if (node != null) {
             try {
-                ConnectionInfo connectionInfo  = (ConnectionInfo) node.getLastPathComponent();
+                ConnectionInfo connectionInfo = (ConnectionInfo) node.getLastPathComponent();
                 IConnection conn = connectionInfo.getConnection();
+                ArrayList<IDatabase> clientDatabaseProxyList = ConnectionPool.getDatabases(conn);
+                int n = clientDatabaseProxyList.size(); // clientDatabaseProxyList is a reference & its size reduces as we remove
+                for (int i = n - 1; i >= 0; i--) {
+                    ClientDatabaseProxy db = (ClientDatabaseProxy) clientDatabaseProxyList.get(i);
+                    try {
+                        /**
+                         * ClientDatabaseProxy close() method will: 1) close all TopComponent opened for this 
+                         * database 2) send a request to the server to close the database
+                         */
+                        LOGGER.debug("CLIENT - Closing TopComponents for Database "+db.getDbName());
+                        db.closeTopComponents();
+                        
+                    } catch (DbException ex) {
+                        LOGGER.error("CLIENT - Cannot close TopComponents for database "+db.getDbName(), ex);
+                        throw new TechnicalException("CLIENT - Cannot close TopComponents for Database "+db.getDbName() + db, ex);
+                    }
+                }
+                LOGGER.debug("CLIENT - Close Connection - "+conn);
                 ConnectionPool.closeConnection(conn);
-            }catch (ClassCastException cce) {
-                cce.printStackTrace();
+            } catch (ClassCastException cce) {
+                Exceptions.printStackTrace(cce);
+                GuiGlobal.outputErr("Connection not closed");
+            } catch (DbException ex) {
+                Exceptions.printStackTrace(ex);
+                GuiGlobal.outputErr("Connection not closed");
             }
         }
         connPoolTree.setModel(new ConnectionsModel());
         connPoolTree.updateUI();
     }
-    
+
     public void refresh() {
         connPoolTree.setModel(new ConnectionsModel());
     }
