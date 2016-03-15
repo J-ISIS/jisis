@@ -149,20 +149,16 @@ public class DbViewTopComponent extends TopComponent implements Observer {
       }
       
        try {
-           poll_ = new DbChangedControl(db_, new CallBack() {
+           poll_ = new DbChangedControl(db_, this, new CallBack() {
 
                @Override
                public void notifyDatabaseChanged() {
-                   try {
-                       final NotifyDescriptor d
-                           = new NotifyDescriptor.Message(NbBundle.getMessage(DbViewTopComponent.class,
-                                   "MSG_DATABASE_CHANGED_BY_ANOTHER_PROCESS"));
-                       DialogDisplayer.getDefault().notify(d);
-                       long maxMFN = db_.getLastMfn();
-                       txtMaxMfn.setText(maxMFN + "");
-                   } catch (DbException ex) {
-                       Exceptions.printStackTrace(ex);
-                   }
+
+                   final NotifyDescriptor d
+                       = new NotifyDescriptor.Message(NbBundle.getMessage(DbViewTopComponent.class,
+                               "MSG_DATABASE_CHANGED_BY_ANOTHER_PROCESS"));
+                   DialogDisplayer.getDefault().notify(d);
+
                }
 
            });
@@ -889,6 +885,8 @@ public class DbViewTopComponent extends TopComponent implements Observer {
        * We need to remove it
        */
       db_.deleteObserver(this);
+      
+      poll_.shutDownNow();
    }
 
    /** replaces this in object stream */
@@ -960,14 +958,16 @@ public class DbViewTopComponent extends TopComponent implements Observer {
     
     class DbChangedControl {
 
-        private ClientDatabaseProxy db_;
+        private final ClientDatabaseProxy db_;
         private long recordsCount_;
         private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        private CallBack callBack_;
+        private final CallBack callBack_;
+        private final TopComponent topComponent_;
 
-        public DbChangedControl(ClientDatabaseProxy db, CallBack callBack) throws DbException {
+        public DbChangedControl(ClientDatabaseProxy db, TopComponent topComponent, CallBack callBack) throws DbException {
             db_ = db;
             callBack_ = callBack;
+            topComponent_ = topComponent;
 
             recordsCount_ = db_.getRecordsCount();
 
@@ -980,16 +980,22 @@ public class DbViewTopComponent extends TopComponent implements Observer {
                     long recordsCount = 0;
                     try {
                         recordsCount = db_.getRecordsCount();
+
+                        if (recordsCount != recordsCount_) {
+
+                            recordsCount_ = recordsCount;
+                            long maxMFN = db_.getLastMfn();
+                            txtMaxMfn.setText(maxMFN + "");
+                            /**
+                             * Inform only if current TopComponent is data viewer
+                             */
+                            if (topComponent_.isFocusOwner()) {
+                                callBack_.notifyDatabaseChanged();
+                            }
+
+                        }
                     } catch (DbException ex) {
                         Exceptions.printStackTrace(ex);
-                    }
-
-                    if (recordsCount != recordsCount_) {
-                       
-                        
-                        recordsCount_ = recordsCount;
-                        callBack_.notifyDatabaseChanged();
-                     
                     }
 
                 }
@@ -1008,6 +1014,10 @@ public class DbViewTopComponent extends TopComponent implements Observer {
                 },
                 60 * 60 * 24, // the time from now to delay execution
                 SECONDS);
+        }
+        
+        public void shutDownNow() {
+            scheduler.shutdownNow();
         }
     }
 }
