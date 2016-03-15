@@ -85,6 +85,8 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
     /** Default Record Terminator */
     private final static int      RECORD_TERMINATOR = 29;
     private final static int      SUBFIELD_PREFIX   = '^';
+    private final static int LEADER_SIZE = 24; // 24 bytes
+    private final static int DIRECTORY_ENTRY_SIZE = 12; // (3) Tag + (4) length + (5) offset
     private FileChannel    channel_          = null;
     private CharBuffer     charBuffer_       = null;
     private CharsetDecoder decoder_          = null;
@@ -98,7 +100,7 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
     private int                    recordTerminator_ = RECORD_TERMINATOR;
     private int                    fieldTerminator_  = FIELD_TERMINATOR;
     private MarcFactory            factory_;
-    private NioBufferedReader      nbr_;
+    private NioBufferedReader      nioBufferReader_;
     private  NoControlFieldsRecord record_;
     
     private ErrorHandler errors;
@@ -129,14 +131,14 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
     public NoControlFieldsNioIsoReader(File file, String encoding, int lineLength) {
         if (lineLength == 0) {
             bReadLines = false;
-            lineLength = DEFAULT_LINE_LENGTH;
+            lineLength = 2048 * 10;
         }
         lineLength_ = lineLength;
         lineBuf_    = new byte[lineLength_];
         try {
             channel_ = new FileInputStream(file).getChannel();
             length_  = (int) channel_.size();
-            nbr_     = new NioBufferedReader(channel_);
+            nioBufferReader_     = new NioBufferedReader(channel_);
         } catch (IOException ioe) {
             throw new ImportException(ioe);
         }
@@ -169,9 +171,10 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
 
     /**
      * Returns true if the iteration has more records, false otherwise.
+    * @return 
      */
     public boolean hasNext() {
-        return nbr_.hasRemaining();
+        return nioBufferReader_.hasRemaining();
     }
 
     /**
@@ -227,7 +230,8 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
             record_.setLeader(ldr);
             int directoryLength = ldr.getBaseAddressOfData() - (24 + 1);
             if ((directoryLength % 12) != 0) {
-                throw new MarcException("invalid directory");
+                GuiGlobal.output("Warning - Directory Length="+directoryLength
+                                 +" is not a multiple of directory entry size (12)");
             }
             int      size    = directoryLength / 12;
             String[] tags    = new String[size];
@@ -637,7 +641,7 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
          * Leader is 24 Ascii characters (or bytes)
          */
         try {
-            if (!nbr_.getBytesLeader(bytesLeader)) {
+            if (!nioBufferReader_.getBytesLeader(bytesLeader)) {
                throw new MarcException("EOF");
             }
             ldr = parseLeader(bytesLeader);
@@ -663,7 +667,8 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
                          ? Math.min(lineLength_ - bytesLeader.length, rlen - offset)
                          : Math.min(lineLength_, rlen - offset);
             //assert nbytes > 0;
-            b = nbr_.getLine(nbytes);
+            b = nioBufferReader_.getLine(nbytes);
+            //System.out.println("---offset="+offset+"nbytes="+nbytes+"-------\n"+new String(b));
             if (b == null) {
                 break;
             }
@@ -676,6 +681,7 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
 //            }
         }
         b = null;
+        //System.out.println("*********END OF RECORD*************");
         
         if (firstRecord_) {
             // Adjust the RT and FT
@@ -700,7 +706,7 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
                 GuiGlobal.output("Error** Was expecting as RT: " + recordTerminator_);
                 GuiGlobal.output("Found : " + (int) buf[offset - 1]);
                 // try to recover so that we are at beginning of record
-                while ((b = nbr_.getLine(lineLength_)) != null) {
+                while ((b = nioBufferReader_.getLine(lineLength_)) != null) {
                     int len = b.length;
                     if (len < 2) {
                         continue;
@@ -781,18 +787,26 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
             }
             return nRead;
         }
-
-        private byte[] getLine(int nbytes) {
-            int c;
-            int p = 0;
-            try {
-                while ((c = getByte()) != -1) {
+/**
+     * Read nbytes characters
+     * 
+     * if characters after nbytes characters are '\n' or '\r'
+     * @param nbytes
+     * @return 
+     */
+    private byte[] getLine(int nbytes) {
+        int c;
+        int p = 0;
+        try {
+             if (bReadLines) {
+               while ((c = getByte()) != -1) {
                     if ((c == '\n') && (p == nbytes)) {
-                        // end of line lf, line is read
+                        // end of line lf, line is read 
+                        // we don't retain '\n' in buffer. The line is read, stop reading
                         break;
                     }
                     if ((c == '\r') && (p == nbytes)) {
-                        // end of line cr, swallow the character
+                        // end of line cr, swallow the character and continue reading
                         continue;
                     }
                     if (p > lineBuf_.length) {
@@ -800,23 +814,38 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
                     }
                     lineBuf_[p] = (byte) c;
                     p++;
-                    if ((!bReadLines) && (p == nbytes)) {
-                       // ISO file is not splitted in lines
-                        break;
-                    }
+                    
                 }
-            } catch (Exception ioe) {
-                c = -1;
-            }
-            if ((c == -1) && (p == 0)) {
-                return null;
+                
             } else {
-                byte[] data = new byte[p];
-                // System.out.println("p=" + p);
-                System.arraycopy(lineBuf_, 0, data, 0, p);
-                return data;
+                 // Read nbytes characters including '\n' and '\r' 
+                 while ((c = getByte()) != -1) {
+
+                     if (p > lineBuf_.length) {
+                         throw new RuntimeException("Buffer Line Length exceeded :" + lineBuf_.length);
+                     }
+                     lineBuf_[p] = (byte) c;
+                     p++;
+                     if ((p == nbytes)) {
+                         // We have read exactly nbytes character,
+                         break;
+                     }
+                 }
             }
+           
+        } catch (Exception ioe) {
+            c = -1;
         }
+        if ((c == -1) && (p == 0)) {
+            return null;
+        } else {
+            byte[] data = new byte[p];
+            // System.out.println("p=" + p);
+            System.arraycopy(lineBuf_, 0, data, 0, p);
+            return data;
+        }
+    }
+
 
         private int getByte() {
             return getByteFromBuf() & 0xFF;
@@ -835,5 +864,7 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
             return false;
         }
     }
+    
+    
 }
  

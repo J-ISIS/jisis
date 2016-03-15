@@ -124,7 +124,7 @@ public class NioIsoReader implements MarcReader {
     public NioIsoReader(File file, String encoding, int lineLength) {
         if (lineLength == 0) {
             bReadLines = false;
-            lineLength = DEFAULT_LINE_LENGTH;
+            lineLength = 2048 * 10;
         }
         lineLength_ = lineLength;
         lineBuf_    = new byte[lineLength_];
@@ -776,18 +776,19 @@ public class NioIsoReader implements MarcReader {
             }
             return nRead;
         }
-
-        private byte[] getLine(int nbytes) {
-            int c;
-            int p = 0;
-            try {
-                while ((c = getByte()) != -1) {
+ private byte[] getLine(int nbytes) {
+        int c;
+        int p = 0;
+        try {
+             if (bReadLines) {
+               while ((c = getByte()) != -1) {
                     if ((c == '\n') && (p == nbytes)) {
-                        // end of line lf, line is read
+                        // end of line lf, line is read 
+                        // we don't retain '\n' in buffer. The line is read, stop reading
                         break;
                     }
                     if ((c == '\r') && (p == nbytes)) {
-                        // end of line cr, swallow the character
+                        // end of line cr, swallow the character and continue reading
                         continue;
                     }
                     if (p > lineBuf_.length) {
@@ -795,23 +796,38 @@ public class NioIsoReader implements MarcReader {
                     }
                     lineBuf_[p] = (byte) c;
                     p++;
-                    if ((!bReadLines) && (p == nbytes)) {
-                       // ISO file is not splitted in lines
-                        break;
-                    }
+                    
                 }
-            } catch (Exception ioe) {
-                c = -1;
-            }
-            if ((c == -1) && (p == 0)) {
-                return null;
+                
             } else {
-                byte[] data = new byte[p];
-                // System.out.println("p=" + p);
-                System.arraycopy(lineBuf_, 0, data, 0, p);
-                return data;
+                 // Read nbytes characters including '\n' and '\r' 
+                 while ((c = getByte()) != -1) {
+
+                     if (p > lineBuf_.length) {
+                         throw new RuntimeException("Buffer Line Length exceeded :" + lineBuf_.length);
+                     }
+                     lineBuf_[p] = (byte) c;
+                     p++;
+                     if ((p == nbytes)) {
+                         // We have read exactly nbytes character,
+                         break;
+                     }
+                 }
             }
+           
+        } catch (Exception ioe) {
+            c = -1;
         }
+        if ((c == -1) && (p == 0)) {
+            return null;
+        } else {
+            byte[] data = new byte[p];
+            // System.out.println("p=" + p);
+            System.arraycopy(lineBuf_, 0, data, 0, p);
+            return data;
+        }
+    }
+       
 
         private int getByte() {
             return getByteFromBuf() & 0xFF;

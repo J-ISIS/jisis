@@ -817,6 +817,9 @@ public class ImpExpTool {
                int iTag = Integer.parseInt(cf.getTag());
                MFN = -1L;
                if (inputTagMFN == iTag) {
+                   /**
+                    * This field contains the MFN
+                    */
                   String sMFN = cf.getData();
                   MFN = Long.valueOf(sMFN);
                   continue;
@@ -910,9 +913,10 @@ public class ImpExpTool {
                }
                iRec = jRec;
             }
-             Date endReadingDate = new Date();
-             timeReading += (endReadingDate.getTime() - startReadingDate.getTime());
-             Date startWritingDate = new Date();
+             
+            Date endReadingDate = new Date();
+            timeReading += (endReadingDate.getTime() - startReadingDate.getTime());
+            Date startWritingDate = new Date();
             try {
                if ((importOption == IMPORT_OPTION_UPDATE) && (MFN>0 && MFN <= targetDB.getLastMfn())) {
                   iRec.setMfn(MFN);
@@ -923,6 +927,7 @@ public class ImpExpTool {
                }
              } catch (Exception ex) {
                  progress.finish();
+                 GuiGlobal.outputErr("ERROR when importing record: \n"+iRec);
                  Exceptions.printStackTrace(ex);
              }
             Date endWritingDate = new Date();
