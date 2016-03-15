@@ -55,7 +55,7 @@ import org.unesco.jisis.jisisutils.threads.IdeCursor;
 
 
 
-public class RepeatableField extends JTextPane implements ActionListener, DocumentListener {
+public final class RepeatableField extends JTextPane implements ActionListener, DocumentListener {
    private int           id_;    // Occurrence index
    private int           type_       = Global.FIELD_TYPE_STRING;
    protected boolean     isModified_ = false;
@@ -65,6 +65,12 @@ public class RepeatableField extends JTextPane implements ActionListener, Docume
    private DefaultStyledDocument  document_;
    private JProgressBar progressBar;
    OccurrenceEditEvent occurrenceEditEvent_;
+  
+   // Line height of this RepeatableField component
+     private int fontLineHeight_;
+        
+     // Metrics of this RepeatableField component
+     private FontMetrics fontMetrics_;
    
 
       
@@ -159,6 +165,7 @@ public class RepeatableField extends JTextPane implements ActionListener, Docume
       RepeatableField.this.repaint();
    }
 
+   
   
    /**
     * Creates a new instance of RepeatableField
@@ -174,11 +181,11 @@ public class RepeatableField extends JTextPane implements ActionListener, Docume
         id_ = id;
         type_ = Global.FIELD_TYPE_STRING;
 
-        Font font = new Font("Monospaced", Font.PLAIN, 14);
-        setFont(font);
+        Font font = new Font("Monospaced", Font.PLAIN, DataEntryTopComponent.DEFAULT_FONT_SIZE);
+        setJTextPaneFont(font);
         RepeatableField.this.setContentType("text/plain;charset=UTF-8");
 
-        System.out.println("FIELD TEXT LENGTH " + text.length());
+        //System.out.println("FIELD TEXT LENGTH " + text.length());
         final JFrame mainWin = (JFrame) WindowManager.getDefault().getMainWindow();
 
         if (fieldType == Global.FIELD_TYPE_DOC) {
@@ -188,24 +195,24 @@ public class RepeatableField extends JTextPane implements ActionListener, Docume
             document_ = new DefaultStyledDocument();
             RepeatableField.this.setDocument(document_);
             loadHugeDocument(text);
-        } else {
-         // TextDataEntryDocument extends DefaultStyledDocument so that the subfield
-            // delimiters will be highlighted
-            document_ = new TextDataEntryDocument();
-            RepeatableField.this.setDocument(document_);
-            RepeatableField.this.setText(text);
-            Action deleteFieldAction = new AbstractAction() {
-                public void actionPerformed(ActionEvent e) {
-                    RepeatableField source = (RepeatableField) e.getSource();
-                    occurrenceEditEvent_.notifyCaller(null, id_, "delete-field");
-                   
-                }
-            };
-            getInputMap().put(KeyStroke.getKeyStroke("F2"),
-                "deleteField");
-            getActionMap().put("deleteField",
-                deleteFieldAction);
-        }
+       } else {
+          // TextDataEntryDocument extends DefaultStyledDocument so that the subfield
+          // delimiters will be highlighted
+          document_ = new TextDataEntryDocument();
+          RepeatableField.this.setDocument(document_);
+          RepeatableField.this.setText(text);
+          Action deleteFieldAction = new AbstractAction() {
+             public void actionPerformed(ActionEvent e) {
+                RepeatableField source = (RepeatableField) e.getSource();
+                occurrenceEditEvent_.notifyCaller(null, id_, "delete-field");
+
+             }
+          };
+          getInputMap().put(KeyStroke.getKeyStroke("F2"),
+                  "deleteField");
+          getActionMap().put("deleteField",
+                  deleteFieldAction);
+       }
         isModified_ = false;
         GuiExecutor.instance().execute(new Runnable() {
             @Override
@@ -328,12 +335,20 @@ public class RepeatableField extends JTextPane implements ActionListener, Docume
         isModified_ = false;
     }
 
-   void setJTextPaneFont(Font font) {
+    public void setJTextPaneFont(Font font) {
 
-      System.out.println("Changing font to"+font.toString());
-      this.setFont(font);
-      updateUI();      
-   }
+        System.out.println("Changing font to" + font.toString());
+
+        super.setFont(font);
+        fontMetrics_ = getFontMetrics(getFont());
+        fontLineHeight_ = fontMetrics_.getHeight();
+
+        updateUI();
+    }
+    
+    public int getFontLineHeight() {
+        return fontLineHeight_;
+    }
    
   
 

@@ -67,6 +67,7 @@ import org.unesco.jisis.corelib.exceptions.FormattingException;
 import org.unesco.jisis.corelib.exceptions.GeneralDatabaseException;
 import org.unesco.jisis.corelib.pft.ISISFormatter;
 import org.unesco.jisis.corelib.picklist.PickListData;
+import org.unesco.jisis.corelib.picklist.ValidationData;
 import org.unesco.jisis.corelib.record.IField;
 import org.unesco.jisis.corelib.record.IRecord;
 import org.unesco.jisis.corelib.record.Record;
@@ -97,21 +98,27 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
    static final String DEL_PATH = "org/unesco/jisis/dataentryexdl/minus.gif";
    static final String PICK_LIST_PATH = "org/unesco/jisis/dataentryexdl/PickList.png";
    static final String GET_FILE_CONTENT = "org/unesco/jisis/dataentryexdl/get-file-content-16x16.png";
-   private IField fld_ = null;
+   private IField field_ = null;
    private WorksheetDef.WorksheetField wksFld_ = null;
    private WorksheetDef wksDef_ = null;
-   private IRecord rec_ = null;
+   private IRecord record_ = null;
    private IDatabase db_ = null;
    private FieldDefinitionTable fdt_ = null;
    private Object fieldValue_ = null;
    private List<RepeatableField> fieldEntries_ = null;
-   private PickListData pickListData_;
+   private List<PickListData> pickListDataList_;
+   private List<ValidationData> validationDataList_;
+   private PickListData pickListData_ = null;
    private ComponentOrientation orientation_ = ComponentOrientation.LEFT_TO_RIGHT;
    public static Logger logger = null;
    final ExecutorService executorService = Executors.newSingleThreadExecutor();
    final static int FIRST_FIELD_OCCURRENCE_INDEX = 0; // Where we store the text for DOC fields
    final static int SECOND_FIELD_OCCURRENCE_INDEX = 1; // Where we store the url for DOC fields
- 
+
+   final static int DEFAULT_HEIGHT_LINES = 8;
+
+   
+
    static {
       logger = Logger.getRootLogger();
       logger.setLevel(Level.OFF);
@@ -125,35 +132,149 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
    private boolean recordModified = false;
    private UndoRedo.Manager undoRedoManager_;
    private OccurrenceEditEvent occurrenceEditEvent_;
-
+   
+   private FontSize fontSize_;
+   
    /**
     * Creates a new instance of EditEntry
+    * @param occurrenceEditEvent
+    * @param wd
+    * @param wf
+    * @param field
+    * @param pickListDataList
+    * @param validationData
+    * @param rec
+    * @param db
+    * @param fdt
+    * @param undoRedoManager
+    * @param fontSize
     */
     public EditEntry(OccurrenceEditEvent occurrenceEditEvent, // Call back EditPanel refrence
-        WorksheetDef wd, WorksheetDef.WorksheetField wf, IField f,
-        PickListData pickListData, IRecord rec,
-        IDatabase db, FieldDefinitionTable fdt, UndoRedo.Manager undoRedoManager) {
+        WorksheetDef wd, 
+        WorksheetDef.WorksheetField wf, 
+        IField field,
+        List<PickListData> pickListDataList, 
+        List<ValidationData> validationData,
+        IRecord rec,
+        IDatabase db, 
+        FieldDefinitionTable fdt, 
+        UndoRedo.Manager undoRedoManager,
+        FontSize fontSize) {
         
         occurrenceEditEvent_ = occurrenceEditEvent;
-        fld_ = f;
+        field_ = field;
         wksFld_ = wf;
         wksDef_ = wd;
-        pickListData_ = pickListData;
-        rec_ = rec;
+        pickListDataList_ = pickListDataList;
+        validationDataList_ = validationData;
+        record_ = rec;
         db_ = db;
         fdt_ = fdt;
         //FieldFactory.setDatabase(db);
         fieldEntries_ = new ArrayList<RepeatableField>();
         recordModified = false;
+             
+       pickListData_ = null;
+       for (PickListData pickList : pickListDataList_) {
+          if (Integer.valueOf(pickList.getTag()) == wksFld_.getTag() &&
+                  (pickList.getSubfieldCode() == null || "".equals(pickList.getSubfieldCode())) ) {
+             pickListData_ = pickList;
+             break;
+          }
+       }
 
         dbp_ = (ClientDatabaseProxy) db;
         undoRedoManager_ = undoRedoManager;
+        fontSize_ = fontSize;
         redraw();
         EditEntry.this.setUnModified();
-       
+
     }
 
-  
+   
+    
+    class TreeViewAction extends AbstractAction {
+       
+       private DataEntryTopComponent topComponent_;
+       private IDatabase db_;
+       private WorksheetDef.WorksheetField wksField_;
+       private List<PickListData> pickListDataList_;
+       private List<ValidationData> validationDataList_;
+           
+       public TreeViewAction(DataEntryTopComponent topComponent,
+           IDatabase db,
+           WorksheetDef.WorksheetField wksField,
+           List<PickListData> pickListDataList,
+           List<ValidationData> validationDataList)  {
+          
+           topComponent_ = topComponent;
+           db_ = db;
+           wksField_ = wksField;
+           pickListDataList_ = pickListDataList;
+           validationDataList_ = validationDataList;
+          
+       }
+       
+        @Override
+         public void actionPerformed(ActionEvent ae) {
+            /**
+             * Get the field occurrence from where the TreeView action was triggered
+             */
+            RepeatableField repeatableField = (RepeatableField) ae.getSource();
+            
+            
+            FieldDialog dlg = new FieldDialog(topComponent_,
+                    db_,
+                    wksField_,
+                    record_,
+                    pickListDataList_,
+                    validationDataList_);
+            dlg.setResizable(true);
+            dlg.setTitle(wksField_.getDescription());
+            dlg.setModal(true);
+            dlg.setLocationRelativeTo(null);
+            dlg.setVisible(true);
+            
+            
+           
+            if (dlg.getDialogStatus() == FieldDialog.CANCEL ||
+                    dlg.getDialogStatus() == FieldDialog.ABORT) {
+               dlg.setVisible(false);
+               return;
+            }
+            Object fieldValue = dlg.getFieldValue();
+          try {
+             /**
+              * If fieldValue is a string, the occurrences are separated by the 
+              * occurrence delimiters
+              */
+             if (fieldValue instanceof String) {
+                field_.setFieldValue(fieldValue);
+             } else {
+                /**
+                 * In case it is a BLOB field, we get the occurrences into an
+                 * array, thus we must add occurrence by occurrence
+                 */
+                ArrayList<Object> blobArray = (ArrayList<Object>) (fieldValue);
+                field_.clear();
+                for (int i = 0; i < blobArray.size(); i++) {
+                   field_.setOccurrence(i, blobArray.get(i));
+                }
+                
+             }
+          } catch (DbException ex) {
+             Exceptions.printStackTrace(ex);
+          }
+          redraw();
+           if (fontSize_.getFontSize() != DataEntryTopComponent.DEFAULT_FONT_SIZE) {
+              changeFontSize(fontSize_.getFontSize());
+           }
+            
+
+         }
+    }
+
+   
    private String doExtractText(final File f) {
 
       final TextExtractSwingWorker worker = new TextExtractSwingWorker(f);
@@ -223,8 +344,8 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
     private void delOccurrence(ActionEvent e) {
         try {
             DeleteButton de = (DeleteButton) e.getSource();
-            if (fld_.getOccurrenceCount() > 0) {
-                fld_.removeOccurrence(de.getID());
+            if (field_.getOccurrenceCount() > 0) {
+                field_.removeOccurrence(de.getID());
                 recordModified = true;
                 redraw();
             }
@@ -240,10 +361,10 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
     }
     private void addOccurrence() {
         try {
-            if (fld_.getType() == Global.FIELD_TYPE_BLOB) {
+            if (field_.getType() == Global.FIELD_TYPE_BLOB) {
                 RepeatableField rp = new RepeatableField(this, 0);
                 Object value = rp.getValue();
-                fld_.setOccurrence(fld_.getOccurrenceCount(), (byte[]) value);
+                field_.setOccurrence(field_.getOccurrenceCount(), (byte[]) value);
             } else {
                 String val = "";
                 if (wksFld_.getDefaultValue() != null) {
@@ -255,7 +376,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
                     }
                 }
 
-                fld_.setOccurrence(fld_.getOccurrenceCount(), val);
+                field_.setOccurrence(field_.getOccurrenceCount(), val);
             }
             GuiExecutor.instance().execute(new Runnable() {
                 @Override
@@ -271,6 +392,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
 
     }
     private void addFromPicklist(ActionEvent e) {
+       
         if (pickListData_ != null) {
             List<String> labels = pickListData_.getLabels();
             List<String> codes = pickListData_.getCodes();
@@ -316,7 +438,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
                             } else if (pickListData_.isSlashSlash()) {
                                 sb.append("/");
                             }
-                            Object obj = fld_.getOccurrenceValue(pickListButton.getID());
+                            Object obj = field_.getOccurrenceValue(pickListButton.getID());
                             boolean startOnCurrentOccurrence = false;
                             if (obj == null) {
                                 startOnCurrentOccurrence = true;
@@ -328,16 +450,16 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
                             }
                             if (startOnCurrentOccurrence) {
                                 // Current occurrence is empty thus start from there
-                                fld_.setOccurrence(pickListButton.getID(), sb.toString());
+                                field_.setOccurrence(pickListButton.getID(), sb.toString());
                             } else {
-                                fld_.setOccurrence(fld_.getOccurrenceCount(), sb.toString());
+                                field_.setOccurrence(field_.getOccurrenceCount(), sb.toString());
                             }
                         }
                     } else {
                         // We work on the current occurrence
                         if (pickListData_.isAdd()) {
                             //New selected items' text will be added to the text already in the field.
-                            Object obj = fld_.getOccurrenceValue(pickListButton.getID());
+                            Object obj = field_.getOccurrenceValue(pickListButton.getID());
                             if (obj == null || ((String) obj).length() == 0) {
                                 // Do nothing
                             } else {
@@ -370,13 +492,16 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
                                 sb.append(" ");
                             }
                         }
-                        fld_.setOccurrence(pickListButton.getID(), sb.toString());
+                        field_.setOccurrence(pickListButton.getID(), sb.toString());
                     }
                     GuiExecutor.instance().execute(new Runnable() {
                         @Override
                         public void run() {
                             recordModified = true;
                             redraw();
+                           if (fontSize_.getFontSize() != DataEntryTopComponent.DEFAULT_FONT_SIZE) {
+                              changeFontSize(fontSize_.getFontSize());
+                           }
                         }
                     });
                 } catch (DbException ex) {
@@ -406,13 +531,13 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
             IdeCursor.changeCursorWaitStatus(false);
             try {
                 // Store the document content in the 1st field occurrence
-                fld_.setOccurrence(FIRST_FIELD_OCCURRENCE_INDEX, text);
+                field_.setOccurrence(FIRST_FIELD_OCCURRENCE_INDEX, text);
 
                 String path = f.getAbsolutePath();
                 /**
                  * Save the path to the document for copying the document only when the record is saved
                  */
-                fld_.setOccurrence(SECOND_FIELD_OCCURRENCE_INDEX, path);
+                field_.setOccurrence(SECOND_FIELD_OCCURRENCE_INDEX, path);
 
                 GuiExecutor.instance().execute(new Runnable() {
                     @Override
@@ -704,6 +829,19 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
    public void setOrientation(ComponentOrientation orientation) {
       orientation_ = orientation;
    }
+   
+   void changeFontSize(int fontSize) {
+
+      int n = fieldEntries_.size();
+
+      for (int i = 0; i < n; ++i) {
+         RepeatableField rf = fieldEntries_.get(i);
+         Font font = rf.getFont();
+         font = font.deriveFont((float) fontSize);
+         rf.setJTextPaneFont(font);
+         rf.updateUI();
+      }
+   }
 
    void setJTextPanetFont(Font font) {
       int n = fieldEntries_.size();
@@ -729,7 +867,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
                return false;
             }
 
-            formatter.setRecord(db_, rec_);
+            formatter.setRecord(db_, record_);
             formatter.eval();
             String result = formatter.getText();
             if (result.length() > 0) {
@@ -782,7 +920,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
     */
    @Override
    public void focusGained(FocusEvent e) {
-      if (fld_.hasOccurrences()) {
+      if (field_.hasOccurrences()) {
          RepeatableField source = (RepeatableField) e.getSource();
          fieldValue_ = source.getValue();
       } else {
@@ -799,7 +937,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
    @Override
    public void focusLost(FocusEvent e) {
       try {
-         if (fld_.hasOccurrences()) {
+         if (field_.hasOccurrences()) {
             RepeatableField source = (RepeatableField) e.getSource();
             switch (source.getType()) {
                case Global.FIELD_TYPE_ALPHABETIC:
@@ -822,12 +960,12 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
 
                   String newValue = source.getText();
                   //if (!fieldValue_.equals(newValue) && fieldValidation() && recordValidation()) {
-                  fld_.setOccurrence(source.getID(), source.getText());
+                  field_.setOccurrence(source.getID(), source.getText());
                   //}
                   break;
                case Global.FIELD_TYPE_BLOB:
 
-                  fld_.setOccurrence(source.getID(), source.getValue());
+                  field_.setOccurrence(source.getID(), source.getValue());
                   break;
             }
          } else {
@@ -835,7 +973,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
             JTextArea source = (JTextArea) e.getSource();
             String newValue = source.getText();
             if (!fieldValue_.equals(newValue) && fieldValidation() && recordValidation()) {
-               fld_.setFieldValue(source.getText());
+               field_.setFieldValue(source.getText());
             }
          }
       } catch (DbException ex) {
@@ -856,7 +994,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
                return false;
             }
 
-            formatter.setRecord(db_, rec_);
+            formatter.setRecord(db_, record_);
             formatter.eval();
             String result = formatter.getText();
             if (result.length() > 0) {
@@ -878,7 +1016,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
     * Redraw the data entry panel
     */
    private void redraw() {
-      // fieldEntries will contain a List of ReteatableField with data for this
+      // fieldEntries will contain a List of Repeatable Field with data for this
       // specific field
       fieldEntries_.clear();
       ClientDatabaseProxy database = (ClientDatabaseProxy) db_;
@@ -886,7 +1024,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
       // Build an array of the occurrences values
       //-------------------------------------------
       Object values[] = {""};
-      if (fld_ == null || fld_.getOccurrenceCount() == 0) {
+      if (field_ == null || field_.getOccurrenceCount() == 0) {
          // The field is empty, just one occurrence
          values[0] = "";
          if (wksFld_.getDefaultValue() != null && wksFld_.getDefaultValue().length() > 0) {
@@ -896,7 +1034,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
             if (val != null) {
                values[0] = val;
                try {
-                  fld_.setFieldValue(val);
+                  field_.setFieldValue(val);
                } catch (DbException ex) {
                   Exceptions.printStackTrace(ex);
                }
@@ -905,23 +1043,30 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
 
       } else {
          // We are updating a field that already contains value(s)
-         if (!fld_.hasOccurrences()) {
+         if (!field_.hasOccurrences()) {
             // Only one occurrence, put the data in the 1st value item
-            values[0] = fld_.getFieldValue();
+            values[0] = field_.getFieldValue();
          } else {
             // More than one occurrence, get number of occurrences
-            int repCount = fld_.getOccurrenceCount();
+            int repCount = field_.getOccurrenceCount();
             // Allocate an array of objects that will contain references to
             // the occurrence data
             Object[] repData = new Object[repCount];
             for (int i = 0; i < repCount; i++) {
-               repData[i] = fld_.getOccurrenceValue(i);
+               repData[i] = field_.getOccurrenceValue(i);
             }
             values = repData;
          }
       }
       int tag = wksFld_.getTag();
-
+      // Get the number of lines to display
+      String size = wksFld_.getSize();
+      int nLines = 0;
+      if (size == null || size.length() == 0) {
+          // Do nothing
+      } else { 
+         nLines = Integer.parseInt(size);
+      }
 
       // Get the field type from the FDT
       FieldDefinition fieldDefinition = fdt_.getFieldByTag(tag);
@@ -1004,7 +1149,22 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
                if (Global.getApplicationFont() != null) {
                   repeatableField.setJTextPaneFont(Global.getApplicationFont());
                }
+               /**
+                * Tree View action
+                */
+               TreeViewAction treeViewAction = new TreeViewAction(null,
+                       db_,
+                       wksFld_,
+                       pickListDataList_,
+                       validationDataList_);
+
+               repeatableField.getInputMap().put(KeyStroke.getKeyStroke("F10"),
+                            "TreeView"+tag);
+               repeatableField.getActionMap().put("TreeView"+tag,
+                             treeViewAction);
+               
                fieldEntries_.add(repeatableField);
+               
 //            TextDataEntryDocument doc = new TextDataEntryDocument();
 //            doc.addDocumentListener(fieldEntry);
 //            fieldEntry.setDocument(doc);
@@ -1013,14 +1173,19 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
                // fieldEntry.setPreferredSize(new Dimension(325, 100));
                // Add a scroll bar to the JTextPane derived Repeatable component
                JScrollPane scrollPane = new JScrollPane(repeatableField);
-               scrollPane.setPreferredSize(new Dimension(650, 175));
+               int fontLineHeight = repeatableField.getFontLineHeight();
+               int height = (nLines ==0) ?(DEFAULT_HEIGHT_LINES*fontLineHeight) : nLines*fontLineHeight;
+               Dimension dimension = new Dimension(650, height+10);
+               scrollPane.setPreferredSize(dimension);
+               
+               //scrollPane.setPreferredSize(new Dimension(650, 175));
                // fieldEntry.setPreferredSize(new Dimension(100, 50));
                gbc.gridx = 1; // Column 1 for the occurrence
                // Add the scrollable JTextPane derived Repeatable component
                fieldPanel.add(scrollPane /*
                         * fieldEntry
                         */, gbc);
-               if (isRepeatitive && fld_.getOccurrenceCount()>1 && i>0) {
+               if (isRepeatitive && field_.getOccurrenceCount()>1 && i>0) {
                   // Create the Delete (-) button
                   DeleteButton btnDel = new DeleteButton(i);
                   btnDel.setIcon(new ImageIcon(ImageUtilities.loadImage(DEL_PATH, true)));
@@ -1096,23 +1261,36 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
             break;
          case Global.FIELD_TYPE_BLOB:
             for (int i = 0; i < values.length; i++) {
-               RepeatableField fieldEntry = new RepeatableField(this, i);
+               RepeatableField repeatableField = new RepeatableField(this, i);
                if (Global.getApplicationFont() != null) {
-                  fieldEntry.setJTextPaneFont(Global.getApplicationFont());
+                  repeatableField.setJTextPaneFont(Global.getApplicationFont());
                }
-               fieldEntries_.add(fieldEntry);
-               fieldEntries_.add(fieldEntry);
+               /**
+                * Tree View action
+                */
+               TreeViewAction treeViewAction = new TreeViewAction(null,
+                       db_,
+                       wksFld_,
+                       pickListDataList_,
+                       validationDataList_);
+
+               repeatableField.getInputMap().put(KeyStroke.getKeyStroke("F10"),
+                            "TreeView"+tag);
+               repeatableField.getActionMap().put("TreeView"+tag,
+                             treeViewAction);
+               fieldEntries_.add(repeatableField);
+               //fieldEntries_.add(repeatableField);
                byte[] bytes = null;
                if (values[i] instanceof String) {
                   bytes = ((String) values[i]).getBytes();
                } else {
                   bytes = (byte[]) values[i];
                }
-               fieldEntry.setValue(bytes);
+               repeatableField.setValue(bytes);
 
-               fieldEntry.addFocusListener(this);
+               repeatableField.addFocusListener(this);
                // fieldEntry.setPreferredSize(new Dimension(325, 100));
-               JScrollPane scrollPane = new JScrollPane(fieldEntry);
+               JScrollPane scrollPane = new JScrollPane(repeatableField);
                scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
                scrollPane.setPreferredSize(new Dimension(650, 250));
                // fieldEntry.setPreferredSize(new Dimension(100, 50));
@@ -1244,6 +1422,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
                      */, gridBagConstraints);
             break;
       }
+     
        //System.out.println("EditEntry before updateUI");
       this.updateUI();
       //System.out.println("EditEntry after updateUI");
@@ -1289,7 +1468,7 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
 
     @Override
     public void notifyCaller(IField field, int occurrence, String event) {
-        occurrenceEditEvent_.notifyCaller(fld_, occurrence, event);
+        occurrenceEditEvent_.notifyCaller(field_, occurrence, event);
     }
 
    static class CancellableProgress implements Cancellable {

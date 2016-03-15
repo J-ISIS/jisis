@@ -90,9 +90,15 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="toolbarRTL" min="-2" pref="100" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="toolbarOptions" min="-2" pref="454" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="toolbarOptions" min="-2" pref="454" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="jLabel1" min="-2" pref="69" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="sliderFont" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace pref="73" max="32767" attributes="0"/>
+                      <EmptySpace pref="71" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -107,7 +113,11 @@
                           <Component id="toolbarNavigation" min="-2" pref="25" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="toolbarOptions" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="toolbarOptions" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="sliderFont" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -450,6 +460,30 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Component class="javax.swing.JSlider" name="sliderFont">
+              <Properties>
+                <Property name="maximum" type="int" value="32"/>
+                <Property name="minimum" type="int" value="10"/>
+                <Property name="toolTipText" type="java.lang.String" value="Change Font Size of Data Text Box"/>
+                <Property name="value" type="int" value="14"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                    <LineBorder/>
+                  </Border>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sliderFontStateChanged"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel1">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="12" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Font Size:"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>

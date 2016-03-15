@@ -12,12 +12,8 @@ package org.unesco.jisis.dataentryexdl;
 
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.awt.UndoRedo;
@@ -46,19 +42,32 @@ public class EditPanel extends JPanel implements OccurrenceEditEvent {
     private FieldDefinitionTable fdt_ = null;
     private WorksheetDef wks_ = null;
     private boolean showEmptyFields_ = true;
-    private List<PickListData> pickListDataList_;
+    private final List<PickListData> pickListDataList_;
 
-    private List<ValidationData> validationDataList_;
+    private final List<ValidationData> validationDataList_;
 
     UndoRedo.Manager undoRedoManager_;
-   
     
-    /** Creates a new instance of EditPanel */
+    private FontSize fontSize_;
+    
+  
+    
+    /** Creates a new instance of EditPanel
+    * @param db
+    * @param fdt
+    * @param wks - Reference to the Record stored in the DataEntryTopComponent
+    * @param pickListDataList
+    * @param validationDataList
+    * @param rec
+    * @param showEmptyFields
+    * @param undoRedoManager */
     public EditPanel(IDatabase db, FieldDefinitionTable fdt, WorksheetDef wks,
              List<PickListData> pickListDataList,
              List<ValidationData> validationDataList,
-             IRecord rec, boolean showEmptyFields,
-             UndoRedo.Manager undoRedoManager) {
+             IRecord rec, 
+             boolean showEmptyFields,
+             UndoRedo.Manager undoRedoManager,
+             FontSize fontSize) {
 
         db_ = db;
         fdt_ = fdt;
@@ -67,8 +76,8 @@ public class EditPanel extends JPanel implements OccurrenceEditEvent {
         validationDataList_ = validationDataList;
         showEmptyFields_ = showEmptyFields;
         undoRedoManager_ = undoRedoManager;
-        
-       
+        fontSize_ = fontSize;
+          
         redraw(rec);
     }
 
@@ -87,6 +96,19 @@ public class EditPanel extends JPanel implements OccurrenceEditEvent {
             }
         }
     }
+
+   public void changeFontSize(int fontSize) {
+
+      JPanel editPanel = (JPanel) this.getComponent(0);
+      int ncomponents = editPanel.getComponentCount();
+      for (int i = 0; i < ncomponents; ++i) {
+         Component c = editPanel.getComponent(i);
+         if (c instanceof EditEntry) {
+            EditEntry ee = (EditEntry) c;
+            ee.changeFontSize(fontSize);
+         }
+      }
+   }
 
      private String fieldDefaultValue(String defaultValue) {
       try {
@@ -156,7 +178,7 @@ public class EditPanel extends JPanel implements OccurrenceEditEvent {
              // field is edited, it will be updated when a field occurrence 
              // loose the focus
              // 
-             PickListData pickListData = null;
+             PickListData pickListData;
              for (PickListData pickList : pickListDataList_) {
                 if (Integer.valueOf(pickList.getTag()) == wf.getTag()) {
                    pickListData = pickList;
@@ -164,16 +186,23 @@ public class EditPanel extends JPanel implements OccurrenceEditEvent {
                 }
              }
              //System.out.println("EditPanel before creating an EditEntry");
-             EditEntry editEntry = new EditEntry(this, wks_, wf, f, pickListData, rec, db_, fdt_, undoRedoManager_);
+             EditEntry editEntry = new EditEntry(this, wks_, wf, f, 
+                     pickListDataList_, 
+                     validationDataList_,
+                     rec, db_, fdt_, undoRedoManager_,
+                     fontSize_);
+                     
               //System.out.println("EditPanel after creating an EditEntry");
              
              gbc.gridy++;
+ 
              editorPanel.add(editEntry, gbc);
           }
           this.add(editorPanel);
        } catch (DbException ex) {
           new GeneralDatabaseException(ex).displayWarning();
        }
+       
     }
 
     public void refresh() {
