@@ -33,6 +33,7 @@ import org.openide.util.Utilities;
 import org.openide.util.actions.CallableSystemAction;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
+import org.unesco.jisis.*;
 import org.unesco.jisis.corelib.client.ConnectionInfo;
 import org.unesco.jisis.corelib.client.ConnectionNIO;
 import org.unesco.jisis.corelib.client.ConnectionPool;
@@ -43,6 +44,7 @@ import org.unesco.jisis.corelib.common.UserInfo;
 import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.database.explorer.DbViewAction;
 import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.threads.IdeCursor;
 import org.unesco.jisis.windows.connection.ConnTopComponent;
 import org.unesco.jisis.windows.databases.DbTopComponent;
 
@@ -170,7 +172,7 @@ public final class MRUDatabasesAction extends CallableSystemAction {
              */
             try {
 
-               connection = new ConnectionNIO(server, port, userName, passWord);
+               connection = ConnectionNIO.connect(server, port, userName, passWord);
             } catch (DbException ex) {
                NotifyDescriptor nd = new NotifyDescriptor.Message(ex.getMessage(), NotifyDescriptor.ERROR_MESSAGE);
                DialogDisplayer.getDefault().notify(nd);
@@ -216,34 +218,34 @@ public final class MRUDatabasesAction extends CallableSystemAction {
       final JFrame frame = (JFrame) WindowManager.getDefault().getMainWindow();
 
       // Set status text
+       IdeCursor.changeCursorWaitStatus(true);
+       
       StatusDisplayer.getDefault().setStatusText("Reading Database Info - Please wait...");
       RepaintManager.currentManager(frame).paintDirtyRegions();
 
-      frame.getGlassPane().setCursor(Utilities.createProgressCursor(frame));
-      frame.getGlassPane().setVisible(true);
+    
 
       Runnable openRun = new Runnable() {
          public void run() {
-            if (!EventQueue.isDispatchThread()) {
-               try {
-                  //Global.output("Starting Open");
-                  Date start = new Date();
-                  db.getDatabase(dbHome, dbName, Global.DATABASE_DURABILITY_WRITE);
-                  Date end = new Date();
+             if (!EventQueue.isDispatchThread()) {
+                 try {
+                     //Global.output("Starting Open");
+                     Date start = new Date();
+                     db.getDatabase(dbHome, dbName, Global.DATABASE_DURABILITY_WRITE);
+                     Date end = new Date();
                   //Global.output(Long.toString(end.getTime() - start.getTime())
-                  //              + " milliseconds to open database");
-                  frame.getGlassPane().setCursor(Utilities.createProgressCursor(frame));
-                  frame.getGlassPane().setVisible(true);
-                
-                 
-               } catch (DbException ex) {
-                  Exceptions.printStackTrace(ex);
-               } finally {
+                     //              + " milliseconds to open database");
+
+                     IdeCursor.changeCursorWaitStatus(true);
+
+                 } catch (DbException ex) {
+                     Exceptions.printStackTrace(ex);
+                 } finally {
                   // clear status text
-                  StatusDisplayer.getDefault().setStatusText(""); // NOI18N
-                  // clear wait cursor
-                  frame.getGlassPane().setCursor(null);
-                  frame.getGlassPane().setVisible(false);
+                 
+                   IdeCursor.changeCursorWaitStatus(false);
+                   StatusDisplayer.getDefault().setStatusText("");
+                   RepaintManager.currentManager(frame).paintDirtyRegions();
 
                   EventQueue.invokeLater(this);
                }
