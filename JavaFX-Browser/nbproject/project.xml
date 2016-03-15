@@ -40,7 +40,6 @@
                 </dependency>
             </module-dependencies>
             <public-packages>
-                <package>com.sun.javafx.tk.quantum</package>
                 <package>com.sun.pdfview</package>
                 <package>com.sun.pdfview.action</package>
                 <package>com.sun.pdfview.colorspace</package>
@@ -55,10 +54,6 @@
             <class-path-extension>
                 <runtime-relative-path>ext/pdf-renderer-1.0.5.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/pdf-renderer-1.0.5.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/jfxrt.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jfxrt.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>
