@@ -104,7 +104,6 @@
                 <package>com.google.gson.internal.bind</package>
                 <package>com.google.gson.reflect</package>
                 <package>com.google.gson.stream</package>
-                <package>com.tecnick.htmlutils.htmlentities</package>
                 <package>org.apache.commons.codec</package>
                 <package>org.apache.commons.codec.binary</package>
                 <package>org.apache.commons.codec.digest</package>
@@ -129,6 +128,8 @@
                 <package>org.apache.commons.lang3.text.translate</package>
                 <package>org.apache.commons.lang3.time</package>
                 <package>org.apache.commons.lang3.tuple</package>
+                <package>org.apache.commons.logging</package>
+                <package>org.apache.commons.logging.impl</package>
                 <package>org.apache.shiro</package>
                 <package>org.apache.shiro.aop</package>
                 <package>org.apache.shiro.authc</package>
@@ -156,6 +157,7 @@
                 <package>org.apache.shiro.realm</package>
                 <package>org.apache.shiro.realm.activedirectory</package>
                 <package>org.apache.shiro.realm.jdbc</package>
+                <package>org.apache.shiro.realm.jndi</package>
                 <package>org.apache.shiro.realm.ldap</package>
                 <package>org.apache.shiro.realm.text</package>
                 <package>org.apache.shiro.session</package>
@@ -209,6 +211,7 @@
                 <package>org.unesco.jisis.corelib.pft.cisis</package>
                 <package>org.unesco.jisis.corelib.pft.interpretor</package>
                 <package>org.unesco.jisis.corelib.pft.parser.cc</package>
+                <package>org.unesco.jisis.corelib.pft.parser.cup</package>
                 <package>org.unesco.jisis.corelib.picklist</package>
                 <package>org.unesco.jisis.corelib.record</package>
                 <package>org.unesco.jisis.corelib.searchengine</package>
@@ -252,16 +255,16 @@
                 <binary-origin>release/modules/ext/commons-codec-1.7.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
+                <runtime-relative-path>ext/shiro-all-1.2.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/shiro-all-1.2.4.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
                 <runtime-relative-path>ext/gson-2.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/gson-2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-lang3-3.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/commons-lang3-3.1.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/shiro-all-1.2.3.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/shiro-all-1.2.3.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/slf4j-api-1.6.4.jar</runtime-relative-path>
