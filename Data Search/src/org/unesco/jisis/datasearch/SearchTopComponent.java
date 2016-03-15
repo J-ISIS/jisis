@@ -1390,6 +1390,7 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
           queryTerms_ = parser.getQueryTerms();    
 
        } else {
+           // Expert Lucene Search
         
           squery = ((javax.swing.text.JTextComponent) this.queryPanels_.get(0)[0]).getText();
           /**
