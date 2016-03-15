@@ -24,6 +24,9 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import org.openide.util.NbBundle;
 
@@ -31,8 +34,7 @@ import org.openide.util.NbBundle;
 // import org.netbeans.modules.db.sql.editor.SQLEditorKit;
 
 // public class QueryBuilderSqlTextArea extends JTextPane
-public class PftEditor extends JTextPane
-        implements ActionListener, DocumentListener {
+public class PftEditor extends JTextPane  implements ActionListener, DocumentListener {
 
    private boolean DEBUG = false;
    private boolean stringIsParsed = false;

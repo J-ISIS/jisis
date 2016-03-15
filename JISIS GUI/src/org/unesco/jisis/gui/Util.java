@@ -184,16 +184,16 @@ public class Util {
      * @return
      */
     public static boolean isAdminOrOper() {
-           IConnection conn = ConnectionPool.getDefaultConnection();
+        IConnection conn = ConnectionPool.getDefaultConnection();
         UserInfo userInfo = conn.getUserInfo();
         Map<String, String> permissions = userInfo.getPermissions();
         if (userInfo.getIsAdmin() || permissions.get("crud") != null || permissions.get("oper") != null) {
             // Do nothing, user is authorized
             return true;
         } else {
-            String label = NbBundle.getMessage( Util.class,
+            String label = NbBundle.getMessage(Util.class,
                 "MSG_NotAuthorized");
-            String title = NbBundle.getMessage( Util.class,
+            String title = NbBundle.getMessage(Util.class,
                 "MSG_NotAuthorizedDialogTitle");
             NotifyDescriptor d
                 = new NotifyDescriptor.Confirmation(label, title,
@@ -202,8 +202,8 @@ public class Util {
             return false;
 
         }
-      }
-      
+    }
+
      public static boolean isAdmin() {
         IConnection conn = ConnectionPool.getDefaultConnection();
         UserInfo userInfo = conn.getUserInfo();

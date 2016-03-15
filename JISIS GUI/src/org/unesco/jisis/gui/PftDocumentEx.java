@@ -49,6 +49,9 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
     private HashSet keywords;
     private final String fontFamily = "Monospaced";
     private final int fontSize = 12;
+    
+    private int fontSize_;
+    private boolean sourceIsNotPft = true;
 
     public PftDocumentEx() {
         doc = this;
@@ -59,7 +62,7 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
         normal = new SimpleAttributeSet();
         StyleConstants.setForeground(normal, Color.black);
         
-       
+       fontSize_ = fontSize;
 
         if (Global.getApplicationFont() != null) {
             Font font = Global.getApplicationFont();
@@ -106,6 +109,10 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
         singleQuote.addAttribute(StyleConstants.NameAttribute, "singleQuote");
 
         select = execution;
+    }
+    
+    public void setFontSize(int fontSize) {
+        fontSize_ = fontSize;
     }
 
     public void setKeywords(HashSet aKeywordList) {
@@ -186,7 +193,15 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
 
       //System.out.println("Tokenize content=" + content + " line=" + line + " Tokenize startOffset=" + startOffset + " endOffset=" + endOffset);
         //  Tokenize and color the tokens
-        colorTokens(content, startOffset, endOffset);
+        if (sourceIsNotPft) {
+            MutableAttributeSet multiAttributeSet = normal;
+            if (fontSize_ != fontSize) {
+                StyleConstants.setFontSize(multiAttributeSet, fontSize_);
+            }
+            doc.setCharacterAttributes(startOffset, lineLength, multiAttributeSet, false);
+        } else {
+            colorTokens(content, startOffset, endOffset);
+        }
     }
 
     private boolean isAlreadyColored(AttributeSet startAttribute, AttributeSet endAttribute,
@@ -205,29 +220,27 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
 
         Element charElement = getCharacterElement(startOffset);
         AttributeSet startAttrs = charElement.getAttributes();
-        charElement = getCharacterElement(startOffset + len - 1);
+      charElement = getCharacterElement(startOffset + len);
         AttributeSet endAttrs = charElement.getAttributes();
       //System.out.println("startAttrName=" + startAttrs.getAttribute(StyleConstants.NameAttribute));
         //System.out.println("endAttrName=" + endAttrs.getAttribute(StyleConstants.NameAttribute));
 
+        MutableAttributeSet multiAttributeSet = normal;
         switch (type) {
             /* Literals */
             case COND_LITER:
                 if (!isAlreadyColored(startAttrs, endAttrs, "doubleQuote")) {
-                    doc.setCharacterAttributes(startOffset, len,
-                        doubleQuote, false);
+                    multiAttributeSet = doubleQuote;
                 }
                 break;
             case UNCOND_LITER:
                 if (!isAlreadyColored(startAttrs, endAttrs, "singleQuote")) {
-                    doc.setCharacterAttributes(startOffset, len,
-                        singleQuote, false);
+                    multiAttributeSet = singleQuote;
                 }
                 break;
             case REP_LITER:
                 if (!isAlreadyColored(startAttrs, endAttrs, "doubleQuote")) {
-                    doc.setCharacterAttributes(startOffset, len,
-                        repeatLiteral, false);
+                    multiAttributeSet = repeatLiteral;
                 }
                 break;
 //         case COND_LITER_ERROR:
@@ -244,14 +257,14 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
             case AND:   // "and"
             case OR:    // "or"
                 if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-                    doc.setCharacterAttributes(startOffset, len, keyword, false);
+                    multiAttributeSet = keyword;
                 }
                 break;
             case ASSIGN:  // ":="
             case SEL:     // "->"
             case DOT_DOT: // ".."
                 if (!isAlreadyColored(startAttrs, endAttrs, "normalBold")) {
-                    doc.setCharacterAttributes(startOffset, len, normalBold, false);
+                    multiAttributeSet = normalBold;
                 }
                 break;
             case FIELD:
@@ -262,7 +275,7 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
             case FIELD_FRAG_2:
             case FIELD_FRAG_3:
                 if (!isAlreadyColored(startAttrs, endAttrs, "fields")) {
-                    doc.setCharacterAttributes(startOffset, len, fields, false);
+                    multiAttributeSet = fields;
                 }
                 break;
             case IF:
@@ -271,13 +284,13 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
             case FI:
             case WHILE:
                 if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-                    doc.setCharacterAttributes(startOffset, len, keyword, false);
+                    multiAttributeSet = keyword;
                 }
                 break;
             case INT:
             case NUMBER:
                 if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-                    doc.setCharacterAttributes(startOffset, len, keyword, false);
+                    multiAttributeSet = keyword;
                 }
                 break;
 
@@ -286,7 +299,7 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
             case CMD_C:
             case CMD_X:
                 if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-                    doc.setCharacterAttributes(startOffset, len, keyword, false);
+                    multiAttributeSet = keyword;
                 }
                 break;
             case MHU:
@@ -296,23 +309,23 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
             case MPU:
             case MPL:
                 if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-                    doc.setCharacterAttributes(startOffset, len, keyword, false);
+                    multiAttributeSet = keyword;
                 }
                 break;
             case VAR_E:
             case VAR_S:
                 if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-                    doc.setCharacterAttributes(startOffset, len, keyword, false);
+                    multiAttributeSet = keyword;
                 }
                 break;
             case EXT_FUNC:
                 if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-                    doc.setCharacterAttributes(startOffset, len, keyword, false);
+                    multiAttributeSet = keyword;
                 }
                 break;
             case EXT_FMT:
                 if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-                    doc.setCharacterAttributes(startOffset, len, keyword, false);
+                    multiAttributeSet = keyword;
                 }
                 break;
             case FNC_VAL:
@@ -337,7 +350,7 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
             case FNC_A:
             case FNC_P:
                 if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-                    doc.setCharacterAttributes(startOffset, len, keyword, false);
+                    multiAttributeSet = keyword;
                 }
                 break;
             case FONTS:
@@ -361,7 +374,7 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
             case CMD_COLOR:
             case LINK:
                 if (!isAlreadyColored(startAttrs, endAttrs, "keyword")) {
-                    doc.setCharacterAttributes(startOffset, len, keyword, false);
+                    multiAttributeSet = keyword;
                 }
                 break;
             default:
@@ -393,9 +406,14 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
 //     public static final int IDENT = 67;
 //     public static final int error = 1;
                 if (!isAlreadyColored(startAttrs, endAttrs, "normal")) {
-                    doc.setCharacterAttributes(startOffset, len, normal, false);
+                    multiAttributeSet = normal;
                 }
         }
+         if (fontSize_ != fontSize) {
+            StyleConstants.setFontSize(multiAttributeSet, fontSize_);
+        }
+        doc.setCharacterAttributes(startOffset, len, multiAttributeSet, false);
+       
     }
 
     /**
@@ -421,7 +439,7 @@ public class PftDocumentEx extends DefaultStyledDocument implements FmtParserCon
             for (t = mgr.getNextToken(); t.kind != EOF; t = mgr.getNextToken()) {
                 int col = t.beginColumn;
                 int len = t.image.length();
-                colorToken(t.kind, col + startOffset, len);
+                colorToken(t.kind, col + startOffset -1, len);
 
             }
         } catch (TokenMgrError tme) {
