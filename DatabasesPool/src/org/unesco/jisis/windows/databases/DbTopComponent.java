@@ -307,7 +307,7 @@ public class DbTopComponent extends TopComponent {
     public void closeDatabase(ClientDatabaseProxy db) {
         try {
             db.close();
-            ConnectionPool.closeDatabase(db);
+            ConnectionPool.removeDatabase(db);
 
         } catch (DbException ex) {
             Exceptions.printStackTrace(ex);
@@ -325,9 +325,13 @@ public class DbTopComponent extends TopComponent {
     }
     
     public void closeConnection() {
-        closeAllDatabases();
-        IConnection con = ConnectionPool.getDefaultConnection();
-        ConnectionPool.closeConnection(con);
+        try {
+            closeAllDatabases();
+            IConnection con = ConnectionPool.getDefaultConnection();
+            ConnectionPool.closeConnection(con);
+        } catch (DbException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }
 
     /** This method is called from within the constructor to
