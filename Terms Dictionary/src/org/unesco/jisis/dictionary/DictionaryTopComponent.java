@@ -3,6 +3,7 @@ package org.unesco.jisis.dictionary;
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -39,6 +40,7 @@ import org.unesco.jisis.corelib.index.TermParams;
 import org.unesco.jisis.gui.GuiUtils;
 import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
 import org.unesco.jisis.jisisutils.distributed.DistributedTableModel;
+import org.unesco.jisis.jisisutils.threads.IdeCursor;
 
 class Popupmenu_mouseAdapter extends java.awt.event.MouseAdapter {
    JPopupMenu popup;
@@ -98,176 +100,178 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
    private javax.swing.JList suggestionList;
    private javax.swing.JScrollPane suggestionScroll;
 
-   public DictionaryTopComponent(IDatabase db) {
+    public DictionaryTopComponent(IDatabase db) {
 
-      setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      if (db instanceof ClientDatabaseProxy) {
-         db_ = (ClientDatabaseProxy) db;
-      } else {
-         throw new RuntimeException("RecordDataBrowserTopComponent: Cannot cast DB to ClientDatabaseProxy");
-      }
-      /* Register this TopComponent as attached to this DB */
-      db_.addWindow(this);
-      /* Add this TopComponent as Observer to DB changes */
-      db_.addObserver((Observer) this);
-      try {
-         this.setDisplayName("Dictionary" + " (" + db.getDbHome() + "//" + db.getDatabaseName() + ")");
+        final JFrame mainWin = (JFrame) WindowManager.getDefault().getMainWindow();
+        IdeCursor.changeCursorWaitStatus(true);
+        StatusDisplayer.getDefault().setStatusText("Loading Indexed Tems, please wait...");
+        RepaintManager.currentManager(mainWin).paintDirtyRegions();
+        if (db instanceof ClientDatabaseProxy) {
+            db_ = (ClientDatabaseProxy) db;
+        } else {
+            throw new RuntimeException("RecordDataBrowserTopComponent: Cannot cast DB to ClientDatabaseProxy");
+        }
+        /* Register this TopComponent as attached to this DB */
+        db_.addWindow(this);
+        /* Add this TopComponent as Observer to DB changes */
+        db_.addObserver((Observer) this);
+        try {
+            this.setDisplayName("Dictionary" + " (" + db.getDbHome() + "//" + db.getDatabaseName() + ")");
 
-         model_ = new DistributedTableModel(new TermsTableDataSource(db));
+            model_ = new DistributedTableModel(new TermsTableDataSource(db));
 
-         initComponents();
+            initComponents();
 
-         initIndexInfo();
+            initIndexInfo();
 
-         setName(NbBundle.getMessage(DictionaryTopComponent.class, "CTL_dictionaryTopComponent"));
-         setToolTipText(NbBundle.getMessage(DictionaryTopComponent.class, "HINT_dictionaryTopComponent"));
-         setIcon(ImageUtilities.loadImage(ICON_PATH, true));
+            setName(NbBundle.getMessage(DictionaryTopComponent.class, "CTL_dictionaryTopComponent"));
+            setToolTipText(NbBundle.getMessage(DictionaryTopComponent.class, "HINT_dictionaryTopComponent"));
+            setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
-         /* Construct the JTable for displaying the dictionary terms */
-         termsTable_.setAutoCreateColumnsFromModel(false);
-         termsTable_.setColumnSelectionAllowed(false);
-         termsTable_.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-         //System.out.println("TermsDictionary TopComponent columnCount=" + model_.getColumnCount());
-         for (int i = 0; i < model_.getColumnCount(); i++) {
-            DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-           
-            if (i == 1 || i == 2) {
-               renderer.setHorizontalAlignment(JLabel.LEFT);
-            } else {
-                renderer.setHorizontalAlignment(JLabel.RIGHT);
+            /* Construct the JTable for displaying the dictionary terms */
+            termsTable_.setAutoCreateColumnsFromModel(false);
+            termsTable_.setColumnSelectionAllowed(false);
+            termsTable_.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            //System.out.println("TermsDictionary TopComponent columnCount=" + model_.getColumnCount());
+            for (int i = 0; i < model_.getColumnCount(); i++) {
+                DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+
+                if (i == 1 || i == 2) {
+                    renderer.setHorizontalAlignment(JLabel.LEFT);
+                } else {
+                    renderer.setHorizontalAlignment(JLabel.RIGHT);
+                }
+                int w = 100;
+                if (i == 2) {
+                    w = 350;
+                }
+                TableColumn column = new TableColumn(i, w, renderer, null);
+                termsTable_.addColumn(column);
             }
-            int w = 50;
-            if (i == 2) {
-               w = 350;
+            if (db_.getDisplayFont() != null) {
+                termsTable_.setFont(db_.getDisplayFont());
             }
-            TableColumn column = new TableColumn(i, w, renderer, null);
-            termsTable_.addColumn(column);
-         }
-         if (db_.getDisplayFont() != null) {
-            termsTable_.setFont(db_.getDisplayFont());
-         }
-         
-         termsTable_.setRowSelectionAllowed(true);
-         termsTable_.setCellSelectionEnabled(true);
+
+            termsTable_.setRowSelectionAllowed(true);
+            termsTable_.setCellSelectionEnabled(true);
 
 //         sorter_ = new FilterOnlyTableRowSorter<DistributedTableModel>(termsTable_);
 //         termsTable_.setRowSorter(sorter_);
+            suggestionBox = new javax.swing.JPopupMenu();
+            suggestionScroll = new javax.swing.JScrollPane();
+            suggestionList = new javax.swing.JList();
+            suggestionTimerTask_ = null;
+            suggestionTimer_ = new Timer();
 
-         suggestionBox = new javax.swing.JPopupMenu();
-         suggestionScroll = new javax.swing.JScrollPane();
-         suggestionList = new javax.swing.JList();
-         suggestionTimerTask_ = null;
-         suggestionTimer_ = new Timer();
+            suggestionScroll.setComponentPopupMenu(suggestionBox);
 
-         suggestionScroll.setComponentPopupMenu(suggestionBox);
+            suggestionList.setModel(new javax.swing.AbstractListModel() {
+                String[] strings = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5"};
 
-         suggestionList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5"};
-            public int getSize() {
-               return strings.length;
+                public int getSize() {
+                    return strings.length;
+                }
+
+                public Object getElementAt(int i) {
+                    return strings[i];
+                }
+            });
+            suggestionList.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    suggestionListMouseClicked(evt);
+                }
+            });
+            suggestionList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+                public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                    suggestionListValueChanged(evt);
+                }
+            });
+
+            if (db_.getDisplayFont() != null) {
+                suggestionList.setFont(db_.getDisplayFont());
             }
-            public Object getElementAt(int i) {
-               return strings[i];
+            suggestionScroll.setViewportView(suggestionList);
+            java.awt.GridBagConstraints gridBagConstraints;
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.weighty = 1.0;
+
+            suggestionBox.setLayout(new java.awt.GridBagLayout());
+            suggestionBox.add(this.suggestionScroll, gridBagConstraints);
+            suggestionList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+            suggestionList.setModel(new DefaultListModel());
+
+            txtQuery.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    queryFieldEnter(evt);
+                }
+            });
+
+            txtQuery.addKeyListener(new java.awt.event.KeyAdapter() {
+                @Override
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    queryFieldPressed(evt);
+                }
+            });
+
+            txtQuery.addKeyListener(new java.awt.event.KeyAdapter() {
+                @Override
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    queryFieldTyped(evt);
+                }
+            });
+
+            if (db_.getDisplayFont() != null) {
+                txtQuery.setFont(db_.getDisplayFont());
             }
-         });
-         suggestionList.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-               suggestionListMouseClicked(evt);
+
+            cmbFstEntry.addActionListener(new java.awt.event.ActionListener() {
+
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    searchableFieldClicked(evt);
+                }
+
+                private void searchableFieldClicked(ActionEvent evt) {
+                    SearchableField searchableField = (SearchableField) cmbFstEntry.getSelectedItem();
+                    if (searchableField != null) {
+                        searchableFieldChanged(evt, searchableField);
+                    }
+                }
+            });
+
+            fst_ = db_.getFieldSelectionTable();
+
+            GuiUtils.TweakJTable(termsTable_);
+
+            createPopupMenu();
+
+            populateFields();
+
+            int[] fstTags = fst_.getEntriesTag();
+            String[] fields = new String[fstTags.length + 1];
+            fields[0] = "<all the fields>";
+
+            for (int k = 0; k < fstTags.length; k++) {
+                fields[k + 1] = Integer.toString(fstTags[k]);
             }
-         });
-         suggestionList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-               suggestionListValueChanged(evt);
+
+            // FST entry ID or ALL
+            if (this.searchableFields_ != null) {
+                cmbFstEntry.setModel(new javax.swing.DefaultComboBoxModel(searchableFields_));
             }
-         });
 
-         if (db_.getDisplayFont() != null) {
-            suggestionList.setFont(db_.getDisplayFont());
-         }
-         suggestionScroll.setViewportView(suggestionList);
-         java.awt.GridBagConstraints gridBagConstraints;
-         gridBagConstraints = new java.awt.GridBagConstraints();
-         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-         gridBagConstraints.weightx = 1.0;
-         gridBagConstraints.weighty = 1.0;
-
-         suggestionBox.setLayout(new java.awt.GridBagLayout());
-         suggestionBox.add(this.suggestionScroll, gridBagConstraints);
-         suggestionList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
-         suggestionList.setModel(new DefaultListModel());
-
-         txtQuery.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-               queryFieldEnter(evt);
-            }
-         });
-
-         txtQuery.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-               queryFieldPressed(evt);
-            }
-         });
-
-         txtQuery.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-               queryFieldTyped(evt);
-            }
-         });
-
-         if (db_.getDisplayFont() != null) {
-            txtQuery.setFont(db_.getDisplayFont());
-         }
-
-         cmbFstEntry.addActionListener(new java.awt.event.ActionListener() {
-
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            searchableFieldClicked(evt);
-         }
-
-         private void searchableFieldClicked(ActionEvent evt) {
-            SearchableField searchableField = (SearchableField) cmbFstEntry.getSelectedItem();
-            if (searchableField != null) {
-               searchableFieldChanged(evt, searchableField);
-            }
-         }
-      });
-
-         fst_ = db_.getFieldSelectionTable();
-
-         GuiUtils.TweakJTable(termsTable_);
-
-         createPopupMenu();
-
-         populateFields();
-
-
-
-         int[] fstTags = fst_.getEntriesTag();
-         String[] fields = new String[fstTags.length + 1];
-         fields[0] = "<all the fields>";
-         
-         for (int k = 0; k < fstTags.length; k++) {
-            fields[k + 1] = Integer.toString(fstTags[k]);
-         }
-
-         // FST entry ID or ALL
-         if (this.searchableFields_ != null) {
-            cmbFstEntry.setModel(new javax.swing.DefaultComboBoxModel(searchableFields_));
-         }
-         
-
-        
-      } catch (DbException ex) {
-         new GeneralDatabaseException(ex).displayWarning();
-      } catch (Exception ex) {
-         Exceptions.printStackTrace(ex);
-      } finally {
-         setCursor(null);
-      }
-   }
+        } catch (DbException ex) {
+            new GeneralDatabaseException(ex).displayWarning();
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        } finally {
+            IdeCursor.changeCursorWaitStatus(false);
+            StatusDisplayer.getDefault().setStatusText("");
+            RepaintManager.currentManager(mainWin).paintDirtyRegions();
+        }
+    }
 
    private void populateFields() {
 
@@ -359,209 +363,248 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
      * WARNING: Do NOT modify this code. The content of this method is
      * always regenerated by the Form Editor.
      */
-   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents() {
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
-      mainPanel = new javax.swing.JPanel();
-      lblIndexName = new javax.swing.JLabel();
-      txtIndexName = new javax.swing.JTextField();
-      lblNumFields = new javax.swing.JLabel();
-      txtNumFields = new javax.swing.JTextField();
-      lblNumRecords = new javax.swing.JLabel();
-      txtNumRecords = new javax.swing.JTextField();
-      lblNumTerms = new javax.swing.JLabel();
-      txtNumTerms = new javax.swing.JTextField();
-      lblLastModified = new javax.swing.JLabel();
-      txtLastModified = new javax.swing.JTextField();
-      scrollPane_ = new javax.swing.JScrollPane();
-      termsTable_ = new javax.swing.JTable();
-      quickSearchPanel = new javax.swing.JPanel();
-      cmbFstEntry = new javax.swing.JComboBox();
-      txtQuery = new javax.swing.JTextField();
-      jLabel1 = new javax.swing.JLabel();
-      jLabel3 = new javax.swing.JLabel();
-      lblIndexContent = new javax.swing.JLabel();
+        mainPanel = new javax.swing.JPanel();
+        quickSearchPanel = new javax.swing.JPanel();
+        cmbFstEntry = new javax.swing.JComboBox();
+        txtQuery = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        lblIndexContent = new javax.swing.JLabel();
+        infoPanel = new javax.swing.JPanel();
+        lblNumFields = new javax.swing.JLabel();
+        txtNumFields = new javax.swing.JTextField();
+        lblNumRecords = new javax.swing.JLabel();
+        txtNumRecords = new javax.swing.JTextField();
+        lblNumTerms = new javax.swing.JLabel();
+        txtNumTerms = new javax.swing.JTextField();
+        lblLastModified = new javax.swing.JLabel();
+        txtLastModified = new javax.swing.JTextField();
+        lblIndexName = new javax.swing.JLabel();
+        txtIndexName = new javax.swing.JTextField();
+        tablePanel = new javax.swing.JPanel();
+        scrollPane_ = new javax.swing.JScrollPane();
+        termsTable_ = new javax.swing.JTable();
 
-      setAutoscrolls(true);
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setAutoscrolls(true);
 
-      lblIndexName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-      org.openide.awt.Mnemonics.setLocalizedText(lblIndexName, "Index name:");
+        mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-      txtIndexName.setEditable(false);
-      txtIndexName.setText("jTextField2");
+        quickSearchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Quick Search", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-      lblNumFields.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-      org.openide.awt.Mnemonics.setLocalizedText(lblNumFields, "Number of fields:");
+        txtQuery.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtQueryActionPerformed(evt);
+            }
+        });
 
-      txtNumFields.setEditable(false);
-      txtNumFields.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-      txtNumFields.setText("jTextField2");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Query:");
 
-      lblNumRecords.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-      org.openide.awt.Mnemonics.setLocalizedText(lblNumRecords, "Number of Records:");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel3, "Search:");
 
-      txtNumRecords.setEditable(false);
-      txtNumRecords.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-      txtNumRecords.setText("jTextField2");
+        javax.swing.GroupLayout quickSearchPanelLayout = new javax.swing.GroupLayout(quickSearchPanel);
+        quickSearchPanel.setLayout(quickSearchPanelLayout);
+        quickSearchPanelLayout.setHorizontalGroup(
+            quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, quickSearchPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(18, 18, 18)
+                .addGroup(quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(quickSearchPanelLayout.createSequentialGroup()
+                        .addComponent(cmbFstEntry, 0, 252, Short.MAX_VALUE)
+                        .addGap(82, 82, 82))
+                    .addGroup(quickSearchPanelLayout.createSequentialGroup()
+                        .addComponent(txtQuery)
+                        .addContainerGap())))
+        );
+        quickSearchPanelLayout.setVerticalGroup(
+            quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(quickSearchPanelLayout.createSequentialGroup()
+                .addGroup(quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbFstEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
+                .addGroup(quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtQuery, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(33, Short.MAX_VALUE))
+        );
 
-      lblNumTerms.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-      org.openide.awt.Mnemonics.setLocalizedText(lblNumTerms, "Number of terms:");
+        lblIndexContent.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblIndexContent, "Index Content");
 
-      txtNumTerms.setEditable(false);
-      txtNumTerms.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-      txtNumTerms.setText("jTextField2");
+        infoPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-      lblLastModified.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-      org.openide.awt.Mnemonics.setLocalizedText(lblLastModified, "Last modified:");
+        lblNumFields.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblNumFields, "Number of fields:");
 
-      txtLastModified.setEditable(false);
-      txtLastModified.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-      txtLastModified.setText("jTextField2");
+        txtNumFields.setEditable(false);
+        txtNumFields.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
-      termsTable_.setAutoCreateColumnsFromModel(false);
-      termsTable_.setModel(model_);
-      scrollPane_.setViewportView(termsTable_);
+        lblNumRecords.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblNumRecords, "Number of Records:");
 
-      quickSearchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Quick Search", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        txtNumRecords.setEditable(false);
+        txtNumRecords.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
-      txtQuery.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            txtQueryActionPerformed(evt);
-         }
-      });
+        lblNumTerms.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblNumTerms, "Number of terms:");
 
-      jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-      org.openide.awt.Mnemonics.setLocalizedText(jLabel1, "Query:");
+        txtNumTerms.setEditable(false);
+        txtNumTerms.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
 
-      jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-      org.openide.awt.Mnemonics.setLocalizedText(jLabel3, "Search:");
+        lblLastModified.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblLastModified, "Last modified:");
 
-      javax.swing.GroupLayout quickSearchPanelLayout = new javax.swing.GroupLayout(quickSearchPanel);
-      quickSearchPanel.setLayout(quickSearchPanelLayout);
-      quickSearchPanelLayout.setHorizontalGroup(
-         quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, quickSearchPanelLayout.createSequentialGroup()
-            .addContainerGap()
-            .addGroup(quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-               .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
-            .addGap(18, 18, 18)
-            .addGroup(quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-               .addGroup(quickSearchPanelLayout.createSequentialGroup()
-                  .addComponent(cmbFstEntry, 0, 250, Short.MAX_VALUE)
-                  .addGap(82, 82, 82))
-               .addGroup(quickSearchPanelLayout.createSequentialGroup()
-                  .addComponent(txtQuery, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
-                  .addContainerGap())))
-      );
-      quickSearchPanelLayout.setVerticalGroup(
-         quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGroup(quickSearchPanelLayout.createSequentialGroup()
-            .addGroup(quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-               .addComponent(cmbFstEntry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-               .addComponent(jLabel3))
-            .addGap(18, 18, 18)
-            .addGroup(quickSearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-               .addComponent(jLabel1)
-               .addComponent(txtQuery, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addContainerGap(51, Short.MAX_VALUE))
-      );
+        txtLastModified.setEditable(false);
+        txtLastModified.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
 
-      org.openide.awt.Mnemonics.setLocalizedText(lblIndexContent, "Index Content");
+        javax.swing.GroupLayout infoPanelLayout = new javax.swing.GroupLayout(infoPanel);
+        infoPanel.setLayout(infoPanelLayout);
+        infoPanelLayout.setHorizontalGroup(
+            infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(infoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(infoPanelLayout.createSequentialGroup()
+                        .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNumTerms)
+                            .addComponent(lblLastModified)
+                            .addComponent(lblNumFields))
+                        .addGap(42, 42, 42)
+                        .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txtNumTerms, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtLastModified, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))
+                            .addComponent(txtNumFields, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(55, Short.MAX_VALUE))
+                    .addGroup(infoPanelLayout.createSequentialGroup()
+                        .addComponent(lblNumRecords)
+                        .addGap(26, 26, 26)
+                        .addComponent(txtNumRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+        infoPanelLayout.setVerticalGroup(
+            infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(infoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtNumFields, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNumFields))
+                .addGap(18, 18, 18)
+                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtNumRecords, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNumRecords, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(18, 18, 18)
+                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtNumTerms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNumTerms))
+                .addGap(18, 18, 18)
+                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblLastModified)
+                    .addComponent(txtLastModified, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
 
-      javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
-      mainPanel.setLayout(mainPanelLayout);
-      mainPanelLayout.setHorizontalGroup(
-         mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGroup(mainPanelLayout.createSequentialGroup()
-            .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addGroup(mainPanelLayout.createSequentialGroup()
-                  .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                     .addComponent(lblIndexName, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                     .addComponent(lblNumFields)
-                     .addComponent(lblNumRecords)
-                     .addComponent(lblNumTerms)
-                     .addComponent(lblLastModified))
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                  .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                     .addComponent(txtIndexName, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
-                     .addComponent(txtNumTerms, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
-                     .addComponent(txtLastModified, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
-                     .addComponent(txtNumRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
-                     .addComponent(txtNumFields, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
-                  .addGap(67, 67, 67))
-               .addGroup(mainPanelLayout.createSequentialGroup()
-                  .addComponent(quickSearchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-            .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(scrollPane_, javax.swing.GroupLayout.PREFERRED_SIZE, 586, javax.swing.GroupLayout.PREFERRED_SIZE)
-               .addGroup(mainPanelLayout.createSequentialGroup()
-                  .addGap(253, 253, 253)
-                  .addComponent(lblIndexContent)))
-            .addGap(216, 216, 216))
-      );
-      mainPanelLayout.setVerticalGroup(
-         mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGroup(mainPanelLayout.createSequentialGroup()
-            .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addGroup(mainPanelLayout.createSequentialGroup()
-                  .addGap(19, 19, 19)
-                  .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                     .addComponent(lblIndexName)
-                     .addComponent(txtIndexName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-               .addGroup(mainPanelLayout.createSequentialGroup()
-                  .addContainerGap()
-                  .addComponent(lblIndexContent)))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(scrollPane_, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
-               .addGroup(mainPanelLayout.createSequentialGroup()
-                  .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                     .addComponent(lblNumFields)
-                     .addComponent(txtNumFields, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                  .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                     .addComponent(lblNumRecords)
-                     .addComponent(txtNumRecords, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                  .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                     .addComponent(lblNumTerms)
-                     .addComponent(txtNumTerms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                  .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                  .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                     .addComponent(lblLastModified)
-                     .addComponent(txtLastModified, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                  .addGap(86, 86, 86)
-                  .addComponent(quickSearchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-            .addContainerGap(57, Short.MAX_VALUE))
-      );
+        lblIndexName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblIndexName, "Index name:");
 
-      javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-      this.setLayout(layout);
-      layout.setHorizontalGroup(
-         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGroup(layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addContainerGap(212, Short.MAX_VALUE))
-      );
-      layout.setVerticalGroup(
-         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-         .addGroup(layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addContainerGap())
-      );
-   }// </editor-fold>//GEN-END:initComponents
+        txtIndexName.setEditable(false);
+
+        tablePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        termsTable_.setAutoCreateColumnsFromModel(false);
+        termsTable_.setModel(model_);
+        scrollPane_.setViewportView(termsTable_);
+
+        javax.swing.GroupLayout tablePanelLayout = new javax.swing.GroupLayout(tablePanel);
+        tablePanel.setLayout(tablePanelLayout);
+        tablePanelLayout.setHorizontalGroup(
+            tablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tablePanelLayout.createSequentialGroup()
+                .addComponent(scrollPane_, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 142, Short.MAX_VALUE))
+        );
+        tablePanelLayout.setVerticalGroup(
+            tablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrollPane_)
+        );
+
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addComponent(lblIndexName, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtIndexName, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(107, 107, 107)
+                        .addComponent(lblIndexContent)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(quickSearchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblIndexContent)
+                    .addComponent(lblIndexName)
+                    .addComponent(txtIndexName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(quickSearchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 265, Short.MAX_VALUE))
+                    .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void txtQueryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQueryActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtQueryActionPerformed
 
     private String getTagFromField(String field){
         String[] splitted = field.split("@");
         return splitted[0];
     }
-
-    private void txtQueryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQueryActionPerformed
-       // TODO add your handling code here:
-    }//GEN-LAST:event_txtQueryActionPerformed
 
     private String[] buildIndexFieldNames() {
       HashSet<Integer> tags = new HashSet<Integer>();
@@ -768,27 +811,29 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
 
    }
 
-   // Variables declaration - do not modify//GEN-BEGIN:variables
-   private javax.swing.JComboBox cmbFstEntry;
-   private javax.swing.JLabel jLabel1;
-   private javax.swing.JLabel jLabel3;
-   private javax.swing.JLabel lblIndexContent;
-   private javax.swing.JLabel lblIndexName;
-   private javax.swing.JLabel lblLastModified;
-   private javax.swing.JLabel lblNumFields;
-   private javax.swing.JLabel lblNumRecords;
-   private javax.swing.JLabel lblNumTerms;
-   private javax.swing.JPanel mainPanel;
-   private javax.swing.JPanel quickSearchPanel;
-   private javax.swing.JScrollPane scrollPane_;
-   private javax.swing.JTable termsTable_;
-   private javax.swing.JTextField txtIndexName;
-   private javax.swing.JTextField txtLastModified;
-   private javax.swing.JTextField txtNumFields;
-   private javax.swing.JTextField txtNumRecords;
-   private javax.swing.JTextField txtNumTerms;
-   private javax.swing.JTextField txtQuery;
-   // End of variables declaration//GEN-END:variables
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox cmbFstEntry;
+    private javax.swing.JPanel infoPanel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel lblIndexContent;
+    private javax.swing.JLabel lblIndexName;
+    private javax.swing.JLabel lblLastModified;
+    private javax.swing.JLabel lblNumFields;
+    private javax.swing.JLabel lblNumRecords;
+    private javax.swing.JLabel lblNumTerms;
+    private javax.swing.JPanel mainPanel;
+    private javax.swing.JPanel quickSearchPanel;
+    private javax.swing.JScrollPane scrollPane_;
+    private javax.swing.JPanel tablePanel;
+    private javax.swing.JTable termsTable_;
+    private javax.swing.JTextField txtIndexName;
+    private javax.swing.JTextField txtLastModified;
+    private javax.swing.JTextField txtNumFields;
+    private javax.swing.JTextField txtNumRecords;
+    private javax.swing.JTextField txtNumTerms;
+    private javax.swing.JTextField txtQuery;
+    // End of variables declaration//GEN-END:variables
 
     /**
      * Gets default instance. Do not use directly: reserved for *.settings files only,
