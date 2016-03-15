@@ -145,11 +145,12 @@ public class DataEntryTreeModel extends AbstractTreeModel {
    }
 
    /**
-    * Build Tree node(s) for the Worksheet Field. We have several nodes when
-    * the record field has multiple occurrences
+    * Build Tree node(s) for a Worksheet Field from the record data. We have several nodes when
+    * the record field has multiple occurrences. The worksheet subfields (if any) are added as sub-nodes and
+    * filled with record data.
     *
     * @param wksField - The worksheet Field definition
-    * @param record   - The record to accomodate for this worksheet field
+    * @param record   - The record to accommodate for this worksheet field
     *
     * @return - The tree nodes resulting from combining the worksheet field
     *           definition with the record field
@@ -168,31 +169,37 @@ public class DataEntryTreeModel extends AbstractTreeModel {
             nodes[0] = buildTreeNodes(wksField, false);
             return nodes;
           }
+         /**
+          * Let assume that we may have pickList and validation rules on the field
+          * even if we have subfields
+          */
           PickListData pickListData = null;
           for (PickListData pickList : pickListDataList_) {
-              if (Integer.valueOf(pickList.getTag()) == wksField.getTag()) {
+              if (Integer.valueOf(pickList.getTag()) == wksField.getTag()
+                      && pickList.getSubfieldCode().length() == 0) {
                   pickListData = pickList;
                   break;
               }
           }
           ValidationData validationData = null;
           for (ValidationData validation : validationDataList_) {
-              if (Integer.valueOf(validation.getTag()) == wksField.getTag()) {
+              if (Integer.valueOf(validation.getTag()) == wksField.getTag()
+                      && validation.getSubfieldCode().length() == 0) {
                   validationData = validation;
                   break;
               }
           }
 
-         int nOccurrences = fld.getOccurrenceCount();
+          int nOccurrences = fld.getOccurrenceCount();
           if (nOccurrences == 0) {
-            nodes = new DataEntryNode[1];
-            nodes[0] = buildTreeNodes(wksField, false);
-            return nodes;
-         }
-         nodes = new DataEntryNode[nOccurrences];
-         boolean noTyping = false;
+              nodes = new DataEntryNode[1];
+              nodes[0] = buildTreeNodes(wksField, false);
+              return nodes;
+          }
+          nodes = new DataEntryNode[nOccurrences];
+          boolean noTyping = false;
           if (pickListData != null) {
-             noTyping = pickListData.isNoType();            
+              noTyping = pickListData.isNoType();
           }
          // Create a wks entry for each occurrence
          for (int i = 0; i < nOccurrences; i++) {
@@ -234,9 +241,29 @@ public class DataEntryTreeModel extends AbstractTreeModel {
                subfieldMap.put("description", wksSubfield.getDescription());
                subfieldMap.put("displayControl", wksSubfield.getDisplayControl());
                subfieldMap.put("helpMsg", wksSubfield.getHelpMessage());
-               if (pickListData != null) subfieldMap.put("pickList", pickListData);
-               if (validationData != null) subfieldMap.put("valFormat", validationData.getFormat());
-              
+                pickListData = null;
+                for (PickListData pickList : pickListDataList_) {
+                    if (Integer.valueOf(pickList.getTag()) == wksSubfield.getTag()
+                        && wksSubfield.getSubfieldCode().equals(pickList.getSubfieldCode())) {
+                        pickListData = pickList;
+                        break;
+                    }
+                }
+               if (pickListData != null) {
+                  subfieldMap.put("pickList", pickListData);
+               }
+                validationData = null;
+                for (ValidationData validation : validationDataList_) {
+                    if (Integer.valueOf(validation.getTag()) == wksSubfield.getTag()
+                        && wksSubfield.getSubfieldCode().equals(validation.getSubfieldCode())) {
+                        validationData = validation;
+                        break;
+                    }
+                }
+               if (validationData != null) {
+                  subfieldMap.put("valFormat", validationData.getFormat());
+               }
+
                if (wksSubfield.getSubfieldCode().equals("$ind1")) {
                   hasIndicators = true;
                   StringOccurrence occ = (StringOccurrence) occurrence;
@@ -352,14 +379,16 @@ public class DataEntryTreeModel extends AbstractTreeModel {
 
         PickListData pickListData = null;
           for (PickListData pickList : pickListDataList_) {
-              if (Integer.valueOf(pickList.getTag()) == wksField.getTag()) {
+              if (Integer.valueOf(pickList.getTag()) == wksField.getTag() &&
+                  wksSubfield.getSubfieldCode().equals(pickList.getSubfieldCode())) {
                   pickListData = pickList;
                   break;
               }
           }
           ValidationData validationData = null;
           for (ValidationData validation : validationDataList_) {
-              if (Integer.valueOf(validation.getTag()) == wksField.getTag()) {
+              if (Integer.valueOf(validation.getTag()) == wksField.getTag()&&
+                  wksSubfield.getSubfieldCode().equals(validation.getSubfieldCode())) {
                   validationData = validation;
                   break;
               }
@@ -412,7 +441,8 @@ public class DataEntryTreeModel extends AbstractTreeModel {
 
         PickListData pickListData = null;
           for (PickListData pickList : pickListDataList_) {
-              if (Integer.valueOf(pickList.getTag()) == wksField.getTag()) {
+              if (Integer.valueOf(pickList.getTag()) == wksField.getTag() && 
+                  pickList.getSubfieldCode().length() == 0) {
                   pickListData = pickList;
                   break;
               }

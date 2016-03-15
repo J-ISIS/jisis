@@ -5,20 +5,10 @@
 package org.unesco.jisis.dataentryex;
 
 import java.awt.event.ActionEvent;
-import java.util.Map;
 import javax.swing.AbstractAction;
-import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
-import org.unesco.jisis.corelib.client.ConnectionPool;
-import org.unesco.jisis.corelib.common.FieldDefinitionTable;
-import org.unesco.jisis.corelib.common.FieldSelectionTable;
-import org.unesco.jisis.corelib.common.IConnection;
 import org.unesco.jisis.corelib.common.IDatabase;
-import org.unesco.jisis.corelib.common.UserInfo;
-import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.gui.Util;
 
 /**

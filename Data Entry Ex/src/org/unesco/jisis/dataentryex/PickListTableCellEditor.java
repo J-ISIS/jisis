@@ -13,12 +13,9 @@ import javax.swing.table.TableCellEditor;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.decorator.ColorHighlighter;
 import org.jdesktop.swingx.decorator.HighlightPredicate;
-import org.openide.util.Exceptions;
 import org.openide.windows.WindowManager;
-import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.corelib.picklist.PickListData;
 import org.unesco.jisis.gui.AbstractActionTableCellEditor;
-import org.unesco.jisis.gui.FieldEntryDlg;
 import org.unesco.jisis.jisisutil.history.ListSelectorDialog;
 
 /**

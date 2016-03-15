@@ -111,7 +111,18 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>net.miginfocom.swing</package>
+                <package>org.unesco.jisis.dataentryex</package>
+            </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/miglayout-swing-5.1-20150404.220019-96.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/miglayout-swing-5.1-20150404.220019-96.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/miglayout-core-5.1-20150404.220010-96.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/miglayout-core-5.1-20150404.220010-96.jar</binary-origin>
+            </class-path-extension>
         </data>
     </configuration>
 </project>

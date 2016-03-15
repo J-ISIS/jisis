@@ -78,5 +78,150 @@ and open the template in the editor.
       </element> 
 
 </leader>
+<control tag="008" length="40" >
+   
+   <ALL_MATERIALS>
+      <element pos="00-05" label="Date entered on file">
+         <help_text>
+            Computer-generated, six-character numeric string that indicates the date the MARC record was created. Recorded in the pattern yymmdd.
+         </help_text>
+      </element>
+      <element pos="06"	label="Type of date/Publication status">
+         <help_text>
+            One-character alphabetic code that indicates that categorizes the type of dates given in 008/07-10 
+            (Date 1) and 008/11-14 (Date 2). For continuing resources, the code in 008/06 also indicates the publication status.
+            The choice of code for 008/06 is made concurrently with a determination of the appropriate dates for 008/07-14. 
+            For most records data is derived from information in field 260 (Publication, Distribution, etc. (Imprint)), field 264 
+            (Production, Publication, Distribution, Manufacture, and Copyright Notice), field 362 (Dates of Publication and/or 
+            Sequential Designation), or from note fields.
+         </help_text>
+         
+	   <code value="b" text="No dates given; B.C. date involved"
+                 help_text=" Each character position in fields 008/07-10 and 008/11-14 contains a blank." />
+	   <code value="c" text="Continuing resource currently published"
+                 help_text= "008/07-10 contain the beginning date of publication; 008/11-14 contain the characters 9999." />
+	   <code value="d" text="Continuing resource ceased publication"
+                 help_text="008/07-10 contain the beginning date of publication; 008/11-14 contain the date the item ceased to be published." />
+	   <code value="e" text="Detailed date" />
+                 help_text="008/07-10 contain the year and 008/11-14 contain the month and day formatted mmdd." />
+	   <code value="i" text="Inclusive dates of collection" />
+	   <code value="k" text="Range of years of bulk of collection" />
+	   <code value="m" text="Multiple dates"
+                  help_text="008/07-10 usually contain the initial (or beginning) date and 008/11-14
+                              the terminal (or ending) date."  />
+	   <code value="n" text="Dates unknown"
+                  help_text="Dates appropriate for 008/07-10 and 008/11-14 are unknown, 
+                             (e.g., when no dates are given in field 260)."  />
+	   <code value="p" text="Date of distribution/release/issue and production/recording session when different" />
+	   <code value="q" text="Questionable date"
+                  help_text="Earliest possible date is given in 008/07-10; latest possible date in 008/11-14." />
+	   <code value="r" text="Reprint/reissue date and original date"
+                  help_text="008/07-10 contain the date of reproduction or reissue; 008/11-14 contain the date of the original, 
+                            if known. 008/11-14 contain code u (\"uuuu\"), if unknown." />
+	   <code value="s" text="Single known date/probable date"
+                  help_text="008/07-10 contain the date; 008/11-14 contain blanks (####)." />
+	<code value="t" text="Publication date and copyright date" />
+	<code value="u" text="Continuing resource status unknown"
+                 help_text="008/07-10 contain a beginning date of publication; 008/11-14 contain the characters uuuu since no ending date is known." />
+	<code value="|" text="No attempt to code" />
+   </element>
+   <element pos="07-10"	label="Date 1">
+      <help_text>
+         Determination of dates for 008/07-10 is made concurrently with the choice of code for 008/06. See the section above on 008/06 for examples and input conventions related to coded date information. The use of fill characters in 008/07-10, although possible, is discouraged since the data in Date 1 is used for retrieval and duplicate detection in many systems. When fill is used in 008/07-10, all four positions must contain the fill character.
+      </help_text>
+	<code value="1-9" text="Date digit" />
+	<code value="#" text="Date element is not applicable" />
+	<code value="u" text="Date element is totally or partially unknown" />
+	<code value="||||" text="No attempt to code" />
+   </element>
+   <element pos="11-14" label="Date 2" >
+        <help_text>
+          Determination of dates for 008/11-14 is made concurrently with the choice of code for 008/06. See the section above on 008/06 for examples and input conventions related to coded date information. Four fill characters (||||) are used when no attempt has been made to code these character positions.
+        </help_text>
+        <code value="1-9" text="Date digit" />
+	<code value="#" text="Date element is not applicable" />
+	<code value="u" text="Date element is totally or partially unknown" />
+	<code value="||||" text="No attempt to code" />
+   </element>
+   <element pos="15-17" label="Place of publication, production, or execution" >
+        <help_text>
+             Two- or three-character alphabetic code that indicates the place of publication, production, or execution. Place code is an authoritative-agency data element. Code from: MARC Code List for Countries. Choice of a MARC code is generally related to information in field 260 (Publication, Distribution, etc. (Imprint)). The code recorded in 008/15-17 is used in conjunction with field 044 (Country of Producer Code) when more than one code is appropriate to an item. The first code in subfield $a of field 044 is recorded in 008/15-17. Three fill characters (|||) may be used in place of a valid code, but their use in 008/15-17 is discouraged. The data in this field 008 data element is used for retrieval and duplicate detection in many systems. When fill is used in 008/15-17, all three positions must contain the fill character.
+        </help_text>
+   </element>
+   <element pos="35-37" label="Language" >
+        <help_text>
+Three-character alphabetic code that indicates the language of the item. Code from: MARC Code List for Languages. Choice of a MARC code is based on the predominant language of the item. Three fill characters (|||) may also be used if no attempt is made to code the language or if non-MARC language coding is preferred (and coded in field 041 (Language code)).
+	</help_text>
+   </element>
+    <element pos="38" label="Modified record" >
+         <help_text>
+One-character code that indicates whether any data in a bibliographic record is a modification of information that appeared on the item being cataloged or that was intended to be included in the MARC record.
+Codes are assigned a priority (recorded in the order of the following list) that determines which code is input when more than one code applies to the item.
+	</help_text>
+        <code value="#" text="Not modified" />
+	<code value="d" text="Dashed-on information omitted" />
+	<code value="o" text="Completely romanized/printed cards romanized" />
+	<code value="r" text="Completely romanized/printed cards in script" />
+	<code value="s" text="Shortened"
+              help_text="Some of the data was omitted because the data exceeded the maximum length allowed by the system used to create or process it." />
+	<code value="x" text="Missing characters"
+help_text="Record contained characters that could not be converted to machine-readable form (e.g., incidental nonroman characters on predominantly roman alphabet records, mathematical symbols, etc.)." />
+	<code value="|" text="No attempt to code" />
+     </element>
+     
+   <element pos="39" label="Cataloging source" >
+      <help_text>
+One-character code that indicates the original cataloging source of the record. If the cataloging source is known, it is identified in subfield $a of field 040 (Cataloging Source).
+      </help_text> 	
+        <code value="#" text="National bibliographic agency" />
+	<code value="c" text="Cooperative cataloging program" 
+help_text="Creator of the cataloging data is a participant (other than a national bibliographic agency) in a cooperative cataloging program." />
+	<code value="d" text="Other" />
+	<code value="u" text="Unknown" />
+	<code value="|" text="No attempt to code" />
+   </element>
+   </ALL_MATERIALS>
+   
+   <BOOKS>
+     <element pos="18-21" label="Illustrations (006/01-04)" >
+          <help_text>
+Up to four (4) one-character alphabetic codes (recorded in alphabetical order)that indicate the presence of types of illustrations in the item. If fewer than four alphabetic codes are assigned, the codes are left justified and unused positions contain blanks (#).
+          </help_text>
+	<code value="#" text="No illustrations" />
+	<code value="a" text="Illustrations" />
+	<code value="b" text="Maps" />
+	<code value="c" text="Portraits" />
+	<code value="d" text="Charts" />
+	<code value="e" text="Plans" />
+	<code value="f" text="Plates" />
+	<code value="g" text="Music" />
+	<code value="h" text="Facsimiles" />
+	<code value="i" text="Coats of arms" />
+	<code value="j" text="Genealogical tables" />
+	<code value="k" text="Forms" />
+	<code value="l" text="Samples" />
+	<code value="m" text="Phonodisc, phonowire, etc." />
+	<code value="o" text="Photographs" />
+	<code value="p" text="Illuminations" />
+	<code value="|" text="No attempt to code" />
+   </element>
+   <element pos="22" label="Target audience (006/05)" >
+        <help_text>
+One-character alphabetic code that describes the intellectual level of the target audience for which the material is intended.
+	</help_text>
+        <code value="#" text="Unknown or not specified" />
+	<code value="a" text="text="Preschool" />
+	<code value="b" text="Primary" />
+	<code value="c" text="Pre-adolescent" />
+	<code value="d" text="Adolescent" />
+	<code value="e" text="Adult" />
+	<code value="f" text="Specialized" />
+	<code value="g" text="General" />
+	<code value="j" text="Juvenile" />
+	<code value="|" text="No attempt to code" />
+    </element>
+        
+   </BOOKS>
+</control>
 
 

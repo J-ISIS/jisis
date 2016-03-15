@@ -108,8 +108,7 @@ public class DataEntryRowModel implements RowModel
          case 3:
             return nameMap.get("data");
          case 4:
-            if (nameMap.get("type").equals("rootNode") ||
-              nameMap.get("type").equals("subfieldNode")) {
+            if (nameMap.get("type").equals("rootNode")) {
               return ""; 
             }
             Object obj = nameMap.get("pickList");
@@ -184,7 +183,7 @@ public class DataEntryRowModel implements RowModel
 
             return; // "description"
          case 3:
-            
+            // Data
             if (value instanceof String) {
                String val = (String) value;
                map.put("data", val);
