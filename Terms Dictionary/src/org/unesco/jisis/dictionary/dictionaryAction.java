@@ -28,6 +28,7 @@ public class dictionaryAction extends AbstractAction {
                 new ImageIcon(ImageUtilities.loadImage(DictionaryTopComponent.ICON_PATH, true)));
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt) {
         IDatabase db = Util.getDatabaseToUse(evt);
         if (db == null) {

@@ -13,7 +13,7 @@ import org.unesco.jisis.corelib.exceptions.NoConnectionException;
 import org.unesco.jisis.datadefinition.fdt.FDTVisualPanel;
 
 
-public class FDTWizardPanel implements WizardDescriptor.Panel {
+public class FDTWizardPanel implements WizardDescriptor.Panel<WizardDescriptor> {
     
     public FDTWizardPanel() {}
     
@@ -28,6 +28,7 @@ public class FDTWizardPanel implements WizardDescriptor.Panel {
     // is kept separate. This can be more efficient: if the wizard is created
     // but never displayed, or not all panels are displayed, it is better to
     // create only those which really need to be visible.
+    @Override
     public Component getComponent() {
         IConnection conn = null;
         try {
@@ -46,6 +47,7 @@ public class FDTWizardPanel implements WizardDescriptor.Panel {
         return component;
     }
     
+    @Override
     public HelpCtx getHelp() {
         // Show no Help button for this panel:
         return HelpCtx.DEFAULT_HELP;
@@ -53,6 +55,7 @@ public class FDTWizardPanel implements WizardDescriptor.Panel {
         // return new HelpCtx(SampleWizardPanel1.class);
     }
     
+    @Override
     public boolean isValid() {
         // If it is always OK to press Next or Finish, then:
         return true;
@@ -63,7 +66,9 @@ public class FDTWizardPanel implements WizardDescriptor.Panel {
         // and uncomment the complicated stuff below.
     }
     
+    @Override
     public final void addChangeListener(ChangeListener l) {}
+    @Override
     public final void removeChangeListener(ChangeListener l) {}
     /*
     private final Set<ChangeListener> listeners = new HashSet<ChangeListener>(1);
@@ -93,14 +98,16 @@ public class FDTWizardPanel implements WizardDescriptor.Panel {
     // settings object will be the WizardDescriptor, so you can use
     // WizardDescriptor.getProperty & putProperty to store information entered
     // by the user.
-    public void readSettings(Object settings) {
+    @Override
+    public void readSettings(WizardDescriptor wiz) {
     }
     
-    public void storeSettings(Object settings) {
-        WizardDescriptor wd = (WizardDescriptor) settings;
+    @Override
+    public void storeSettings(WizardDescriptor wiz) {
+     
         FDTVisualPanel panel3 = (FDTVisualPanel) getComponent();
         TableModel fdtModel = panel3.getFDTModel();
-        wd.putProperty("fdt", fdtModel);
+        wiz.putProperty("fdt", fdtModel);
     }
     
 }

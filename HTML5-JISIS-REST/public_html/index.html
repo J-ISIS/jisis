@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<html>
+   <head>
+      <title>DbFederation REST</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+      <script src="./js/DbFederation.js"></script>
+      <link rel="stylesheet" href="css/styles.css" />
+   </head>
+
+    <body>
+        
+       <div class="header">
+          <input type="text" id="searchKey"/>
+          <button id="btnSearch">Search</button>
+          <button id="btnAdd">New Wine</button>
+       </div>
+
+
+      <div class="leftArea">
+            <ul id="restList"></ul>
+      </div>
+
+       <form id="wineForm">
+
+          <div class="mainArea">
+             <p class="DbFederation-content">The db names are </p>
+             <label>Id:</label>
+             <input id="wineId" name="id" type="text" disabled />
+
+             <label>Name:</label>
+             <input type="text" id="name" name="name" required>
+
+             <label>Grapes:</label>
+             <input type="text" id="grapes" name="grapes"/>
+
+             <label>Country:</label>
+             <input type="text" id="country" name="country"/>
+
+             <label>Region:</label>
+             <input type="text" id="region" name="region"/>
+
+             <label>Year:</label>
+             <input type="text" id="year" name="year"/>
+
+             <button id="btnSave">Save</button>
+             <button id="btnDelete">Delete</button>
+
+          </div>
+          <div class="rightArea">
+
+             <img id="pic" height="300"/>
+
+             <label>Notes:</label>
+             <textarea id="description" name="description"></textarea>
+          </div>
+
+       </form>
+    </body>
+</html>

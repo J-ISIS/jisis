@@ -174,7 +174,7 @@ public final class ImportWizardAction extends CallableSystemAction {
 
             db_ = new ClientDatabaseProxy(conn_);
             try {
-               db_.getDatabase(dbHome, dbName, Global.DATABASE_DURABILITY_WRITE);
+               db_.getDatabase(dbHome, dbName, Global.DATABASE_BULK_WRITE);
             } catch (DbException ex) {
                Exceptions.printStackTrace(ex);
             }

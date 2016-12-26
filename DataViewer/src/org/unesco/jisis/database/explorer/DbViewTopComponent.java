@@ -148,24 +148,24 @@ public class DbViewTopComponent extends TopComponent implements Observer {
          new GeneralDatabaseException(ex).displayWarning();
       }
       
-       try {
-           poll_ = new DbChangedControl(db_, this, new CallBack() {
-
-               @Override
-               public void notifyDatabaseChanged() {
-
-                   final NotifyDescriptor d
-                       = new NotifyDescriptor.Message(NbBundle.getMessage(DbViewTopComponent.class,
-                               "MSG_DATABASE_CHANGED_BY_ANOTHER_PROCESS"));
-                   DialogDisplayer.getDefault().notify(d);
-
-               }
-
-           });
-           poll_.notifyIfDbChanged();
-       } catch (DbException ex) {
-           Exceptions.printStackTrace(ex);
-       }
+//       try {
+//           poll_ = new DbChangedControl(db_, this, new CallBack() {
+//
+//               @Override
+//               public void notifyDatabaseChanged() {
+//
+//                   final NotifyDescriptor d
+//                       = new NotifyDescriptor.Message(NbBundle.getMessage(DbViewTopComponent.class,
+//                           "MSG_DATABASE_CHANGED_BY_ANOTHER_PROCESS"));
+//                   DialogDisplayer.getDefault().notify(d);
+//
+//               }
+//
+//           });
+//           poll_.notifyIfDbChanged();
+//       } catch (DbException ex) {
+//           Exceptions.printStackTrace(ex);
+//       }
       
       associateLookup(new JisisPrintNode().getLookup());
    }
@@ -886,7 +886,9 @@ public class DbViewTopComponent extends TopComponent implements Observer {
        */
       db_.deleteObserver(this);
       
-      poll_.shutDownNow();
+      if (poll_ != null) {
+          poll_.shutDownNow();
+      }
    }
 
    /** replaces this in object stream */

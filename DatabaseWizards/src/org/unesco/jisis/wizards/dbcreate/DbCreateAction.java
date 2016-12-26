@@ -28,7 +28,7 @@ import org.unesco.jisis.jisiscore.common.WKSModelEx;
 
 //An example action demonstrating how the wizard could be called from within
 public final class DbCreateAction extends CallableSystemAction {
-   private WizardDescriptor.Panel[] panels;
+   private WizardDescriptor.Panel<WizardDescriptor>[] panels;
 
     public void performAction() {
         if (!ConnectionPool.ensureDefaultConnection()) {

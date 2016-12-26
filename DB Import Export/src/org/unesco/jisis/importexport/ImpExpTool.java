@@ -183,7 +183,7 @@ public class ImpExpTool {
                         long recordCount = 0;
                         try {
                             targetDB.close();
-                            targetDB.getDatabase(targetDB.getDbHome(), targetDB.getDbName(), Global.DATABASE_DURABILITY_WRITE);
+                            targetDB.getDatabase(targetDB.getDbHome(), targetDB.getDbName(), Global.DATABASE_BULK_WRITE);
                             recordCount = targetDB.getRecordsCount();
                         } catch (DbException ex) {
                             Exceptions.printStackTrace(ex);
@@ -267,7 +267,7 @@ public class ImpExpTool {
                         long recordCount = 0;
                         try {
                             targetDB.close();
-                            targetDB.getDatabase(targetDB.getDbHome(), targetDB.getDbName(), Global.DATABASE_DURABILITY_WRITE);
+                            targetDB.getDatabase(targetDB.getDbHome(), targetDB.getDbName(), Global.DATABASE_BULK_WRITE);
                             recordCount = targetDB.getRecordsCount();
                         } catch (DbException ex) {
                             Exceptions.printStackTrace(ex);
@@ -347,7 +347,7 @@ public class ImpExpTool {
                           long recordCount = 0;
                         try {
                             targetDB.close();
-                            targetDB.getDatabase(targetDB.getDbHome(), targetDB.getDbName(), Global.DATABASE_DURABILITY_WRITE);
+                            targetDB.getDatabase(targetDB.getDbHome(), targetDB.getDbName(), Global.DATABASE_BULK_WRITE);
                             recordCount = targetDB.getRecordsCount();
                         } catch (DbException ex) {
                             Exceptions.printStackTrace(ex);
@@ -426,7 +426,7 @@ public class ImpExpTool {
                           long recordCount = 0;
                         try {
                             targetDB.close();
-                            targetDB.getDatabase(targetDB.getDbHome(), targetDB.getDbName(), Global.DATABASE_DURABILITY_WRITE);
+                            targetDB.getDatabase(targetDB.getDbHome(), targetDB.getDbName(), Global.DATABASE_BULK_WRITE);
                             recordCount = targetDB.getRecordsCount();
                         } catch (DbException ex) {
                             Exceptions.printStackTrace(ex);
@@ -514,7 +514,7 @@ public class ImpExpTool {
                           long recordCount = 0;
                         try {
                             targetDB.close();
-                            targetDB.getDatabase(targetDB.getDbHome(), targetDB.getDbName(), Global.DATABASE_DURABILITY_WRITE);
+                            targetDB.getDatabase(targetDB.getDbHome(), targetDB.getDbName(), Global.DATABASE_BULK_WRITE);
                             recordCount = targetDB.getRecordsCount();
                         } catch (DbException ex) {
                             Exceptions.printStackTrace(ex);

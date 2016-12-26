@@ -23,7 +23,6 @@ import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.util.Version;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -76,8 +75,8 @@ class SearchComponent {
 
    private final List<QueryTerm> terms = new ArrayList<>();
 
-   public MyQueryParser(Version version, String defaultField, Analyzer analyzer) {
-      super(version, defaultField, analyzer);
+   public MyQueryParser(String defaultField, Analyzer analyzer) {
+      super(defaultField, analyzer);
    }
 
    @Override
@@ -998,6 +997,7 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
         matchAllRadio = new javax.swing.JRadioButton();
         matchAnyRadio = new javax.swing.JRadioButton();
         btnDictionaryOptions = new javax.swing.JButton();
+        chkbDisableSuggestions = new javax.swing.JCheckBox();
         guidedBox = new javax.swing.JCheckBox();
         termsScrollPane = new javax.swing.JScrollPane();
         termsPanel = new javax.swing.JPanel();
@@ -1205,6 +1205,9 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
         });
         jPanel2.add(btnDictionaryOptions);
 
+        chkbDisableSuggestions.setText(org.openide.util.NbBundle.getMessage(SearchTopComponent.class, "SearchTopComponent.chkbDisableSuggestions.text")); // NOI18N
+        jPanel2.add(chkbDisableSuggestions);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -1373,7 +1376,7 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
              defaultField = searchableFields_[1].name;
           }
           MyQueryParser parser;
-          parser = new MyQueryParser(Lucene.MATCH_VERSION,defaultField, new KeywordAnalyzer());
+          parser = new MyQueryParser(defaultField, new KeywordAnalyzer());
           Query query = null;
           try {
              query = parser.parse(squery);
@@ -1387,7 +1390,8 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
            * this behavior can be controlled:
            */
           parser.setLowercaseExpandedTerms(false);
-          queryTerms_ = parser.getQueryTerms();    
+          queryTerms_ = parser.getQueryTerms();  
+          
 
        } else {
            // Expert Lucene Search
@@ -1428,7 +1432,7 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
           escapedQuery = org.unesco.jisis.corelib.util.StringUtils.fastReplaceAll(escapedQuery, "~", "\\~");
           escapedQuery = org.unesco.jisis.corelib.util.StringUtils.fastReplaceAll(escapedQuery, "^", "\\^");
           MyQueryParser parser;
-          parser = new MyQueryParser(Lucene.MATCH_VERSION,defaultField, new KeywordAnalyzer());
+          parser = new MyQueryParser(defaultField, new KeywordAnalyzer());
           Query query = null;
           try {
              query = parser.parse(escapedQuery);
@@ -1686,6 +1690,7 @@ private void btnDictionaryOptionsActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JButton btnPgUp;
     private javax.swing.JButton btnSearch;
     private javax.swing.JPanel buttonsPanel;
+    private javax.swing.JCheckBox chkbDisableSuggestions;
     private javax.swing.JCheckBox chkbSortByMfn;
     private javax.swing.JComboBox cmbPftSelect;
     private javax.swing.JLabel enterQueryLabel;

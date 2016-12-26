@@ -417,6 +417,13 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDictionaryOptionsActionPerformed"/>
                       </Events>
                     </Component>
+                    <Component class="javax.swing.JCheckBox" name="chkbDisableSuggestions">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+                          <ResourceString bundle="org/unesco/jisis/datasearch/Bundle.properties" key="SearchTopComponent.chkbDisableSuggestions.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                        </Property>
+                      </Properties>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Component class="javax.swing.JCheckBox" name="guidedBox">

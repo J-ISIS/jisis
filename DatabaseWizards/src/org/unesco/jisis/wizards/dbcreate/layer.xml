@@ -9,7 +9,7 @@
     <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction-separatorAfter.instance\position" intvalue="382"/>
     <folder name="Actions">
         <folder name="Database">
-            <file name="org-unesco-jisis-wizards-connopen-connOpenWizardAction.instance" url="org-unesco-jisis-wizards-connopen-connOpenWizardAction.instance">
+            <file name="org-unesco-jisis-wizards-connopen-ConnectionOpenWizardAction.instance" url="org-unesco-jisis-wizards-connopen-connOpenWizardAction.instance">
                 <attr name="position" intvalue="100"/>
             </file>
              <file name="org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.instance" url="org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.instance">
@@ -36,7 +36,7 @@
                 <attr name="position" intvalue="1900"/>
             </file>
             <file name="org-unesco-jisis-wizards-connopen-connOpenWizardAction.shadow" url="org-unesco-jisis-wizards-connopen-connOpenWizardAction.shadow">
-                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-connopen-connOpenWizardAction.instance"/>
+                <attr name="originalFile" stringvalue="Actions/Database/org-unesco-jisis-wizards-connopen-ConnectionOpenWizardAction.instance"/>
                 <attr name="position" intvalue="100"/>
             </file>
             <file name="Separator2.instance" url="Separator2.instance">

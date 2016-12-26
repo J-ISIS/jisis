@@ -1,13 +1,11 @@
 package org.unesco.jisis.dataentryexdl;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
-import java.awt.Container;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -15,7 +13,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollPane;
-import javax.swing.JSlider;
 import javax.swing.KeyStroke;
 import org.apache.commons.io.FileUtils;
 import org.netbeans.api.progress.ProgressUtils;
@@ -834,17 +831,18 @@ public class DataEntryTopComponent extends TopComponent implements Observer {
     * Save a single document on the server side
     * @param path 
     */
-    private void saveDocument(final String path) {
+    private void saveDocument(final String path) throws IOException {
         final File f = new File(path);
 
+         final byte[] content =FileUtils.readFileToByteArray(f);
         // Start you operation here
        final Runnable saveDocumentRun = new Runnable() {
           public void run() {
 
-             final byte[] content;
+            
              try {
                 // Your operation here 
-                content = FileUtils.readFileToByteArray(f);
+                
                 db_.saveDocument(f.getName(), content);
                 GuiExecutor.instance().execute(new Runnable() {
                    @Override

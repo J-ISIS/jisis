@@ -1331,24 +1331,27 @@ public class EditEntry extends JPanel implements ActionListener, FocusListener, 
          case Global.FIELD_TYPE_DOC:
             for (int i = 0; i < values.length; i++) {
                String s = (String) values[i];
-               System.out.println("DOC Create Repeatable Field for String with length:"+s.length());
+               //System.out.println("DOC Create Repeatable Field for String with length:"+s.length());
                RepeatableField fieldEntry = new RepeatableField(this, s, i, type);
-               System.out.println("DOC RepeatableField OK i="+i);
+               //System.out.println("DOC RepeatableField OK i="+i);
                if (Global.getApplicationFont() != null) {
                   fieldEntry.setJTextPaneFont(Global.getApplicationFont());
                   System.out.println("DOC fieldEntry.setJTextPaneFont( OK i="+i);
                }
                fieldEntries_.add(fieldEntry);
-               System.out.println("DOC Before fieldEntry.addFocusListener OK i="+i);
+               //System.out.println("DOC Before fieldEntry.addFocusListener OK i="+i);
                fieldEntry.addFocusListener(this);
-               System.out.println("DOC After fieldEntry.addFocusListener OK i="+i);
+               //System.out.println("DOC After fieldEntry.addFocusListener OK i="+i);
                JScrollPane scrollPane = new JScrollPane(fieldEntry);
-               scrollPane.setPreferredSize(new Dimension(650, 100));
+                int fontLineHeight = fieldEntry.getFontLineHeight();
+               int height = (nLines ==0) ?(DEFAULT_HEIGHT_LINES*fontLineHeight) : nLines*fontLineHeight;
+               Dimension dimension = new Dimension(650, height+10);
+               scrollPane.setPreferredSize(dimension);
                gbc.gridx = 1;
                fieldPanel.add(scrollPane /*
                         * fieldEntry
                         */, gbc);
-               System.out.println("DOC After scrollPane OK i="+i);
+               //System.out.println("DOC After scrollPane OK i="+i);
                DeleteButton btnDel = new DeleteButton(i);
                btnDel.setIcon(new ImageIcon(ImageUtilities.loadImage(DEL_PATH, true)));
                btnDel.setActionCommand("actDel");

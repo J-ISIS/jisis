@@ -17,6 +17,7 @@ public class CloseAllDatabasesAction extends AbstractAction {
         putValue(SMALL_ICON, new ImageIcon(ImageUtilities.loadImage(DbTopComponent.CLOSEDB_ICON_PATH, true)));
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt) {
        
         DbTopComponent dbTopComponent = DbTopComponent.findInstance();

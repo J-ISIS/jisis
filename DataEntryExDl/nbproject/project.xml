@@ -16,6 +16,14 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>org.netbeans.api.progress.nb</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.47.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.netbeans.swing.outline</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -61,6 +69,14 @@
                     <compile-dependency/>
                     <run-dependency>
                         <specification-version>8.8.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.openide.util.ui</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>9.6.1</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -112,7 +128,7 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>org.unesco.jisis.lucene470</code-name-base>
+                    <code-name-base>org.unesco.jisis.lucene_6_3_0</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
@@ -128,7 +144,7 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>org.unesco.jisis.tika15</code-name-base>
+                    <code-name-base>org.unesco.jisis.tika_1_13</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
@@ -139,6 +155,10 @@
             <public-packages>
                 <package>org.unesco.jisis.dataentryexdl</package>
             </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/commons-io-2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-io-2.1.jar</binary-origin>
+            </class-path-extension>
         </data>
     </configuration>
 </project>

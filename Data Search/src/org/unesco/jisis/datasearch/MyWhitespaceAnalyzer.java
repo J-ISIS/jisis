@@ -18,8 +18,8 @@ public final class MyWhitespaceAnalyzer extends Analyzer {
  
 
    @Override
-   protected TokenStreamComponents createComponents(String string, Reader reader) {
-      Tokenizer source = new MyWhitespaceTokenizer(reader);
+   protected TokenStreamComponents createComponents(String string) {
+      Tokenizer source = new MyWhitespaceTokenizer();
     
          return new TokenStreamComponents(source);
 

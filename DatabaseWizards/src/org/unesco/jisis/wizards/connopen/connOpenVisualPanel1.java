@@ -15,7 +15,7 @@ public final class connOpenVisualPanel1 extends JPanel {
     }
     
     public String getName() {
-        return NbBundle.getMessage(connOpenWizardAction.class, "CTL_ConnOpenWizardStepOne");
+        return NbBundle.getMessage(ConnectionOpenWizardAction.class, "CTL_ConnOpenWizardStepOne");
     }
     
     /** This method is called from within the constructor to

@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observer;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -56,8 +61,8 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
    private List<HitSortResult> hitSortResults_;
    private int hitSortResultNumber_ = 0;
    
-
-     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HandleDbRequest.class);
+    private static final ExecutorService executor = Executors.newFixedThreadPool(10);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HandleDbRequest.class);
 
 
     private ClientDatabaseProxy() {
@@ -73,7 +78,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     public ClientDatabaseProxy(IConnection connection) {
         dbChangeObservers_ = new ObservableEx() {
         };
-        windows_ = new ArrayList<TopComponent>();
+        windows_ = new ArrayList<>();
         db_ = new RemoteDatabase(connection);
         searchResults_ = new ArrayList<SearchResult>();
         markedRecordsList_ = new ArrayList<MarkedRecords>();
@@ -406,13 +411,35 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
          Exceptions.printStackTrace(ex);
       }
    }
+   
+   private long getDictionaryTermsCountThread() throws InterruptedException, ExecutionException {
+          final Future termsCount = executor.submit(
+              new Callable() {
+              @Override
+              public Object call() throws Exception {
+
+                  long count = 0;
+                  try {
+                      count = db_.getDictionaryTermsCount();
+                  } catch (DbException ex) {
+                      Exceptions.printStackTrace(ex);
+                  }
+                  return count;
+              }
+
+          });
+          
+         
+         return (long) termsCount.get();
+   }
 
    private void updateDbInfoForIndex() {
       try {
          ClientDatabaseInfo dbInfo = db_.getClientDatabaseInfo();
          // Index Number of terms
-         long termsCount = db_.getDictionaryTermsCount();
-         dbInfo.setTermCount(termsCount);
+        
+         //long termsCount = db_.getDictionaryTermsCount();
+         dbInfo.setTermCount(getDictionaryTermsCount());
       } catch (Exception ex) {
          Exceptions.printStackTrace(ex);
       }
@@ -688,10 +715,21 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
    }
 
    @Override
-   public long getDictionaryTermsCount() throws DbException {
-      long termsCount = db_.getClientDatabaseInfo().getTermCount();
-      return termsCount;
-   }
+    public long getDictionaryTermsCount() throws DbException {
+        long termsCount = 0;
+        if (checkIndexFormatVersion()) {
+            try {
+                termsCount = getDictionaryTermsCountThread();
+                if (termsCount == 0) {
+                    GuiGlobal.output(NbBundle.getMessage(ClientDatabaseProxy.class, "MSG_IndexEmptyOrNotExist"));
+
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                LOGGER.error("Error when getting number of terms in the dictionary", ex);
+            }
+        }
+        return termsCount;
+    }
 
     @Override
     public FieldDefinitionTable getFieldDefinitionTable() throws DbException {
@@ -804,26 +842,28 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
     @Override
     public IRecord getNext() throws DbException {
         IRecord record = db_.getNext();
-        if (db_.getErrorMsg() != null) {
-            GuiGlobal.outputErr(db_.getErrorMsg());
-        }
-        if (record != null) {
+        if (record == null) {
+            GuiGlobal.output(NbBundle.getMessage(ClientDatabaseProxy.class, "MSG_NoMoreNextSequentialRecord"));
+        } else {
+            if (db_.getErrorMsg() != null) {
+                GuiGlobal.outputErr(db_.getErrorMsg());
+            }
             currentRecordMfn_ = record.getMfn();
         }
-
         return record;
     }
 
     @Override
     public IRecord getPrev() throws DbException {
         IRecord record = db_.getPrev();
-        if (db_.getErrorMsg() != null) {
-            GuiGlobal.outputErr(db_.getErrorMsg());
-        }
-        if (record != null) {
+         if (record == null) {
+            GuiGlobal.output(NbBundle.getMessage(ClientDatabaseProxy.class, "MSG_NoMorePrevSequentialRecord"));
+        } else {
+            if (db_.getErrorMsg() != null) {
+                GuiGlobal.outputErr(db_.getErrorMsg());
+            }
             currentRecordMfn_ = record.getMfn();
         }
-
         return record;
     }
 
@@ -1475,8 +1515,8 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
        if (b) {
           // pass
       } else {
-         GuiGlobal.outputErr(db_.getErrorMsg());
-         GuiGlobal.output(NbBundle.getMessage(ClientDatabaseProxy.class, "MSG_IndexFormatTooOld") );
+        
+         GuiGlobal.outputErr(NbBundle.getMessage(ClientDatabaseProxy.class, "MSG_IndexFormatTooOld") );
       }
       return b;
    }

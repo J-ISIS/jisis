@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.TextField;
@@ -23,6 +22,7 @@ import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.Cancellable;
 import org.openide.util.Exceptions;
+import org.slf4j.LoggerFactory;
 import org.unesco.jisis.corelib.common.*;
 import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.corelib.index.ParsedFstEntry;
@@ -70,6 +70,8 @@ public class SortDatabase implements Runnable {
    public static final int    HEADING_PROCESSING_INDICATOR1 = 1;
    public static final int    HEADING_PROCESSING_INDICATOR2 = 2;
    public static final int    HEADING_PROCESSING_INDICATOR3 = 3;
+   
+     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SortDatabase.class);
 
    /**
     * Constructor
@@ -90,59 +92,61 @@ public class SortDatabase implements Runnable {
       // Array of Parsed FSTs
       parsedSortKeys_ = new ParsedSortKey[nKeys];
       List<ParsedFstEntry> parsedSortFstEntries = null;
-      for (int i = 0; i < nKeys; i++) {    // For each sort key
-         // Get or Build the FieldSelectionTable object
-         String s = keys_[i].fst_;
-         if (s.startsWith("@")) {
-            // A predefined FST name is preceded by an at sign "@"
-            String fstName = s.substring(1);
-            try {
-               fst_[i] = db_.getFst(fstName);
-            } catch (DbException ex) {
-               errorCount_++;
-               Exceptions.printStackTrace(ex);
-            }
-         } else {
-            // FST is defined in the string
-            if ((fst_[i] = parseString(s)) == null) {
-               // Error
-               errorCount_++;
-               return;
-            }
-         }
-         // Parse the format part of the FST
-         int nEntries = fst_[i].getEntriesCount();
-         parsedSortFstEntries = new ArrayList<ParsedFstEntry>();
-         for (int j = 0; j < nEntries; j++) {
-            FieldSelectionTable.FstEntry entry     = fst_[i].getEntryByIndex(j);
-            int                          tag       = entry.getTag();
-            String                       name      = entry.getName();
-            String                       format    = entry.getFormat();
-            int                          technique = entry.getTechnique();
-            try {
-
-               /**
-                * Parse the pft and build an intermediate language structure for
-                *  execution
-                */
-               // String s = String.format("| %5d | %1d | %s",tag, teq, pft);
-               // Global.output(s);
-               ParsedFstEntry parsedFstEntry = ParsedFstEntry.newParsedFstEntry(tag, name, technique,
-                                                  format);
-               // ISISFormatter isisFormatter = ISISFormatter.getFormatter(format);
-               parsedSortFstEntries.add(parsedFstEntry);
-               pftValid_ = !parsedFstEntry.invalidState();
-               if (!pftValid_) {
-                  errorCount_++;
+       for (int i = 0; i < nKeys; i++) {    // For each sort key
+           // Get or Build the FieldSelectionTable object
+           String s = keys_[i].fst_;
+           if (s.startsWith("@")) {
+               // A predefined FST name is preceded by an at sign "@"
+               String fstName = s.substring(1);
+               try {
+                   fst_[i] = db_.getFst(fstName);
+               } catch (DbException ex) {
+                   errorCount_++;
+                   LOGGER.error("Error when getting FST [{}]", fstName, ex);
+                   GuiGlobal.outputErr("Error when getting FST [" + fstName + "] " + ex);
                }
-            } catch (Exception e) {
-               parsedSortFstEntries.add(null);
-               pftValid_ = false;
-               errorCount_++;
-            }
-         }
-         parsedSortKeys_[i] = new ParsedSortKey(keys_[i].length_, parsedSortFstEntries);
-      }
+           } else {
+               // FST is defined in the string
+               if ((fst_[i] = parseString(s)) == null) {
+                   // Error
+                   errorCount_++;
+                   LOGGER.error("Error when parsing FST data part of sort key (Field ID technique Format) [{}]", s);
+                   GuiGlobal.outputErr("Error when parsing FST data part of sort key [" + s + "]");
+                   return;
+               }
+           }
+           // Parse the format part of the FST
+           int nEntries = fst_[i].getEntriesCount();
+           parsedSortFstEntries = new ArrayList<ParsedFstEntry>();
+           for (int j = 0; j < nEntries; j++) {
+               FieldSelectionTable.FstEntry entry = fst_[i].getEntryByIndex(j);
+               int tag = entry.getTag();
+               String name = entry.getName();
+               String format = entry.getFormat();
+               int technique = entry.getTechnique();
+               try {
+
+                   /**
+                    * Parse the pft and build an intermediate language structure for execution
+                    */
+               // String s = String.format("| %5d | %1d | %s",tag, teq, pft);
+                   // Global.output(s);
+                   ParsedFstEntry parsedFstEntry = ParsedFstEntry.newParsedFstEntry(tag, name, technique,
+                       format);
+                   // ISISFormatter isisFormatter = ISISFormatter.getFormatter(format);
+                   parsedSortFstEntries.add(parsedFstEntry);
+                   pftValid_ = !parsedFstEntry.invalidState();
+                   if (!pftValid_) {
+                       errorCount_++;
+                   }
+               } catch (Exception e) {
+                   parsedSortFstEntries.add(null);
+                   pftValid_ = false;
+                   errorCount_++;
+               }
+           }
+           parsedSortKeys_[i] = new ParsedSortKey(keys_[i].length_, parsedSortFstEntries);
+       }
       // Global.output("Number of parsing errors in the FST: "+errorCount_);
    }
 
@@ -155,16 +159,24 @@ public class SortDatabase implements Runnable {
    }
 
    /**
+    * This method parse the Sort Key FST data string for building a FeieldSelectionTable object
+    * 
+    * The string is first split into FST lines separated by* " + ", then each line is split into 3 parts:
+    * field ID, indexing technique, and the extraction format. Finally the extraction format is parsed to
+    * check the syntax.
+    * 
     * A FST is either one entry or several entries separated by a "+" character
     * surrounded by spaces, i.e. " + ".
     * An entry is defined by a field identifier followed by by the indexing
     * technique, followed by the format and separated by at least a space.
-    * @param s
-    * @return
+    * @param s - The FST data part of the sort key   
+    * @return  - A FieldSelectionTable object with 1 or more than one 1 FST entries
+    *            or NULL in case they are parsing errors 
     */
     private FieldSelectionTable parseString(String s) {
        /**
         * zero or several spaces followed by + and followed by zero or several spaces
+        * \s	A whitespace character: [ \t\n\x0B\f\r]
         */
         String[] lines = s.split("\\s*\\+\\s*");
         FieldSelectionTable fst = new FieldSelectionTable();
@@ -174,7 +186,7 @@ public class SortDatabase implements Runnable {
             * Split on one or several spaces
             */
             String[] tokens = lines[i].split("\\s+");
-            if (tokens.length != 3) {
+            if (tokens.length < 3) {
                 NotifyDescriptor d =
                         new NotifyDescriptor.Message(
                         "We should have field ID, indexing Tech and format surrounded by space!" + "\nError on FST line:\n" + lines[i]);
@@ -202,7 +214,11 @@ public class SortDatabase implements Runnable {
                 hasErrors = true;
                 continue;
             }
-            String format = tokens[2];
+            String format = "";
+            for (int j = 2; j < tokens.length; j++) {
+                format += tokens[j];
+                format += " ";
+            }
             hasErrors = false;
             try {
                 ISISFormatter il = ISISFormatter.getFormatter(format);

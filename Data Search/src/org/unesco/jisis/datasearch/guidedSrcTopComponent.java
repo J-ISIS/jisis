@@ -63,7 +63,7 @@ final class guidedSrcTopComponent extends TopComponent {
             fields[0] = "";
           
             for (int i = 0; i < ff.size(); i++) {
-                IField f = ((IField) ff.get(i));
+                IField f = ff.get(i);
                 fields[i + 1] = f.getTag() + "@" + fdt.getFieldByTag(f.getTag()).getName();
             }
             fields[ff.size() + 1] = "MFN";

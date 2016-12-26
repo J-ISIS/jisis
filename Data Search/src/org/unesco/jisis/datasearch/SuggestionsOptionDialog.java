@@ -40,7 +40,7 @@ public class SuggestionsOptionDialog extends javax.swing.JDialog {
 
     public void setOptions(int termSorting, int termCaseSensitivity) {
        termSorting_ = termSorting;
-       if (termSorting == this.SORT_TERM_FIELD_FREQ) {
+       if (termSorting == SuggestionsOptionDialog.SORT_TERM_FIELD_FREQ) {
           rdbSortTermFieldFreq.setSelected(true);
           rdbSortFieldTermFreq.setSelected(false);
        } else {
@@ -48,7 +48,7 @@ public class SuggestionsOptionDialog extends javax.swing.JDialog {
           rdbSortFieldTermFreq.setSelected(true);
        }
        termCaseSensitivity_ = termCaseSensitivity;
-       if (termCaseSensitivity == this.TERM_CASE_SENSITIVE) {
+       if (termCaseSensitivity == SuggestionsOptionDialog.TERM_CASE_SENSITIVE) {
           rdbCaseSensitive.setSelected(true);
           rdbCaseInsensitive.setSelected(false);
        } else {

@@ -12,7 +12,7 @@ import org.unesco.jisis.corelib.exceptions.NoConnectionException;
 import org.unesco.jisis.jisiscore.common.FDTModelEx;
 import org.unesco.jisis.datadefinition.wks.WKSVisualPanel;
 
-public class WKSWizardPanel implements WizardDescriptor.Panel {
+public class WKSWizardPanel implements WizardDescriptor.Panel<WizardDescriptor> {
     
     public WKSWizardPanel() {
     }
@@ -27,6 +27,7 @@ public class WKSWizardPanel implements WizardDescriptor.Panel {
     // is kept separate. This can be more efficient: if the wizard is created
     // but never displayed, or not all panels are displayed, it is better to
     // create only those which really need to be visible.
+    @Override
     public Component getComponent() {
         IConnection conn = null;
         try {
@@ -44,6 +45,7 @@ public class WKSWizardPanel implements WizardDescriptor.Panel {
         return component;
     }
     
+    @Override
     public HelpCtx getHelp() {
         // Show no Help button for this panel:
         return HelpCtx.DEFAULT_HELP;
@@ -51,6 +53,7 @@ public class WKSWizardPanel implements WizardDescriptor.Panel {
         // return new HelpCtx(SampleWizardPanel1.class);
     }
     
+    @Override
     public boolean isValid() {
         // If it is always OK to press Next or Finish, then:
         return true;
@@ -61,7 +64,9 @@ public class WKSWizardPanel implements WizardDescriptor.Panel {
         // and uncomment the complicated stuff below.
     }
     
+    @Override
     public final void addChangeListener(ChangeListener l) {}
+    @Override
     public final void removeChangeListener(ChangeListener l) {}
     /*
     private final Set<ChangeListener> listeners = new HashSet<ChangeListener>(1);
@@ -91,21 +96,23 @@ public class WKSWizardPanel implements WizardDescriptor.Panel {
     // settings object will be the WizardDescriptor, so you can use
     // WizardDescriptor.getProperty & putProperty to store information entered
     // by the user.
-    public void readSettings(Object settings) {
-        WizardDescriptor wd =(WizardDescriptor) settings;
+    @Override
+    public void readSettings(WizardDescriptor wiz) {
+    
         
         WKSVisualPanel panel3 = (WKSVisualPanel) getComponent();
-        FDTModelEx fdtModel =(FDTModelEx)wd.getProperty("fdt");
+        FDTModelEx fdtModel =(FDTModelEx)wiz.getProperty("fdt");
         panel3.setAvailableFields(fdtModel);
     }
     
-    public void storeSettings(Object settings) {
-        WizardDescriptor wd = (WizardDescriptor) settings;
+    @Override
+    public void storeSettings(WizardDescriptor wiz) {
+      
         WKSVisualPanel panel4 = (WKSVisualPanel) getComponent();
         TableModel fdtModel = panel4.getWKSModel();
         String recordValFormat = panel4.getRecordValFormat();
-        wd.putProperty("wks", fdtModel);
-        wd.putProperty("recvalformat", recordValFormat);
+        wiz.putProperty("wks", fdtModel);
+        wiz.putProperty("recvalformat", recordValFormat);
     }
     
 }

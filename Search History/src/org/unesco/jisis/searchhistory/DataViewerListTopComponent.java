@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -28,20 +29,22 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
+
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.MultiReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FuzzyQuery;
+import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.MultiPhraseQuery;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.WildcardQuery;
-import org.apache.lucene.util.Version;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -61,7 +64,6 @@ import org.unesco.jisis.corelib.common.FieldDefinitionTable;
 import org.unesco.jisis.corelib.common.FieldSelectionTable;
 import org.unesco.jisis.corelib.common.FormattedRecord;
 import org.unesco.jisis.corelib.common.IDatabase;
-import org.unesco.jisis.corelib.common.Lucene;
 import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.corelib.exceptions.GeneralDatabaseException;
 import org.unesco.jisis.corelib.index.QueryTerm;
@@ -89,8 +91,8 @@ class SearchComponent {
 
    private final List<QueryTerm> terms = new ArrayList<>();
 
-   public MyQueryParser(Version version, String defaultField, Analyzer analyzer) {
-      super(version, defaultField, analyzer);
+   public MyQueryParser(String defaultField, Analyzer analyzer) {
+      super(defaultField, analyzer);
    }
 
    @Override
@@ -227,7 +229,7 @@ public final class DataViewerListTopComponent extends TopComponent implements Ob
                 defaultField = searchableFields_[1].name;
             }
             MyQueryParser parser;
-            parser = new MyQueryParser(Lucene.MATCH_VERSION, defaultField, new KeywordAnalyzer());
+            parser = new MyQueryParser(defaultField, new KeywordAnalyzer());
             Query query = null;
             try {
                 query = parser.parse(luceneQuery);
@@ -937,7 +939,7 @@ public final class DataViewerListTopComponent extends TopComponent implements Ob
         Query q,
         IndexReader r,
         Set<Term> terms
-    ) {
+    ) throws IOException {
         if (terms == null) {
             terms = new HashSet<Term>();
         }
@@ -958,7 +960,10 @@ public final class DataViewerListTopComponent extends TopComponent implements Ob
             }
 
         } else if (q instanceof MultiPhraseQuery) {
-            ((MultiPhraseQuery) q).extractTerms(terms);
+            //((MultiPhraseQuery) q).extractTerms(terms);
+            IndexReader emptyReader = new MultiReader();
+
+            new IndexSearcher(emptyReader).createNormalizedWeight(q, false).extractTerms(terms);
 
         } else if (q instanceof PrefixQuery) {
             Term t = ((PrefixQuery) q).getPrefix();
@@ -974,7 +979,7 @@ public final class DataViewerListTopComponent extends TopComponent implements Ob
             extractTermsFromQuery(q, r, terms);
 
         } else if (q instanceof BooleanQuery) {
-            for (BooleanClause clause : ((BooleanQuery) q).getClauses()) {
+            for (BooleanClause clause : ((BooleanQuery) q).clauses()) {
                 if (clause.getOccur() != BooleanClause.Occur.MUST_NOT) {
                     extractTermsFromQuery(clause.getQuery(), r, terms);
                 }
@@ -982,7 +987,10 @@ public final class DataViewerListTopComponent extends TopComponent implements Ob
 
         } else {
             try {
-                q.extractTerms(terms);
+                IndexReader emptyReader = new MultiReader();
+
+                new IndexSearcher(emptyReader).createNormalizedWeight(q, false).extractTerms(terms);
+                // q.extractTerms(terms);
             } catch (Exception e) {
                 LOGGER.warn("Caught exception trying to extract terms from query ["
                     + q + "]: ", e);

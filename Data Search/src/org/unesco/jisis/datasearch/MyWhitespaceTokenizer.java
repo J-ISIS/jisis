@@ -5,9 +5,7 @@
 
 package org.unesco.jisis.datasearch;
 
-import java.io.Reader;
 import org.apache.lucene.analysis.util.CharTokenizer;
-import org.unesco.jisis.corelib.common.Lucene;
 
 
 /**
@@ -17,12 +15,13 @@ import org.unesco.jisis.corelib.common.Lucene;
 
 public class MyWhitespaceTokenizer extends CharTokenizer {
   /** Construct a new WhitespaceTokenizer. */
-  public MyWhitespaceTokenizer(Reader in) {
-    super(Lucene.MATCH_VERSION, in);
+  public MyWhitespaceTokenizer() {
+    super();
   }
 
   /** Collects only characters which do not satisfy
-   * {@link Character#isWhitespace(char)}.*/
+   * {@link Character#isWhitespace(char)}
+     * @param i.*/
    @Override
   protected boolean isTokenChar(int i) {
     return !Character.isWhitespace(i);

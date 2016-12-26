@@ -1,0 +1,216 @@
+2016-12-08 15:44:14,907 DEBUG [pool-5-thread-20] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:14,914 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 7 milliseconds to get reply from server
+2016-12-08 15:44:14,914 DEBUG [pool-5-thread-21] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:14,914 DEBUG [pool-5-thread-21] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:14,921 DEBUG [pool-5-thread-21] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 7 milliseconds to prepare reply on server side
+2016-12-08 15:44:14,922 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 8 milliseconds to get reply from server
+2016-12-08 15:44:14,922 DEBUG [pool-5-thread-22] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:14,922 DEBUG [pool-5-thread-22] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:14,922 DEBUG [pool-5-thread-22] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:14,923 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:14,923 DEBUG [pool-5-thread-23] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:14,923 DEBUG [pool-5-thread-23] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:14,923 DEBUG [pool-5-thread-23] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:14,924 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:14,924 DEBUG [pool-5-thread-24] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:14,924 DEBUG [pool-5-thread-24] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:14,924 DEBUG [pool-5-thread-24] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:14,927 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 3 milliseconds to get reply from server
+2016-12-08 15:44:14,927 DEBUG [pool-5-thread-25] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:14,928 DEBUG [pool-5-thread-25] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:14,928 DEBUG [pool-5-thread-25] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 1 milliseconds to prepare reply on server side
+2016-12-08 15:44:14,928 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:14,928 DEBUG [pool-5-thread-26] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:14,929 DEBUG [pool-5-thread-26] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,009 DEBUG [pool-5-thread-26] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 81 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,009 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 81 milliseconds to get reply from server
+2016-12-08 15:44:15,010 DEBUG [pool-5-thread-27] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,010 DEBUG [pool-5-thread-27] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,010 DEBUG [pool-5-thread-27] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,010 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,011 DEBUG [pool-5-thread-28] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,011 DEBUG [pool-5-thread-28] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,011 DEBUG [pool-5-thread-28] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,014 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 3 milliseconds to get reply from server
+2016-12-08 15:44:15,015 DEBUG [pool-5-thread-29] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,015 DEBUG [pool-5-thread-29] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,015 DEBUG [pool-5-thread-29] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,015 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,016 DEBUG [pool-5-thread-30] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,016 DEBUG [pool-5-thread-30] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,016 DEBUG [pool-5-thread-30] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,016 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,017 DEBUG [pool-5-thread-31] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,017 DEBUG [pool-5-thread-31] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,017 DEBUG [pool-5-thread-31] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,017 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,018 DEBUG [pool-5-thread-32] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,018 DEBUG [pool-5-thread-32] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,018 DEBUG [pool-5-thread-32] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,021 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 4 milliseconds to get reply from server
+2016-12-08 15:44:15,022 DEBUG [pool-5-thread-33] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,022 DEBUG [pool-5-thread-33] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,022 DEBUG [pool-5-thread-33] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,022 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,023 DEBUG [pool-5-thread-34] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,023 DEBUG [pool-5-thread-34] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,113 DEBUG [pool-5-thread-34] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 90 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,113 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 91 milliseconds to get reply from server
+2016-12-08 15:44:15,114 DEBUG [pool-5-thread-35] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,114 DEBUG [pool-5-thread-35] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,114 DEBUG [pool-5-thread-35] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,114 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,115 DEBUG [pool-5-thread-36] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,115 DEBUG [pool-5-thread-36] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,115 DEBUG [pool-5-thread-36] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,120 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 5 milliseconds to get reply from server
+2016-12-08 15:44:15,120 DEBUG [pool-5-thread-37] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,121 DEBUG [pool-5-thread-37] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,121 DEBUG [pool-5-thread-37] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 1 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,121 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,121 DEBUG [pool-5-thread-38] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,121 DEBUG [pool-5-thread-38] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,121 DEBUG [pool-5-thread-38] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,121 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 0 milliseconds to get reply from server
+2016-12-08 15:44:15,122 DEBUG [pool-5-thread-39] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,122 DEBUG [pool-5-thread-39] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,122 DEBUG [pool-5-thread-39] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,122 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 0 milliseconds to get reply from server
+2016-12-08 15:44:15,123 DEBUG [pool-5-thread-40] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,123 DEBUG [pool-5-thread-40] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,123 DEBUG [pool-5-thread-40] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,126 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 4 milliseconds to get reply from server
+2016-12-08 15:44:15,126 DEBUG [pool-5-thread-41] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,127 DEBUG [pool-5-thread-41] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,127 DEBUG [pool-5-thread-41] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 1 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,127 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,127 DEBUG [pool-5-thread-42] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,127 DEBUG [pool-5-thread-42] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,219 DEBUG [pool-5-thread-42] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 92 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,219 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 92 milliseconds to get reply from server
+2016-12-08 15:44:15,220 DEBUG [pool-5-thread-43] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,220 DEBUG [pool-5-thread-43] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,220 DEBUG [pool-5-thread-43] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,220 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,221 DEBUG [pool-5-thread-44] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,221 DEBUG [pool-5-thread-44] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,221 DEBUG [pool-5-thread-44] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,224 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 4 milliseconds to get reply from server
+2016-12-08 15:44:15,224 DEBUG [pool-5-thread-45] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,225 DEBUG [pool-5-thread-45] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,225 DEBUG [pool-5-thread-45] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 1 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,225 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,225 DEBUG [pool-5-thread-46] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,225 DEBUG [pool-5-thread-46] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,226 DEBUG [pool-5-thread-46] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 1 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,226 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,226 DEBUG [pool-5-thread-47] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,226 DEBUG [pool-5-thread-47] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,226 DEBUG [pool-5-thread-47] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,226 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 0 milliseconds to get reply from server
+2016-12-08 15:44:15,227 DEBUG [pool-5-thread-48] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,227 DEBUG [pool-5-thread-48] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,227 DEBUG [pool-5-thread-48] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,230 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 3 milliseconds to get reply from server
+2016-12-08 15:44:15,230 DEBUG [pool-5-thread-49] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,230 DEBUG [pool-5-thread-49] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,230 DEBUG [pool-5-thread-49] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,231 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,231 DEBUG [pool-5-thread-50] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,231 DEBUG [pool-5-thread-50] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,323 DEBUG [pool-5-thread-50] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 92 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,323 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 92 milliseconds to get reply from server
+2016-12-08 15:44:15,324 DEBUG [pool-5-thread-51] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,324 DEBUG [pool-5-thread-51] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,324 DEBUG [pool-5-thread-51] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,324 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,325 DEBUG [pool-5-thread-52] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,325 DEBUG [pool-5-thread-52] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,325 DEBUG [pool-5-thread-52] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,329 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 4 milliseconds to get reply from server
+2016-12-08 15:44:15,329 DEBUG [pool-5-thread-53] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,330 DEBUG [pool-5-thread-53] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,330 DEBUG [pool-5-thread-53] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 1 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,330 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:44:15,330 DEBUG [pool-5-thread-54] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:97] SERVER - HandleDbRequest Message Request - MSG ID= [53]-> [Get Record Cursor]
+2016-12-08 15:44:15,330 DEBUG [pool-5-thread-54] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:121] SERVER - HandleDbRequest Message Reply - reply= [Msg ID: [53] e_ok: [TRUE] Message Obj Class: [org.unesco.jisis.corelib.record.Record]
+------------]
+2016-12-08 15:44:15,330 DEBUG [pool-5-thread-54] o.u.j.c.s.HandleDbRequest [HandleDbRequest.java:130] SERVER - HandleDbRequest  getResponse Exit 0 milliseconds to prepare reply on server side
+2016-12-08 15:44:15,331 DEBUG [interruptible tasks] o.u.j.c.c.NioClient4 [NioClient4.java:120] CLIENT - NioClient4 1 milliseconds to get reply from server
+2016-12-08 15:46:14,089 INFO [AWT-EventQueue-0] o.u.j.j.JavaISIS [JavaISIS.java:140] J-ISIS History saved
+2016-12-08 15:46:14,091 DEBUG [AWT-EventQueue-0] o.u.j.c.s.DbServerService [DbServerService.java:171] Asking thread [org.unesco.jisis.corelib.server.CustomThreadPoolExecutor@7bd37e99[Running, pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]] to stop.
+2016-12-08 15:46:14,092 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping org.eclipse.jetty.server.Server@7a5a5b73
+2016-12-08 15:46:14,092 INFO [pool-3-thread-1] o.u.j.c.s.CustomThreadPoolExecutor [CustomThreadPoolExecutor.java:75] SERVER -Database Server Shutdown Date Thu Dec 08 15:46:14 CET 2016
+2016-12-08 15:46:14,092 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping SelectChannelConnector@0.0.0.0:8585
+2016-12-08 15:46:14,093 INFO [pool-3-thread-1] o.u.j.c.s.CustomThreadPoolExecutor [CustomThreadPoolExecutor.java:109] SERVER - Database Server Terminated Thu Dec 08 15:46:14 CET 2016
+2016-12-08 15:46:14,093 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping org.eclipse.jetty.server.nio.SelectChannelConnector$ConnectorSelectorManager@5819a634
+2016-12-08 15:46:14,098 DEBUG [qtp1638908069-29 Selector0] o.e.j.i.nio [SelectorManager.java:299] Stopped Thread[qtp1638908069-29 Selector0,5,IDE Main] on org.eclipse.jetty.io.nio.SelectorManager$1@6014f2dc
+2016-12-08 15:46:14,109 DEBUG [qtp1638908069-30 Selector1] o.e.j.i.nio [SelectorManager.java:299] Stopped Thread[qtp1638908069-30 Selector1,5,IDE Main] on org.eclipse.jetty.io.nio.SelectorManager$1@736523c5
+2016-12-08 15:46:14,119 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED org.eclipse.jetty.server.nio.SelectChannelConnector$ConnectorSelectorManager@5819a634
+2016-12-08 15:46:14,119 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping PooledBuffers [0/1024@6144,0/1024@16384,0/1024@-]/PooledBuffers [0/1024@6144,0/1024@32768,0/1024@-]
+2016-12-08 15:46:14,120 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED null/null
+2016-12-08 15:46:14,120 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED SelectChannelConnector@0.0.0.0:8585
+2016-12-08 15:46:14,120 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping org.eclipse.jetty.server.handler.ContextHandlerCollection@bfe3df1
+2016-12-08 15:46:14,120 DEBUG [AWT-EventQueue-0] o.e.j.s.h.AbstractHandler [AbstractHandler.java:63] stopping org.eclipse.jetty.server.handler.ContextHandlerCollection@bfe3df1
+2016-12-08 15:46:14,121 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping org.eclipse.jetty.server.handler.DefaultHandler@23d76e3e
+2016-12-08 15:46:14,121 DEBUG [AWT-EventQueue-0] o.e.j.s.h.AbstractHandler [AbstractHandler.java:63] stopping org.eclipse.jetty.server.handler.DefaultHandler@23d76e3e
+2016-12-08 15:46:14,121 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED org.eclipse.jetty.server.handler.DefaultHandler@23d76e3e
+2016-12-08 15:46:14,121 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping o.e.j.s.ServletContextHandler{/,file:/C:/jisis-workspace/home_test_db/}
+2016-12-08 15:46:14,121 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping org.eclipse.jetty.server.session.SessionHandler@728a74d6
+2016-12-08 15:46:14,121 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping org.eclipse.jetty.server.session.HashSessionManager@727b9948
+2016-12-08 15:46:14,122 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED org.eclipse.jetty.server.session.HashSessionManager@727b9948
+2016-12-08 15:46:14,122 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping org.eclipse.jetty.servlet.ServletHandler@202f9db2
+2016-12-08 15:46:14,126 DEBUG [AWT-EventQueue-0] o.e.j.s.h.AbstractHandler [AbstractHandler.java:63] stopping org.eclipse.jetty.servlet.ServletHandler@202f9db2
+2016-12-08 15:46:14,126 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping org.apache.jasper.servlet.JspServlet-1
+2016-12-08 15:46:14,126 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED org.apache.jasper.servlet.JspServlet-1
+2016-12-08 15:46:14,126 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping org.eclipse.jetty.servlet.DefaultServlet-1
+2016-12-08 15:46:14,127 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED org.eclipse.jetty.servlet.DefaultServlet-1
+2016-12-08 15:46:14,127 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED org.eclipse.jetty.servlet.ServletHandler@202f9db2
+2016-12-08 15:46:14,127 DEBUG [AWT-EventQueue-0] o.e.j.s.h.AbstractHandler [AbstractHandler.java:63] stopping org.eclipse.jetty.server.session.SessionHandler@728a74d6
+2016-12-08 15:46:14,127 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED org.eclipse.jetty.server.session.SessionHandler@728a74d6
+2016-12-08 15:46:14,127 DEBUG [AWT-EventQueue-0] o.e.j.s.h.AbstractHandler [AbstractHandler.java:63] stopping o.e.j.s.ServletContextHandler{/,file:/C:/jisis-workspace/home_test_db/}
+2016-12-08 15:46:14,127 INFO [AWT-EventQueue-0] o.e.j.s.h.ContextHandler [ContextHandler.java:822] stopped o.e.j.s.ServletContextHandler{/,file:/C:/jisis-workspace/home_test_db/}
+2016-12-08 15:46:14,128 DEBUG [AWT-EventQueue-0] o.e.j.u.c.Container [Container.java:219] Container o.e.j.s.ServletContextHandler{/,file:/C:/jisis-workspace/home_test_db/} - org.eclipse.jetty.server.session.SessionHandler@728a74d6 as handler
+2016-12-08 15:46:14,198 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED o.e.j.s.ServletContextHandler{/,file:/C:/jisis-workspace/home_test_db/}
+2016-12-08 15:46:14,198 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED org.eclipse.jetty.server.handler.ContextHandlerCollection@bfe3df1
+2016-12-08 15:46:14,198 DEBUG [AWT-EventQueue-0] o.e.j.s.h.AbstractHandler [AbstractHandler.java:63] stopping org.eclipse.jetty.server.Server@7a5a5b73
+2016-12-08 15:46:14,198 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping org.eclipse.jetty.server.session.HashSessionIdManager@4f7e505a
+2016-12-08 15:46:14,199 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED org.eclipse.jetty.server.session.HashSessionIdManager@4f7e505a
+2016-12-08 15:46:14,202 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:182] stopping qtp1638908069{8<=8<=8/254,0}
+2016-12-08 15:46:14,254 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED qtp1638908069{8<=0<=0/254,0}
+2016-12-08 15:46:14,255 DEBUG [AWT-EventQueue-0] o.e.j.u.c.AbstractLifeCycle [AbstractLifeCycle.java:191] STOPPED org.eclipse.jetty.server.Server@7a5a5b73
+2016-12-08 15:46:14,255 INFO [AWT-EventQueue-0] o.u.j.j.JavaISIS [JavaISIS.java:153] Server Thread closed!
+2016-12-08 15:46:14,255 INFO [AWT-EventQueue-0] o.u.j.j.JavaISIS [JavaISIS.java:154] J-ISIS finished

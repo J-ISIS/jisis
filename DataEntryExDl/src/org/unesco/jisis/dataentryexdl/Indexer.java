@@ -12,6 +12,8 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -55,13 +57,12 @@ public class Indexer {
       throw new IOException(dataDir
               + " does not exist or is not a directory");
     }
-     Directory fsd = FSDirectory.open(indexDir);
+     Directory fsd = FSDirectory.open(indexDir.toPath());
 
-            StandardAnalyzer standardAnalyzer = new StandardAnalyzer(Lucene.MATCH_VERSION);
+            StandardAnalyzer standardAnalyzer = new StandardAnalyzer();
             standardAnalyzer.setMaxTokenLength(Integer.MAX_VALUE);
 
-            IndexWriterConfig conf = new IndexWriterConfig(Lucene.MATCH_VERSION,
-                    standardAnalyzer);
+            IndexWriterConfig conf = new IndexWriterConfig(standardAnalyzer);
 
             conf.setMaxBufferedDocs(120);
             //((LogMergePolicy) conf.getMergePolicy()).setMergeFactor(120);
@@ -102,11 +103,11 @@ public class Indexer {
     }
     System.out.println("Indexing " + f.getCanonicalPath());
     Document doc = new Document();
-    doc.add(new Field("contents", new FileReader(f)));
+    doc.add(new TextField("contents", new FileReader(f)));
 
 
-    doc.add(new Field("filename", f.getCanonicalPath(),
-            Field.Store.YES, Field.Index.NOT_ANALYZED));
+    doc.add(new StringField("filename", f.getCanonicalPath(),
+            Field.Store.YES));
 
 
     writer.addDocument(doc);

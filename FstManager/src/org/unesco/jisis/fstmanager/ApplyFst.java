@@ -12,16 +12,11 @@ package org.unesco.jisis.fstmanager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.StringField;
-import org.openide.util.Exceptions;
 import org.unesco.jisis.corelib.common.FieldSelectionTable;
 import org.unesco.jisis.corelib.common.IDatabase;
-import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.corelib.index.ParsedFstEntry;
 import org.unesco.jisis.corelib.pft.ISISFormatter;
-import org.unesco.jisis.corelib.record.FieldFactory;
 import org.unesco.jisis.corelib.record.IRecord;
 import org.unesco.jisis.jisiscore.client.GuiGlobal;
 

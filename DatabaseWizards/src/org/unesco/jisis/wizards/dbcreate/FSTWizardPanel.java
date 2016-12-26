@@ -14,7 +14,7 @@ import org.unesco.jisis.jisiscore.common.FDTModelEx;
 import org.unesco.jisis.datadefinition.fst.FSTVisualPanel;
 
 
-public class FSTWizardPanel implements WizardDescriptor.Panel {
+public class FSTWizardPanel implements WizardDescriptor.Panel<WizardDescriptor> {
     
     
     public FSTWizardPanel() {
@@ -31,6 +31,7 @@ public class FSTWizardPanel implements WizardDescriptor.Panel {
     // is kept separate. This can be more efficient: if the wizard is created
     // but never displayed, or not all panels are displayed, it is better to
     // create only those which really need to be visible.
+    @Override
     public Component getComponent() {
         IConnection conn;
         try {
@@ -48,6 +49,7 @@ public class FSTWizardPanel implements WizardDescriptor.Panel {
         return component;
     }
     
+    @Override
     public HelpCtx getHelp() {
         // Show no Help button for this panel:
         return HelpCtx.DEFAULT_HELP;
@@ -55,6 +57,7 @@ public class FSTWizardPanel implements WizardDescriptor.Panel {
         // return new HelpCtx(SampleWizardPanel1.class);
     }
     
+    @Override
     public boolean isValid() {
         // If it is always OK to press Next or Finish, then:
         return true;
@@ -65,7 +68,9 @@ public class FSTWizardPanel implements WizardDescriptor.Panel {
         // and uncomment the complicated stuff below.
     }
     
+    @Override
     public final void addChangeListener(ChangeListener l) {}
+    @Override
     public final void removeChangeListener(ChangeListener l) {}
     /*
     private final Set<ChangeListener> listeners = new HashSet<ChangeListener>(1);
@@ -95,21 +100,22 @@ public class FSTWizardPanel implements WizardDescriptor.Panel {
     // settings object will be the WizardDescriptor, so you can use
     // WizardDescriptor.getProperty & putProperty to store information entered
     // by the user.
-    public void readSettings(Object settings) {
-        WizardDescriptor wd =(WizardDescriptor) settings;
+    @Override
+    public void readSettings(WizardDescriptor wiz) {
         
         FSTVisualPanel panel4 = (FSTVisualPanel) getComponent();
-        FDTModelEx fdtModel =(FDTModelEx)wd.getProperty("fdt");
+        FDTModelEx fdtModel =(FDTModelEx)wiz.getProperty("fdt");
         panel4.setAvailableFields(fdtModel);
     }
     
-    public void storeSettings(Object settings) {
-        WizardDescriptor wd = (WizardDescriptor) settings;
+    @Override
+    public void storeSettings(WizardDescriptor wiz) {
+       
         FSTVisualPanel panel5 = (FSTVisualPanel) getComponent();
         TableModel fstModel = panel5.getFSTModel();
         String defFormat = panel5.getDefaultFormat();
-        wd.putProperty("defformat", defFormat);
-        wd.putProperty("fst", fstModel);
+        wiz.putProperty("defformat", defFormat);
+        wiz.putProperty("fst", fstModel);
     }
     
 }

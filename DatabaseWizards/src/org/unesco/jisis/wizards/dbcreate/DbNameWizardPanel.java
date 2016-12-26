@@ -14,7 +14,7 @@ import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.corelib.exceptions.NoConnectionException;
 
 
-public class DbNameWizardPanel implements WizardDescriptor.Panel {
+public class DbNameWizardPanel implements WizardDescriptor.Panel<WizardDescriptor> {
     
     
     public DbNameWizardPanel() {
@@ -31,6 +31,7 @@ public class DbNameWizardPanel implements WizardDescriptor.Panel {
     // is kept separate. This can be more efficient: if the wizard is created
     // but never displayed, or not all panels are displayed, it is better to
     // create only those which really need to be visible.
+    @Override
     public Component getComponent() {
         IConnection conn = null;
         try {
@@ -49,6 +50,7 @@ public class DbNameWizardPanel implements WizardDescriptor.Panel {
         return component;
     }
     
+    @Override
     public HelpCtx getHelp() {
         // Show no Help button for this panel:
         return HelpCtx.DEFAULT_HELP;
@@ -56,6 +58,7 @@ public class DbNameWizardPanel implements WizardDescriptor.Panel {
         // return new HelpCtx(SampleWizardPanel1.class);
     }
     
+    @Override
     public boolean isValid() {
        DbNameVisualPanel panel2 = (DbNameVisualPanel) getComponent();
        String dbName = panel2.getDbName();
@@ -73,7 +76,9 @@ public class DbNameWizardPanel implements WizardDescriptor.Panel {
         // and uncomment the complicated stuff below.
     }
     
+    @Override
     public final void addChangeListener(ChangeListener l) {}
+    @Override
     public final void removeChangeListener(ChangeListener l) {}
     /*
     private final Set<ChangeListener> listeners = new HashSet<ChangeListener>(1);
@@ -103,7 +108,8 @@ public class DbNameWizardPanel implements WizardDescriptor.Panel {
     // settings object will be the WizardDescriptor, so you can use
     // WizardDescriptor.getProperty & putProperty to store information entered
     // by the user.
-    public void readSettings(Object settings) {
+    @Override
+    public void readSettings(WizardDescriptor wiz) {
         
         DbNameVisualPanel panel2 = (DbNameVisualPanel) getComponent();
         
@@ -119,14 +125,15 @@ public class DbNameWizardPanel implements WizardDescriptor.Panel {
         
     }
     
-    public void storeSettings(Object settings) {
-        WizardDescriptor wd = (WizardDescriptor) settings;
+    @Override
+    public void storeSettings(WizardDescriptor wiz) {
+        
         
         DbNameVisualPanel panel2 = (DbNameVisualPanel) getComponent();
         String dbHome = panel2.getDbHome();
         String dbName = panel2.getDbName();
-        wd.putProperty("dbhome", dbHome);
-        wd.putProperty("dbname", dbName);
+        wiz.putProperty("dbhome", dbHome);
+        wiz.putProperty("dbname", dbName);
         
     }
     

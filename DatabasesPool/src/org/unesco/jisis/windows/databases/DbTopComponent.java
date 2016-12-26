@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.swing.tree.TreePath;
 import org.netbeans.api.progress.ProgressHandle;
-import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.ErrorManager;
 import org.openide.awt.StatusDisplayer;
 import org.openide.util.*;
@@ -85,7 +84,7 @@ public class DbTopComponent extends TopComponent {
 
                     public void run() {
                         try {
-                            final ProgressHandle progress = ProgressHandleFactory.createHandle("Performing Indexing " + "...", new Cancellable() {
+                            final ProgressHandle progress = ProgressHandle.createHandle("Performing Indexing " + "...", new Cancellable() {
 
                                 public boolean cancel() {
                                     cancelled = true;
