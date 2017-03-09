@@ -2,18 +2,26 @@ package org.unesco.jisis.wizards.connopen;
 
 import javax.swing.JPanel;
 import org.openide.util.NbBundle;
+import org.unesco.jisis.corelib.server.DbServerService;
 
-public final class connOpenVisualPanel1 extends JPanel {
+public final class ConnectionOpenVisualPanel1 extends JPanel {
     
     /** Creates new form connOpenVisualPanel1 */
-    public connOpenVisualPanel1() {
+    public ConnectionOpenVisualPanel1() {
         initComponents();
+        txtHostName.setText(DbServerService.getJisisDbServerIP());
+        txtPort.setText(DbServerService.getServerPort()+"");
+        txtUsername.setText(DbServerService.getJisisDbServerUserID());
+        txtPassword.setText(DbServerService.getJisisDbServerUserPassword());
+   
+   
         lblUsername.setVisible(true);
         lblPassword.setVisible(true);
         txtUsername.setVisible(true);
         txtPassword.setVisible(true);
     }
     
+    @Override
     public String getName() {
         return NbBundle.getMessage(ConnectionOpenWizardAction.class, "CTL_ConnOpenWizardStepOne");
     }
@@ -35,21 +43,21 @@ public final class connOpenVisualPanel1 extends JPanel {
         txtUsername = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblHostName, org.openide.util.NbBundle.getMessage(connOpenVisualPanel1.class, "connOpenVisualPanel1.lblHostName.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblHostName, org.openide.util.NbBundle.getMessage(ConnectionOpenVisualPanel1.class, "ConnectionOpenVisualPanel1.lblHostName.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblPort, org.openide.util.NbBundle.getMessage(connOpenVisualPanel1.class, "connOpenVisualPanel1.lblPort.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblPort, org.openide.util.NbBundle.getMessage(ConnectionOpenVisualPanel1.class, "ConnectionOpenVisualPanel1.lblPort.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblUsername, org.openide.util.NbBundle.getMessage(connOpenVisualPanel1.class, "connOpenVisualPanel1.lblUsername.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblUsername, org.openide.util.NbBundle.getMessage(ConnectionOpenVisualPanel1.class, "ConnectionOpenVisualPanel1.lblUsername.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblPassword, org.openide.util.NbBundle.getMessage(connOpenVisualPanel1.class, "connOpenVisualPanel1.lblPassword.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblPassword, org.openide.util.NbBundle.getMessage(ConnectionOpenVisualPanel1.class, "ConnectionOpenVisualPanel1.lblPassword.text")); // NOI18N
 
-        txtHostName.setText(org.openide.util.NbBundle.getMessage(connOpenVisualPanel1.class, "connOpenVisualPanel1.txtHostName.text")); // NOI18N
+        txtHostName.setText(org.openide.util.NbBundle.getMessage(ConnectionOpenVisualPanel1.class, "ConnectionOpenVisualPanel1.txtHostName.text")); // NOI18N
 
-        txtPort.setText(org.openide.util.NbBundle.getMessage(connOpenVisualPanel1.class, "connOpenVisualPanel1.txtPort.text")); // NOI18N
+        txtPort.setText(org.openide.util.NbBundle.getMessage(ConnectionOpenVisualPanel1.class, "ConnectionOpenVisualPanel1.txtPort.text")); // NOI18N
 
-        txtUsername.setText(org.openide.util.NbBundle.getMessage(connOpenVisualPanel1.class, "connOpenVisualPanel1.txtUsername.text")); // NOI18N
+        txtUsername.setText(org.openide.util.NbBundle.getMessage(ConnectionOpenVisualPanel1.class, "ConnectionOpenVisualPanel1.txtUsername.text")); // NOI18N
 
-        txtPassword.setText(org.openide.util.NbBundle.getMessage(connOpenVisualPanel1.class, "connOpenVisualPanel1.txtPassword.text")); // NOI18N
+        txtPassword.setText(org.openide.util.NbBundle.getMessage(ConnectionOpenVisualPanel1.class, "ConnectionOpenVisualPanel1.txtPassword.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

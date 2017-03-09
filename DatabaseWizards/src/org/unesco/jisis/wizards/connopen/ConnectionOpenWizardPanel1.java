@@ -20,7 +20,7 @@ public class ConnectionOpenWizardPanel1 implements WizardDescriptor.Panel<Wizard
     @Override
     public Component getComponent() {
         if (component == null) {
-            component = new connOpenVisualPanel1();
+            component = new ConnectionOpenVisualPanel1();
         }
         return component;
     }
@@ -85,7 +85,7 @@ public class ConnectionOpenWizardPanel1 implements WizardDescriptor.Panel<Wizard
     @Override
     public void storeSettings(WizardDescriptor wiz) {
        
-        connOpenVisualPanel1 panel = (connOpenVisualPanel1) getComponent();
+        ConnectionOpenVisualPanel1 panel = (ConnectionOpenVisualPanel1) getComponent();
         
         String hostname = panel.getHostName();
         String port = panel.getPort();
