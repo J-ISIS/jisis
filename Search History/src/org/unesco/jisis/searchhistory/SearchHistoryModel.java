@@ -7,14 +7,14 @@ package org.unesco.jisis.searchhistory;
 
 import java.util.List;
 import javax.swing.AbstractListModel;
-import org.unesco.jisis.jisiscore.client.SearchResult;
+import org.unesco.jisis.jisisutils.proxy.SearchResult;
 
 /**
  *
  * @author jcd
  */
 public class SearchHistoryModel  extends AbstractListModel {
-   private List<SearchResult> searchResults_;
+   private final List<SearchResult> searchResults_;
    public SearchHistoryModel( List<SearchResult> searchResults) {
       searchResults_ = searchResults;
    }

@@ -11,7 +11,6 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
-import java.awt.Dimension;
 
 import java.awt.EventQueue;
 import java.io.*;
@@ -55,7 +54,8 @@ import org.unesco.jisis.corelib.util.Util;
 import org.unesco.jisis.gui.DirectoryChooser;
 import org.unesco.jisis.gui.EditorDlgActionTableCellEditor;
 import org.unesco.jisis.gui.GuiUtils;
-import org.unesco.jisis.jisiscore.client.*;
+import org.unesco.jisis.jisiscore.client.ParsedSortKey;
+import org.unesco.jisis.jisiscore.client.SortDatabase;
 import org.unesco.jisis.jisiscore.common.ColumnData;
 import org.unesco.jisis.jisisutils.FileExtFilter;
 import org.unesco.jisis.jisisutils.gui.CheckCellRenderer;
@@ -63,6 +63,10 @@ import org.unesco.jisis.jisisutils.gui.CheckCellRenderer;
 import org.unesco.jisis.jisisutil.history.HistoryTextArea;
 import org.unesco.jisis.jisisutil.history.HistoryTextField;
 import org.unesco.jisis.jisisutils.gui.SpinnerCellEditor;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.MarkedRecords;
+import org.unesco.jisis.jisisutils.proxy.SearchResult;
 import org.unesco.jisis.searchhistory.SearchHistoryModel;
 //import org.openide.util.Utilities;
 

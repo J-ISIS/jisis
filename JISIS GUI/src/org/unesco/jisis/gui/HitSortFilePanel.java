@@ -11,13 +11,13 @@
 
 package org.unesco.jisis.gui;
 
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.DefaultComboBoxModel;
 import org.unesco.jisis.corelib.common.Global;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 
 /**

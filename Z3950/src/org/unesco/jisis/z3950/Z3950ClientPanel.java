@@ -77,7 +77,7 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
 import org.unesco.jisis.corelib.common.Global;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 /**
  *

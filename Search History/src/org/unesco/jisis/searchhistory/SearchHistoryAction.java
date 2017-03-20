@@ -8,18 +8,16 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.List;
 import java.util.Observer;
 import javax.swing.JPopupMenu;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
-import org.openide.util.NbPreferences;
 import org.unesco.jisis.corelib.common.IDatabase;
-import org.unesco.jisis.gui.ParametersPanel;
 import org.unesco.jisis.gui.Util;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.SearchResult;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.SearchResult;
+
 
 public final class SearchHistoryAction implements ActionListener {
 

@@ -21,7 +21,7 @@ import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.corelib.common.UserInfo;
 import org.unesco.jisis.corelib.pft.ISISFormatter;
 import org.unesco.jisis.corelib.util.StringUtils;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 
 /**

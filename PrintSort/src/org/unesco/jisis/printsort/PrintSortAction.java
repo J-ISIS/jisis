@@ -9,7 +9,7 @@ import javax.swing.AbstractAction;
 import org.openide.util.NbBundle;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.gui.Util;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 public final class PrintSortAction extends AbstractAction  {
 
@@ -18,6 +18,7 @@ public final class PrintSortAction extends AbstractAction  {
 //        putValue(SMALL_ICON, new ImageIcon(Utilities.loadImage(OutlineTopComponent.ICON_PATH, true)));
    }
 
+    @Override
    public void actionPerformed(ActionEvent evt) {
      
         IDatabase db = Util.getDatabaseToUse(evt);

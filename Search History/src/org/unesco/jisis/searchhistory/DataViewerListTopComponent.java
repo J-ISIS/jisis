@@ -70,9 +70,10 @@ import org.unesco.jisis.corelib.index.QueryTerm;
 import org.unesco.jisis.corelib.index.SearchableField;
 import org.unesco.jisis.corelib.record.IRecord;
 import org.unesco.jisis.fxbrowser.SwingFXWebView;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.MarkedRecords;
-import org.unesco.jisis.jisiscore.client.SearchResult;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.MarkedRecords;
+import org.unesco.jisis.jisisutils.proxy.SearchResult;
+
 
 
 class SearchComponent {

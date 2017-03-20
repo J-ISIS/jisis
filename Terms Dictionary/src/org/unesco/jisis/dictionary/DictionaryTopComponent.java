@@ -2,8 +2,6 @@ package org.unesco.jisis.dictionary;
 
 
 import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -38,7 +36,7 @@ import org.unesco.jisis.corelib.index.DictionaryTerm;
 import org.unesco.jisis.corelib.index.SearchableField;
 import org.unesco.jisis.corelib.index.TermParams;
 import org.unesco.jisis.gui.GuiUtils;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 import org.unesco.jisis.jisisutils.distributed.DistributedTableModel;
 import org.unesco.jisis.jisisutils.threads.IdeCursor;
 
@@ -168,10 +166,12 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
             suggestionList.setModel(new javax.swing.AbstractListModel() {
                 String[] strings = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5"};
 
+                @Override
                 public int getSize() {
                     return strings.length;
                 }
 
+                @Override
                 public Object getElementAt(int i) {
                     return strings[i];
                 }
