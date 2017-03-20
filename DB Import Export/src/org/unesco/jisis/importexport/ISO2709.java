@@ -18,7 +18,7 @@ import org.marc4j.marc.ControlField;
 import org.marc4j.marc.Leader;
 import org.marc4j.marc.MarcFactory;
 import org.openide.util.Exceptions;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 /**
  *

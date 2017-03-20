@@ -19,7 +19,7 @@ import org.unesco.jisis.corelib.client.ConnectionPool;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.gui.GuiUtils;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 import org.unesco.jisis.jisiscore.common.FDTModelEx;
 
 //import org.openide.util.Utilities;

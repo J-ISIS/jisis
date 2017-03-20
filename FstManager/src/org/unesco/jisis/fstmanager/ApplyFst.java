@@ -18,7 +18,7 @@ import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.corelib.index.ParsedFstEntry;
 import org.unesco.jisis.corelib.pft.ISISFormatter;
 import org.unesco.jisis.corelib.record.IRecord;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 /**
  * DocBuilder object is responsible of building Lucene Documents, it creates a Document object, adds fields to

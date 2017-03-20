@@ -46,7 +46,7 @@ import org.marc4j.converter.CharConverter;
 import org.marc4j.converter.impl.AnselToUnicode;
 import org.marc4j.converter.impl.Iso5426ToUnicode;
 import org.marc4j.converter.impl.Iso6937ToUnicode;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 /**
  *

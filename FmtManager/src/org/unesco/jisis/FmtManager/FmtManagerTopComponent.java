@@ -61,8 +61,8 @@ import org.unesco.jisis.corelib.exceptions.FormattingException;
 import org.unesco.jisis.corelib.exceptions.GeneralDatabaseException;
 import org.unesco.jisis.corelib.pft.ISISFormatter;
 import org.unesco.jisis.corelib.server.DbHandle;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 import org.unesco.jisis.weboutput.WebOutputTopComponent;
 import org.unesco.jisis.corelib.util.StringUtils;
 
