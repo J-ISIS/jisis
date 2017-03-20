@@ -24,9 +24,9 @@ import org.unesco.jisis.corelib.exceptions.FormattingException;
 import org.unesco.jisis.corelib.pft.ISISFormatter;
 import org.unesco.jisis.corelib.record.IField;
 import org.unesco.jisis.corelib.record.Record;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 import org.unesco.jisis.jisiscore.client.FieldComparator;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 /**
  * Top component which displays something.

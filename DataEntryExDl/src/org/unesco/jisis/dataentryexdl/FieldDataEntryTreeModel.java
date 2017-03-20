@@ -22,7 +22,7 @@ import org.unesco.jisis.corelib.record.IRecord;
 import org.unesco.jisis.corelib.record.Record;
 import org.unesco.jisis.corelib.record.StringOccurrence;
 import org.unesco.jisis.corelib.record.Subfield;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 /**
  *

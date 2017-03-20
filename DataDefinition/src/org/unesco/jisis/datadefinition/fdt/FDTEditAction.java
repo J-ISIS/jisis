@@ -8,7 +8,7 @@ import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.gui.Util;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 
 
 /**

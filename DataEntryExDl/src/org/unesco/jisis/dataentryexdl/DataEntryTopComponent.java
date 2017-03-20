@@ -39,8 +39,8 @@ import org.unesco.jisis.corelib.picklist.ValidationData;
 import org.unesco.jisis.corelib.record.IField;
 import org.unesco.jisis.corelib.record.IRecord;
 import org.unesco.jisis.corelib.record.Record;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 import org.unesco.jisis.jisisutils.threads.GuiExecutor;
 
 

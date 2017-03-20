@@ -59,10 +59,9 @@ import org.unesco.jisis.corelib.pft.ISISFormatter;
 import org.unesco.jisis.corelib.record.IField;
 import org.unesco.jisis.corelib.record.IRecord;
 import org.unesco.jisis.fxbrowser.SwingFXWebView;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
-import org.unesco.jisis.jisiscore.client.MarkedRecords;
-import org.unesco.jisis.jisiscore.common.AsyncCallback;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.MarkedRecords;
 
 interface CallBack {
 
