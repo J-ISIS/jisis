@@ -1317,7 +1317,7 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
        StringBuilder sb = new StringBuilder(); // Query as entered by user
        
        
- 
+       mfnListPageNumber_ = 0;
        if (this.isGuidedSearch_) {
           searchComponents_ = new ArrayList<>();
           for (JComponent[] fields : this.queryPanels_) {
