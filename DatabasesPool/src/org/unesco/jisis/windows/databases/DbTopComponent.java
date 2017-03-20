@@ -28,8 +28,8 @@ import org.unesco.jisis.databrowser.RecordDataBrowserAction;
 import org.unesco.jisis.dataentryexdl.DataEntryTopComponent;
 import org.unesco.jisis.gui.Util;
 import org.unesco.jisis.index.IndexDatabaseAction;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 
 /**

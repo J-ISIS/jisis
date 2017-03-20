@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.unesco.jisis.corelib.common.IDatabase;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 import org.unesco.jisis.gui.Util;
 
 
@@ -21,6 +21,7 @@ public final class CloseDatabaseAction extends AbstractAction {
         putValue(SMALL_ICON, new ImageIcon(ImageUtilities.loadImage(DbTopComponent.CLOSEDB_ICON_PATH, true)));
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt) {
         IDatabase db = Util.getDatabaseToUse(evt);
         if (db == null) {
