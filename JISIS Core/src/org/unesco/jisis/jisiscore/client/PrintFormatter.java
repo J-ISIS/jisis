@@ -10,11 +10,10 @@
 package org.unesco.jisis.jisiscore.client;
 
 import java.util.List;
-import java.util.Vector;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.corelib.pft.ISISFormatter;
 import org.unesco.jisis.corelib.record.IRecord;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 
 

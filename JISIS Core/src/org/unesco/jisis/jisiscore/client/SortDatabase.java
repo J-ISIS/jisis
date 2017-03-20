@@ -32,6 +32,7 @@ import org.unesco.jisis.corelib.sorting.BalancedMergeSort;
 import org.unesco.jisis.corelib.sorting.JisisSortRecordComparator;
 import org.unesco.jisis.corelib.sorting.JisisSortRecordInfo;
 import org.unesco.jisis.corelib.util.StringUtils;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 /**
  *
@@ -91,7 +92,7 @@ public class SortDatabase implements Runnable {
       fst_ = new FieldSelectionTable[nKeys];
       // Array of Parsed FSTs
       parsedSortKeys_ = new ParsedSortKey[nKeys];
-      List<ParsedFstEntry> parsedSortFstEntries = null;
+      List<ParsedFstEntry> parsedSortFstEntries;
        for (int i = 0; i < nKeys; i++) {    // For each sort key
            // Get or Build the FieldSelectionTable object
            String s = keys_[i].fst_;
@@ -117,7 +118,7 @@ public class SortDatabase implements Runnable {
            }
            // Parse the format part of the FST
            int nEntries = fst_[i].getEntriesCount();
-           parsedSortFstEntries = new ArrayList<ParsedFstEntry>();
+           parsedSortFstEntries = new ArrayList<>();
            for (int j = 0; j < nEntries; j++) {
                FieldSelectionTable.FstEntry entry = fst_[i].getEntryByIndex(j);
                int tag = entry.getTag();
@@ -181,69 +182,63 @@ public class SortDatabase implements Runnable {
         String[] lines = s.split("\\s*\\+\\s*");
         FieldSelectionTable fst = new FieldSelectionTable();
         boolean hasErrors = false;
-        for (int i = 0; i < lines.length; i++) {
+       for (String line : lines) {
            /**
             * Split on one or several spaces
             */
-            String[] tokens = lines[i].split("\\s+");
-            if (tokens.length < 3) {
-                NotifyDescriptor d =
-                        new NotifyDescriptor.Message(
-                        "We should have field ID, indexing Tech and format surrounded by space!" + "\nError on FST line:\n" + lines[i]);
-                DialogDisplayer.getDefault().notify(d);
-                hasErrors = true;
-                continue;
-            }
-            int fieldID = 0;
-            try {
-                fieldID = Integer.parseInt(tokens[0]);
-            } catch (NumberFormatException pe) {
-                NotifyDescriptor d =
-                        new NotifyDescriptor.Message("Error on FST line, Invalid field ID:\n" + lines[i]);
-                DialogDisplayer.getDefault().notify(d);
-                hasErrors = true;
-                continue;
-            }
-            int tech = 0;
-            try {
-                tech = Integer.parseInt(tokens[1]);
-            } catch (NumberFormatException pe) {
-                NotifyDescriptor d =
-                        new NotifyDescriptor.Message("Error on FST line, Invalid Technique:\n" + lines[i]);
-                DialogDisplayer.getDefault().notify(d);
-                hasErrors = true;
-                continue;
-            }
-            String format = "";
-            for (int j = 2; j < tokens.length; j++) {
-                format += tokens[j];
-                format += " ";
-            }
-            hasErrors = false;
-            try {
-                ISISFormatter il = ISISFormatter.getFormatter(format);
-                if (il == null) {
-                    GuiGlobal.output(ISISFormatter.getParsingError());
-                    hasErrors = true;
-                } else if (il.hasParsingError()) {
-                    GuiGlobal.output(ISISFormatter.getParsingError());
-                    hasErrors = true;
-                }
-                
-            } catch (Exception e) {
-                NotifyDescriptor d =
-                        new NotifyDescriptor.Message("Error on FST line, Invalid Format:\n" + lines[i]);
-                DialogDisplayer.getDefault().notify(d);
-                hasErrors = true;
-                continue;
-            }
-            FieldSelectionTable.FstEntry e = new FieldSelectionTable.FstEntry(fieldID, "", tech, format);
-          try {
-             fst.addEntryAlways(e);
-          } catch (DbException ex) {
-             Exceptions.printStackTrace(ex);
-          }
-        }
+           String[] tokens = line.split("\\s+");
+           if (tokens.length < 3) {
+               NotifyDescriptor d = new NotifyDescriptor.Message("We should have field ID, indexing Tech and format surrounded by space!" + "\nError on FST line:\n" + line);
+               DialogDisplayer.getDefault().notify(d);
+               hasErrors = true;
+               continue;
+           }
+           int fieldID = 0;
+           try {
+               fieldID = Integer.parseInt(tokens[0]);
+           } catch (NumberFormatException pe) {
+               NotifyDescriptor d = new NotifyDescriptor.Message("Error on FST line, Invalid field ID:\n" + line);
+               DialogDisplayer.getDefault().notify(d);
+               hasErrors = true;
+               continue;
+           }
+           int tech = 0;
+           try {
+               tech = Integer.parseInt(tokens[1]);
+           } catch (NumberFormatException pe) {
+               NotifyDescriptor d = new NotifyDescriptor.Message("Error on FST line, Invalid Technique:\n" + line);
+               DialogDisplayer.getDefault().notify(d);
+               hasErrors = true;
+               continue;
+           }
+           String format = "";
+           for (int j = 2; j < tokens.length; j++) {
+               format += tokens[j];
+               format += " ";
+           }
+           hasErrors = false;
+           try {
+               ISISFormatter il = ISISFormatter.getFormatter(format);
+               if (il == null) {
+                   GuiGlobal.output(ISISFormatter.getParsingError());
+                   hasErrors = true;
+               } else if (il.hasParsingError()) {
+                   GuiGlobal.output(ISISFormatter.getParsingError());
+                   hasErrors = true;
+               }
+           } catch (Exception e) {
+               NotifyDescriptor d = new NotifyDescriptor.Message("Error on FST line, Invalid Format:\n" + line);
+               DialogDisplayer.getDefault().notify(d);
+               hasErrors = true;
+               continue;
+           }
+           FieldSelectionTable.FstEntry e = new FieldSelectionTable.FstEntry(fieldID, "", tech, format);
+           try {
+               fst.addEntryAlways(e);
+           } catch (DbException ex) {
+               Exceptions.printStackTrace(ex);
+           }
+       }
         return (hasErrors)
                 ? null
                 : fst;
@@ -256,6 +251,7 @@ public class SortDatabase implements Runnable {
    static class CancellableProgress implements Cancellable {
       private boolean cancelled = false;
 
+      @Override
       public boolean cancel() {
          cancelled = true;
          return true;
