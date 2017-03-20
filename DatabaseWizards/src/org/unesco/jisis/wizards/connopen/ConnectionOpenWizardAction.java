@@ -2,26 +2,26 @@ package org.unesco.jisis.wizards.connopen;
 
 import java.awt.Component;
 import java.awt.Dialog;
-import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JComponent;
-import org.netbeans.api.progress.BaseProgressUtils;
 
 
 import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
 import org.openide.WizardDescriptor;
-import org.openide.awt.StatusDisplayer;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.CallableSystemAction;
 import org.slf4j.LoggerFactory;
-import org.unesco.jisis.corelib.client.ConnectionNIO;
+import org.unesco.jisis.corelib.client.ConnectionInfo;
 import org.unesco.jisis.corelib.client.ConnectionPool;
-import org.unesco.jisis.corelib.exceptions.DbException;
-import org.unesco.jisis.corelib.util.Notification;
+import org.unesco.jisis.corelib.common.DbInfo;
+import org.unesco.jisis.corelib.common.IConnection;
+import org.unesco.jisis.corelib.server.DbServerService;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.DirectConnectOpen;
+import org.unesco.jisis.jisisutils.proxy.MRUDatabasesOptions;
 import org.unesco.jisis.windows.connection.ConnTopComponent;
+import org.unesco.jisis.windows.databases.DbTopComponent;
 
 // An example action demonstrating how the wizard could be called from within
 // your code. You can copy-paste the code below wherever you need.
@@ -92,103 +92,48 @@ public final class ConnectionOpenWizardAction extends CallableSystemAction {
       return panels;
    }
 
-   private void finished(WizardDescriptor wd) {
-      final String hostname = (String) wd.getProperty("hostname");
-      final String port = (String) wd.getProperty("port");
-      final String username = (String) wd.getProperty("username");
-      final String password = (String) wd.getProperty("password");
+    private void finished(WizardDescriptor wd) {
+        final String hostname = (String) wd.getProperty("hostname");
+        final String port = (String) wd.getProperty("port");
+        final String username = (String) wd.getProperty("username");
+        final String password = (String) wd.getProperty("password");
 
-
-      guiConnectToServer(hostname, port, username, password);
-      ConnTopComponent.findInstance().refresh();
-      
-   }
+        DirectConnectOpen.guiConnectToServer(hostname, port, username, password);
+        /**
+         * Check that server connection succeeded
+         */
+        if (ConnectionPool.findConnection(hostname, Integer.parseInt(port)) == -1) {
+            return;
+        }
    
-   /**
-    * 
-    * @param hostname
-    * @param port
-    * @param username
-    * @param password 
-    */
-    public void guiConnectToServer(final String hostname, final String port,
-            final String username, final String password) {
+        ConnTopComponent.findInstance().refresh();
 
-        final AtomicBoolean cancel = new AtomicBoolean();
+        /**
+         * Do we have a database to open ?
+         */
+        String dbHome;
+        String dbName;
+        if (DbServerService.dbToOpenIsSet()) {
+            dbHome = DbServerService.getJisisDbHomeToOpen();
+            dbName = DbServerService.getJisisDbNameToOpen();
+            ConnectionInfo connectionInfo = ConnectionPool.getDefaultConnectionInfo();
+            IConnection connection = connectionInfo.getConnection();
+            final ClientDatabaseProxy db = new ClientDatabaseProxy(connectionInfo.getConnection());
+            DirectConnectOpen.openViewDatabase(db, dbHome, dbName);
+            connectionInfo.addDatabase(db);
 
-        final String msg = NbBundle.getMessage(ConnectionOpenWizardAction.class, "MSG_ConnectedToServer");
-        Runnable task = () -> {
+            final DbInfo dbInfo = new DbInfo(connection.getUserInfo(), connection.getServer(),
+                    connection.getPort(),
+                    dbHome, dbName);
+            MRUDatabasesOptions opts = MRUDatabasesOptions.getInstance();
+            opts.addDatabase(dbInfo);
+            DbTopComponent.findInstance().refresh();
 
-            Notification notification = connectToServer(hostname, port, username, password);
-            if (notification.hasErrors() || notification.hasExceptions()) {
-                DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(notification.errorMessage()));
-
-            } else {
-                StatusDisplayer.getDefault().setStatusText(msg);
-            }
-        };
-
-        final String msg1 = NbBundle.getMessage(ConnectionOpenWizardAction.class, "MSG_ConnectionToServerPleaseWait");
-        BaseProgressUtils.runOffEventDispatchThread(task,
-                msg1,
-                cancel,
-                false,
-                0, 0);
-
-    }
-
-    /**
-     * Connection to the server - A Notification object is used to collect 
-     * information about errors during the connection and authentication.
-     * 
-     * The Notification object is sent back to the presentation so that it
-     * can display further information about the errors.
-     * @param hostname
-     * @param port
-     * @param username
-     * @param password
-     * @return 
-     */
-    public Notification connectToServer(final String hostname, final String port,
-            final String username, final String password) {
-
-        final Notification notification = new Notification();
-
-        final int i = ConnectionPool.findConnection(hostname, Integer.parseInt(port));
-        if (i != -1) {
-            final String errorMsg = NbBundle.getMessage(ConnectionOpenWizardAction.class, "MSG_ConnAlreadyEstablished", hostname, port);
-            notification.addError(errorMsg);
-        } else {
-            try {
-                ConnectionNIO connection = (ConnectionNIO) ConnectionNIO.connect(hostname, Integer.parseInt(port));
-                /**
-                 * Connection established, Try to authenticate on server side
-                 */
-                boolean success = connection.authenticate(username, password);
-                if (success) {
-                    ConnectionPool.addConnection(connection);
-                } else {
-                    final String errorMsg = NbBundle.getMessage(ConnectionOpenWizardAction.class, "MSG_CannotAuthenticate");
-                    
-                    notification.addError(errorMsg);
-                    connection.close();
-                }
-            } catch (DbException | IOException ex) {
-                
-                final String errorMsg = NbBundle.getMessage(ConnectionOpenWizardAction.class, "MSG_ExceptionRaised", ex.getMessage());
-                LOGGER.error(errorMsg, ex);
-                notification.addError(errorMsg, ex);
-            } catch (Exception ex) {
-                final String errorMsg = NbBundle.getMessage(ConnectionOpenWizardAction.class, "MSG_ExceptionRaised", ex.getMessage());
-                LOGGER.error(errorMsg, ex);
-                notification.addError(errorMsg, ex); 
-            }
+            //DbTopComponent.findInstance().requestActive();
         }
 
-        return notification;
-
     }
-
+ 
    @Override
    public String getName() {
       return NbBundle.getMessage(ConnectionOpenWizardAction.class, "CTL_ConnOpenWizardAction");

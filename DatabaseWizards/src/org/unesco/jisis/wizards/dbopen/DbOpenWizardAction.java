@@ -3,7 +3,6 @@ package org.unesco.jisis.wizards.dbopen;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.text.MessageFormat;
-import java.util.Date;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.RepaintManager;
@@ -11,7 +10,6 @@ import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.WizardDescriptor;
 import org.openide.awt.StatusDisplayer;
-import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
@@ -20,26 +18,22 @@ import org.openide.windows.WindowManager;
 import org.unesco.jisis.corelib.client.ConnectionInfo;
 
 import org.unesco.jisis.corelib.client.ConnectionPool;
-import org.unesco.jisis.corelib.common.DbInfo;
-import org.unesco.jisis.corelib.common.Global;
 import org.unesco.jisis.corelib.common.IConnection;
-import org.unesco.jisis.corelib.exceptions.NoDatabaseSelectedException;
-import org.unesco.jisis.database.explorer.DbViewAction;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.DirectConnectOpen;
 
-import org.unesco.jisis.mrudatabases.MRUDatabasesOptions;
-import org.unesco.jisis.windows.databases.*;
 
 // An example action demonstrating how the wizard could be called from within
 // your code. You can copy-paste the code below wherever you need.
 public final class DbOpenWizardAction extends CallableSystemAction {
     
-    private WizardDescriptor.Panel<org.openide.WizardDescriptor>[] panels;
+    private WizardDescriptor.Panel<org.openide.WizardDescriptor>[] panels_;
 
-    private IConnection conn;
+    private IConnection connection_;
     
     
     
+    @Override
     public void performAction() {
        
        if (!ConnectionPool.ensureDefaultConnection()) {
@@ -49,8 +43,8 @@ public final class DbOpenWizardAction extends CallableSystemAction {
        }
        
         try {
-            conn = ConnectionPool.getDefaultConnection();
-            if (conn == null) {
+            connection_ = ConnectionPool.getDefaultConnection();
+            if (connection_ == null) {
                String errorMsg = NbBundle.getMessage(DbOpenWizardAction.class, "MSG_NoConnection");
                DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(errorMsg));
                return;
@@ -95,65 +89,70 @@ public final class DbOpenWizardAction extends CallableSystemAction {
         frame.getGlassPane().setCursor(Utilities.createProgressCursor(frame));
         frame.getGlassPane().setVisible(true);
 
+         connection_ = ConnectionPool.getDefaultConnection();
+         ClientDatabaseProxy db = new ClientDatabaseProxy(connection_);
+         DirectConnectOpen.openViewDatabase(db, dbHome, dbName);
 
 
-//        Runnable openRun = new Runnable() {
+////        Runnable openRun = new Runnable() {
+////
+////            public void run() {
+////                if (!EventQueue.isDispatchThread()) {
+//                    try {
+//                        //Global.output("Starting Open");
+//                        Date start = new Date();
 //
-//            public void run() {
-//                if (!EventQueue.isDispatchThread()) {
-                    try {
-                        //Global.output("Starting Open");
-                        Date start = new Date();
-
-                        conn = ConnectionPool.getDefaultConnection();
-                        ClientDatabaseProxy db = new ClientDatabaseProxy(conn);
-                        db.getDatabase(dbHome, dbName, Global.DATABASE_DURABILITY_WRITE);
-                        //DatabasePool.addDatabase(db);
-                         connectionInfo.addDatabase(db);
-
-                        Date end = new Date();
-                    //Global.output(Long.toString(end.getTime() - start.getTime())
-                    //              + " milliseconds to import ISO file");
-                        try {
-
-                            DbViewAction dbViewAction = new DbViewAction();
-                            dbViewAction.actionPerformed(null);
-
-                        } catch (ClassCastException cce) {
-                            new NoDatabaseSelectedException().displayWarning();
-                        }
-                    } catch (Exception ex) {
-                        Exceptions.printStackTrace(ex);
-                    } finally {
-                        // clear status text
-                        StatusDisplayer.getDefault().setStatusText(""); // NOI18N
-                        // clear wait cursor
-                        frame.getGlassPane().setCursor(null);
-                        frame.getGlassPane().setVisible(false);
-
-//                        EventQueue.invokeLater(this);
-
-                    }
-                // Second Invocation, we are on the event queue now
-//               }
-//            }
-//        };
+//                        connection_ = ConnectionPool.getDefaultConnection();
+//                        ClientDatabaseProxy db = new ClientDatabaseProxy(connection_);
+//                        db.getDatabase(dbHome, dbName, Global.DATABASE_DURABILITY_WRITE);
+//                        //DatabasePool.addDatabase(db);
+//                         connectionInfo.addDatabase(db);
 //
-//        RequestProcessor.Task openTask = null;
-//        openTask = RequestProcessor.getDefault().post(openRun);
-//                
-//        openTask.waitFinished();
-        
-        DbTopComponent.findInstance().refresh();
-        //StatusDisplayer.getDefault().setStatusText("Default Db: " + dbHome + "//" + dbName);
-
-
-
-        final DbInfo dbInfo = new DbInfo(conn.getUserInfo(), conn.getServer(),
-                conn.getPort(),
-                dbHome, dbName);
-        MRUDatabasesOptions opts = MRUDatabasesOptions.getInstance();
-        opts.addDatabase(dbInfo);
+//                        Date end = new Date();
+//                    //Global.output(Long.toString(end.getTime() - start.getTime())
+//                    //              + " milliseconds to import ISO file");
+//                        try {
+//
+//                            DbViewAction dbViewAction = new DbViewAction();
+//                            dbViewAction.actionPerformed(null);
+//
+//                        } catch (ClassCastException cce) {
+//                            new NoDatabaseSelectedException().displayWarning();
+//                        }
+//                    } catch (Exception ex) {
+//                        Exceptions.printStackTrace(ex);
+//                    } finally {
+//                        // clear status text
+//                        StatusDisplayer.getDefault().setStatusText(""); // NOI18N
+//                        // clear wait cursor
+//                        frame.getGlassPane().setCursor(null);
+//                        frame.getGlassPane().setVisible(false);
+//
+////                        EventQueue.invokeLater(this);
+//
+//                    }
+//                // Second Invocation, we are on the event queue now
+////               }
+////            }
+////        };
+////
+////        RequestProcessor.Task openTask = null;
+////        openTask = RequestProcessor.getDefault().post(openRun);
+////                
+////        openTask.waitFinished();
+//        
+//        DbTopComponent.findInstance().refresh();
+//        //StatusDisplayer.getDefault().setStatusText("Default Db: " + dbHome + "//" + dbName);
+//
+//
+//
+//        final DbInfo dbInfo = new DbInfo(connection_.getUserInfo(), connection_.getServer(),
+//                connection_.getPort(),
+//                dbHome, dbName);
+//        MRUDatabasesOptions opts = MRUDatabasesOptions.getInstance();
+//        opts.addDatabase(dbInfo);
+        frame.getGlassPane().setCursor(null);
+        frame.getGlassPane().setVisible(false);
 
     }
     
@@ -162,14 +161,14 @@ public final class DbOpenWizardAction extends CallableSystemAction {
      * various properties for them influencing wizard appearance.
      */
     private WizardDescriptor.Panel[] getPanels() {
-        if (panels == null) {
-            panels = new WizardDescriptor.Panel[] {
+        if (panels_ == null) {
+            panels_ = new WizardDescriptor.Panel[] {
                 new DbOpenWizardPanel1()
                 //new DbOpenWizardPanel2()
             };
-            String[] steps = new String[panels.length];
-            for (int i = 0; i < panels.length; i++) {
-                Component c = panels[i].getComponent();
+            String[] steps = new String[panels_.length];
+            for (int i = 0; i < panels_.length; i++) {
+                Component c = panels_[i].getComponent();
                 // Default step name to component name of panel. Mainly useful
                 // for getting the name of the target chooser to appear in the
                 // list of steps.
@@ -189,7 +188,7 @@ public final class DbOpenWizardAction extends CallableSystemAction {
                 }
             }
         }
-        return panels;
+        return panels_;
     }
     
     public String getName() {

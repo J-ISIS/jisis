@@ -22,7 +22,7 @@ import org.unesco.jisis.corelib.client.ConnectionPool;
 import org.unesco.jisis.corelib.common.Global;
 import org.unesco.jisis.corelib.common.IConnection;
 import org.unesco.jisis.corelib.exceptions.DbException;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 
 /**
  *

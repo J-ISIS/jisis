@@ -14,9 +14,9 @@ import org.unesco.jisis.corelib.client.ConnectionPool;
 import org.unesco.jisis.corelib.common.Global;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.gui.DirectoryChooser;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.MarkedRecords;
-import org.unesco.jisis.jisiscore.client.SearchResult;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.MarkedRecords;
+import org.unesco.jisis.jisisutils.proxy.SearchResult;
 
 /**
  *

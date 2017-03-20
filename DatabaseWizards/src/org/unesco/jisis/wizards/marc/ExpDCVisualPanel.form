@@ -85,7 +85,7 @@
                   <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cmbEncoding" max="32767" attributes="1"/>
+                  <Component id="cmbEncoding" pref="209" max="32767" attributes="1"/>
                   <EmptySpace min="-2" pref="224" max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
@@ -219,7 +219,7 @@
                       <Component id="jLabel7" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="txtOutputTagMFN" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="71" max="32767" attributes="0"/>
+                  <EmptySpace pref="97" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
