@@ -137,7 +137,7 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>org.unesco.jisis.lucene_6_3_0</code-name-base>
+                    <code-name-base>org.unesco.jisis.lucene_6_4_2</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>

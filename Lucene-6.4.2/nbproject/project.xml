@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.apisupport.project</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
-            <code-name-base>org.unesco.jisis.lucene_6_3_0</code-name-base>
+            <code-name-base>org.unesco.jisis.lucene_6_4_2</code-name-base>
             <suite-component/>
             <module-dependencies/>
             <public-packages>
@@ -123,34 +123,35 @@
                 <package>org.apache.lucene.util.automaton</package>
                 <package>org.apache.lucene.util.bkd</package>
                 <package>org.apache.lucene.util.fst</package>
+                <package>org.apache.lucene.util.graph</package>
                 <package>org.apache.lucene.util.mutable</package>
                 <package>org.apache.lucene.util.packed</package>
                 <package>org.tartarus.snowball</package>
                 <package>org.tartarus.snowball.ext</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/lucene-backward-codecs-6.3.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/lucene-backward-codecs-6.3.0.jar</binary-origin>
+                <runtime-relative-path>ext/lucene-core-6.4.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/lucene-core-6.4.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/lucene-core-6.3.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/lucene-core-6.3.0.jar</binary-origin>
+                <runtime-relative-path>ext/lucene-backward-codecs-6.4.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/lucene-backward-codecs-6.4.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/lucene-analyzers-common-6.3.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/lucene-analyzers-common-6.3.0.jar</binary-origin>
+                <runtime-relative-path>ext/lucene-queries-6.4.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/lucene-queries-6.4.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/lucene-queryparser-6.3.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/lucene-queryparser-6.3.0.jar</binary-origin>
+                <runtime-relative-path>ext/lucene-misc-6.4.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/lucene-misc-6.4.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/lucene-misc-6.3.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/lucene-misc-6.3.0.jar</binary-origin>
+                <runtime-relative-path>ext/lucene-queryparser-6.4.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/lucene-queryparser-6.4.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/lucene-queries-6.3.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/lucene-queries-6.3.0.jar</binary-origin>
+                <runtime-relative-path>ext/lucene-analyzers-common-6.4.2.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/lucene-analyzers-common-6.4.2.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>
