@@ -58,6 +58,7 @@ import org.unesco.jisis.corelib.exceptions.RecordNotFoundException;
 import org.unesco.jisis.corelib.pft.ISISFormatter;
 import org.unesco.jisis.corelib.record.IField;
 import org.unesco.jisis.corelib.record.IRecord;
+import org.unesco.jisis.corelib.server.DbServerService;
 import org.unesco.jisis.fxbrowser.SwingFXWebView;
 import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
@@ -228,6 +229,13 @@ public class DbViewTopComponent extends TopComponent implements Observer {
          }
          String pftName = "RAW";
          String pftFormat = "";
+         if (DbServerService.getJisisPFT().equals("_none_")) {
+             // Do nothing
+         } else {
+             pftName = DbServerService.getJisisPFT();
+             userRawPft = false;
+             
+         }
          currentPft_ = new PrintFormat(pftName, pftFormat);
          cmbSelectPft.setModel(new DefaultComboBoxModel(pftNames));
 
@@ -507,29 +515,28 @@ public class DbViewTopComponent extends TopComponent implements Observer {
        // TODO add your handling code here:
     }//GEN-LAST:event_txtMFNActionPerformed
 
-    private void cmbSelectPftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSelectPftActionPerformed
-
-        try {
+    private void compilePFT() {
+         try {
             // TODO add your handling code here:
             String fmtName = cmbSelectPft.getSelectedItem().toString();
             String fmt = "";
 
             ISISFormatter formatter = null;
              fmt = db_.getPrintFormat(fmtName);
-             if (fmt == null || fmt.equals("")) {
-            
-                fmt = "";
-            } else {
-                fmt = db_.getPrintFormat(fmtName);
-                formatter = ISISFormatter.getFormatter(fmt);
-                if (formatter == null) {
-                    GuiGlobal.output(ISISFormatter.getParsingError());
-                    return;
-                } else if (formatter.hasParsingError()) {
-                    GuiGlobal.output(ISISFormatter.getParsingError());
-                    return;
-                }
-            }
+//             if (fmt == null || fmt.equals("")) {
+//            
+//                fmt = "";
+//            } else {
+//                fmt = db_.getPrintFormat(fmtName);
+//                formatter = ISISFormatter.getFormatter(fmt);
+//                if (formatter == null) {
+//                    GuiGlobal.output(ISISFormatter.getParsingError());
+//                    return;
+//                } else if (formatter.hasParsingError()) {
+//                    GuiGlobal.output(ISISFormatter.getParsingError());
+//                    return;
+//                }
+//            }
             currentPft_.setName(fmtName);
             currentPft_.setFormat(fmt);
             currentPft_.setFormatter(formatter);
@@ -537,6 +544,10 @@ public class DbViewTopComponent extends TopComponent implements Observer {
         } catch (DbException ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+    private void cmbSelectPftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSelectPftActionPerformed
+
+        compilePFT();
         try {
             displayRecord(db_.getRecordFmt(currentMfn_, currentPft_.getName()));
         } catch (DbException ex) {
