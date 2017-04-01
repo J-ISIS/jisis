@@ -84,7 +84,7 @@ public class DbViewTopComponent extends TopComponent implements Observer {
    private PrintFormat currentPft_;
    //private Browser newWebBrowser_ = null;
    private long currentMfn_ = 0;
-   private ArrayList<Long> markedRecords_ = new ArrayList<Long>();
+   private ArrayList<Long> markedRecords_ = new ArrayList<>();
    private SwingFXWebView swingFXWebView = null;
    
    private DbChangedControl poll_;
@@ -94,7 +94,6 @@ public class DbViewTopComponent extends TopComponent implements Observer {
  
    //private IRecord _rec = null;
    public DbViewTopComponent(IDatabase db) {
-
 
       if (db instanceof ClientDatabaseProxy) {
          db_ = (ClientDatabaseProxy) db;
@@ -142,7 +141,11 @@ public class DbViewTopComponent extends TopComponent implements Observer {
          txtMaxMfn.setText(maxMFN + "");
          setName(NbBundle.getMessage(DbViewTopComponent.class, "CTL_DbViewTopComponent") 
                  + " (" +db.getDbHome()+"//"+ db_.getDatabaseName() + ")");
-         displayFirstRecord();
+         
+         FormattedRecord fmtRecord = db_.getFirstFmt(currentPft_.getName());
+         currentMfn_ = fmtRecord.getMfn();
+         //displayFirstRecord();
+         cmbSelectPft.setSelectedItem(currentPft_.getName());
 
       } catch (DbException ex) {
          new GeneralDatabaseException(ex).displayWarning();
@@ -229,16 +232,23 @@ public class DbViewTopComponent extends TopComponent implements Observer {
          }
          String pftName = "RAW";
          String pftFormat = "";
+          cmbSelectPft.setModel(new DefaultComboBoxModel(pftNames));
          if (DbServerService.getJisisPFT().equals("_none_")) {
              // Do nothing
          } else {
-             pftName = DbServerService.getJisisPFT();
-             userRawPft = false;
+             String name = DbServerService.getJisisPFT();
+             for (int i=0; i< pftNames.length; i++) {
+                 if (pftNames[i].equals(name)) {
+                     userRawPft = false;
+                     
+                     pftName = name;
+                     break;
+                 }
+             }
+             
              
          }
-         currentPft_ = new PrintFormat(pftName, pftFormat);
-         cmbSelectPft.setModel(new DefaultComboBoxModel(pftNames));
-
+         currentPft_ = new PrintFormat(pftName, pftFormat);       
       } catch (DbException ex) {
          new GeneralDatabaseException(ex).displayWarning();
       }

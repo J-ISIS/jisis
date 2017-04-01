@@ -113,7 +113,7 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>org.unesco.jisis.lucene_6_4_2</code-name-base>
+                    <code-name-base>org.unesco.jisis.searchhistory</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
@@ -121,7 +121,7 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>org.unesco.jisis.searchhistory</code-name-base>
+                    <code-name-base>org.unesco.lucene_6_5_0</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>

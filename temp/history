@@ -33,6 +33,9 @@ C:\\J-ISIS 2014\\jisis\\work
 [PATR_txtMfns]
 6
 1
+[TestRepeatableLiteral_expertSearch]
+_270:\"1966\"
+_270:1966
 [SciELO_FreeTextSearch]
 v0:\'Cristiano\'
 [jeanclaude_FreeTextSearch]
