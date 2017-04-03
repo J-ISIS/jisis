@@ -128,14 +128,6 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>org.unesco.jisis.lucene_6_3_0</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>1.0</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
                     <code-name-base>org.unesco.jisis.swingx</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -145,6 +137,14 @@
                 </dependency>
                 <dependency>
                     <code-name-base>org.unesco.jisis.tika_1_13</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.unesco.lucene_6_5_0</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>

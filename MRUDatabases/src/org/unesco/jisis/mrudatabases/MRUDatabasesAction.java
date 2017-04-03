@@ -6,6 +6,7 @@ package org.unesco.jisis.mrudatabases;
 
 
 
+import org.unesco.jisis.jisisutils.proxy.MRUDatabasesOptions;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -29,11 +30,9 @@ import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
-import org.openide.util.Utilities;
 import org.openide.util.actions.CallableSystemAction;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-import org.unesco.jisis.*;
 import org.unesco.jisis.corelib.client.ConnectionInfo;
 import org.unesco.jisis.corelib.client.ConnectionNIO;
 import org.unesco.jisis.corelib.client.ConnectionPool;
@@ -43,7 +42,7 @@ import org.unesco.jisis.corelib.common.IConnection;
 import org.unesco.jisis.corelib.common.UserInfo;
 import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.database.explorer.DbViewAction;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 import org.unesco.jisis.jisisutils.threads.IdeCursor;
 import org.unesco.jisis.windows.connection.ConnTopComponent;
 import org.unesco.jisis.windows.databases.DbTopComponent;
@@ -51,10 +50,12 @@ import org.unesco.jisis.windows.databases.DbTopComponent;
 public final class MRUDatabasesAction extends CallableSystemAction {
 
   
+   @Override
    public void performAction() {
       // TODO implement action body
    }
 
+   @Override
    public String getName() {
       return NbBundle.getMessage(MRUDatabasesAction.class, "CTL_MRUDatabasesAction");
    }
@@ -66,6 +67,7 @@ public final class MRUDatabasesAction extends CallableSystemAction {
       putValue("noIconInMenu", Boolean.TRUE);
    }
 
+   @Override
    public HelpCtx getHelpCtx() {
       return HelpCtx.DEFAULT_HELP;
    }
@@ -77,7 +79,7 @@ public final class MRUDatabasesAction extends CallableSystemAction {
    
  
     /** {@inheritDoc}
-     * Overide to provide SubMenu for MRUDatabases (Most Recently Used Databases)
+     * Override to provide SubMenu for MRUDatabases (Most Recently Used Databases)
      * @return 
      */
    @Override
@@ -95,6 +97,7 @@ public final class MRUDatabasesAction extends CallableSystemAction {
  
             MRUDatabasesOptions opts = MRUDatabasesOptions.getInstance();
             opts.addPropertyChangeListener(new PropertyChangeListener() {
+                @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (!evt.getPropertyName().equals(MRUDatabasesOptions.MRU_FILE_LIST_PROPERTY)) {
                        return;
@@ -106,10 +109,12 @@ public final class MRUDatabasesAction extends CallableSystemAction {
             updateMenu();
         }
  
+        @Override
         public JComponent[] getMenuPresenters() {
             return new JComponent[] {this};
         }
  
+        @Override
         public JComponent[] synchMenuPresenters(JComponent[] items) {
             return getMenuPresenters();
         }
@@ -140,6 +145,7 @@ public final class MRUDatabasesAction extends CallableSystemAction {
              this.dbInfo_ = dbInfo;
           }
 
+          @Override
           public void actionPerformed(ActionEvent e) {
              menuItemActionPerformed(dbInfo_);
           }
@@ -173,11 +179,7 @@ public final class MRUDatabasesAction extends CallableSystemAction {
             try {
 
                connection = ConnectionNIO.connect(server, port, userName, passWord);
-            } catch (DbException ex) {
-               NotifyDescriptor nd = new NotifyDescriptor.Message(ex.getMessage(), NotifyDescriptor.ERROR_MESSAGE);
-               DialogDisplayer.getDefault().notify(nd);
-               Exceptions.printStackTrace(ex);
-            } catch (IOException ex) {
+            } catch (DbException | IOException ex) {
                NotifyDescriptor nd = new NotifyDescriptor.Message(ex.getMessage(), NotifyDescriptor.ERROR_MESSAGE);
                DialogDisplayer.getDefault().notify(nd);
                Exceptions.printStackTrace(ex);
@@ -214,7 +216,7 @@ public final class MRUDatabasesAction extends CallableSystemAction {
       }
    }
 
-   private void openViewDatabase(final ClientDatabaseProxy db, final String dbHome, final String dbName) {
+   public static void openViewDatabase(final ClientDatabaseProxy db, final String dbHome, final String dbName) {
       final JFrame frame = (JFrame) WindowManager.getDefault().getMainWindow();
 
       // Set status text
@@ -226,6 +228,7 @@ public final class MRUDatabasesAction extends CallableSystemAction {
     
 
       Runnable openRun = new Runnable() {
+         @Override
          public void run() {
              if (!EventQueue.isDispatchThread()) {
                  try {

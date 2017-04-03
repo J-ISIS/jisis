@@ -18,7 +18,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import org.openide.util.ImageUtilities;
 import org.unesco.jisis.corelib.client.ConnectionInfo;
 import org.unesco.jisis.corelib.client.ConnectionPool;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 
 /**
  *
@@ -28,8 +28,8 @@ public class DbTreeCellRenderer extends DefaultTreeCellRenderer {
     
     static final String FOLDER_ICON_PATH = "org/unesco/jisis/windows/databases/folder.png";
     static final String ICON_PATH = "org/unesco/jisis/windows/databases/data.png";
-    static final ImageIcon folderIcon = new ImageIcon(ImageUtilities.loadImage(FOLDER_ICON_PATH, true));
-    static final ImageIcon leafIcon = new ImageIcon(ImageUtilities.loadImage(ICON_PATH, true));
+    static final ImageIcon FOLDER_ICON = new ImageIcon(ImageUtilities.loadImage(FOLDER_ICON_PATH, true));
+    static final ImageIcon LEAF_ICON = new ImageIcon(ImageUtilities.loadImage(ICON_PATH, true));
     
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
@@ -51,9 +51,9 @@ public class DbTreeCellRenderer extends DefaultTreeCellRenderer {
         }
         cell.setText(s + (isDefault ? " (default)" : ""));
         if (value instanceof DefaultMutableTreeNode) {
-            cell.setIcon(folderIcon);
+            cell.setIcon(FOLDER_ICON);
         } else {
-            cell.setIcon(leafIcon);
+            cell.setIcon(LEAF_ICON);
         }
         return cell;
     }

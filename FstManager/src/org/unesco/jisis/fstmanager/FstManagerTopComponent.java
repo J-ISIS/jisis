@@ -29,8 +29,8 @@ import org.unesco.jisis.corelib.exceptions.GeneralDatabaseException;
 import org.unesco.jisis.corelib.pft.ISISFormatter;
 import org.unesco.jisis.corelib.record.IRecord;
 import org.unesco.jisis.corelib.util.StringUtils;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 import org.unesco.jisis.jisiscore.common.FSTModelEx;
 import static org.unesco.jisis.jisiscore.common.FSTModelEx.NAME_COLUMN_INDEX;
 

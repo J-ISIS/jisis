@@ -19,7 +19,7 @@ import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.unesco.jisis.corelib.client.ConnectionInfo;
 import org.unesco.jisis.corelib.exceptions.DbException;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 
 /**
  *
@@ -29,8 +29,8 @@ public class DbTreeCellRenderer extends DefaultTreeCellRenderer {
     
     static final String FOLDER_ICON_PATH = "org/unesco/jisis/gui/folder.png";
     static final String ICON_PATH        = "org/unesco/jisis/gui/data.png";
-    static final ImageIcon jisisFolderIcon = new ImageIcon(ImageUtilities.loadImage(FOLDER_ICON_PATH, true));
-    static final ImageIcon jisisLeafIcon = new ImageIcon(ImageUtilities.loadImage(ICON_PATH, true));
+    static final ImageIcon JISIS_FOLDER_ICON = new ImageIcon(ImageUtilities.loadImage(FOLDER_ICON_PATH, true));
+    static final ImageIcon JISIS_LEAF_ICON = new ImageIcon(ImageUtilities.loadImage(ICON_PATH, true));
     
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value,
@@ -44,7 +44,7 @@ public class DbTreeCellRenderer extends DefaultTreeCellRenderer {
         if (userObject instanceof ConnectionInfo) {
             ConnectionInfo conInfo = (ConnectionInfo) userObject;
             s = conInfo.toString();
-            cell.setIcon(jisisFolderIcon);
+            cell.setIcon(JISIS_FOLDER_ICON);
 
         } else if (userObject instanceof ClientDatabaseProxy) {
             ClientDatabaseProxy db = (ClientDatabaseProxy) userObject;
@@ -53,7 +53,7 @@ public class DbTreeCellRenderer extends DefaultTreeCellRenderer {
             } catch (DbException ex) {
                 Exceptions.printStackTrace(ex);
             }
-            cell.setIcon(jisisLeafIcon);
+            cell.setIcon(JISIS_LEAF_ICON);
 
         } else {
             //Should be of type String

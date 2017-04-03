@@ -48,6 +48,22 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>org.openide.dialogs</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>7.42.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.openide.filesystems</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>9.10.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.openide.io</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -110,6 +126,7 @@
                 <package>org.unesco.jisis.jisisutils.distributed</package>
                 <package>org.unesco.jisis.jisisutils.gui</package>
                 <package>org.unesco.jisis.jisisutils.gui.rowheader</package>
+                <package>org.unesco.jisis.jisisutils.proxy</package>
                 <package>org.unesco.jisis.jisisutils.threads</package>
                 <package>org.unesco.jisis.sorting</package>
             </public-packages>

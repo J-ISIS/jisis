@@ -6,7 +6,6 @@ package org.unesco.jisis.index;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.unesco.jisis.jisiscore.client.*;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 
@@ -18,7 +17,8 @@ import org.openide.util.Exceptions;
 import java.util.Date;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.corelib.exceptions.DbException;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 /**
  *
@@ -39,6 +39,7 @@ public class ReIndex implements Runnable {
    // -----------------------------------------------------------------------
    // Runnable -- this should only run on a background thread, never AWT thread.
    // -----------------------------------------------------------------------
+   @Override
     public void run() {
 
         String dbName = null;
@@ -53,6 +54,7 @@ public class ReIndex implements Runnable {
         Date start = new Date();
         final ProgressHandle progress = ProgressHandleFactory.createHandle("Re Indexing: " + dbName + "...", new Cancellable() {
 
+            @Override
             public boolean cancel() {
                 cancelled = true;
                 return true;

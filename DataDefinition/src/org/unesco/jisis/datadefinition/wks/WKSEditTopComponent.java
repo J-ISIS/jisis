@@ -20,8 +20,8 @@ import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.corelib.exceptions.DefaultDBNotFoundException;
 import org.unesco.jisis.corelib.exceptions.GeneralDatabaseException;
 import org.unesco.jisis.corelib.exceptions.ResourceNotFoundException;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 
 /**
  * Top component which displays something.

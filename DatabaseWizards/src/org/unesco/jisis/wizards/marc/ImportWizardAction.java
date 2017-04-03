@@ -26,8 +26,8 @@ import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.gui.Util;
 import org.unesco.jisis.importexport.ImpExpTool;
 import org.unesco.jisis.importexport.ImportException;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.mrudatabases.MRUDatabasesOptions;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.MRUDatabasesOptions;
 
 
 //An example action demonstrating how the wizard could be called from within

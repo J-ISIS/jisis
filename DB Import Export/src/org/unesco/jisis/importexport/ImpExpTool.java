@@ -47,7 +47,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.marc4j.MarcXmlReader;
 import org.marc4j.converter.CharConverter;
-import org.marc4j.converter.impl.Iso6937ToUnicode;
 import org.marc4j.converter.impl.UnicodeToAnsel;
 import org.marc4j.converter.impl.UnicodeToIso5426;
 import org.marc4j.converter.impl.UnicodeToIso6937;
@@ -71,10 +70,10 @@ import org.unesco.jisis.corelib.record.IRecord;
 import org.unesco.jisis.corelib.record.StringOccurrence;
 
 import org.unesco.jisis.corelib.util.StringUtils;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
-import org.unesco.jisis.jisiscore.client.MarkedRecords;
-import org.unesco.jisis.jisiscore.client.SearchResult;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.MarkedRecords;
+import org.unesco.jisis.jisisutils.proxy.SearchResult;
 
 
 /**

@@ -28,8 +28,7 @@ import org.openide.util.NbBundle;
 import org.unesco.jisis.corelib.client.*;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.corelib.exceptions.NoDatabaseSelectedException;
-import static org.unesco.jisis.jisisutil.history.ListSelectorDialog.APPROVE_OPTION;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 
 
 

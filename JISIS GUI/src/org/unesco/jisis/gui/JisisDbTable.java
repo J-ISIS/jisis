@@ -18,7 +18,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import org.unesco.jisis.corelib.common.IDatabase;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 import org.unesco.jisis.jisisutils.distributed.DistributedTableModel;
 import org.unesco.jisis.jisisutils.gui.TextAreaEditor;
 import org.unesco.jisis.jisisutils.gui.TextAreaRenderer;

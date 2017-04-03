@@ -25,7 +25,6 @@ import org.marc4j.marc.Subfield;
 
 import org.openide.util.Exceptions;
 
-import org.unesco.jisis.importexport.IsisIsoInputStream;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -33,7 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 /**
  *

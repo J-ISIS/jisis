@@ -2,32 +2,34 @@ package org.unesco.jisis.wizards.connopen;
 
 import java.awt.Component;
 import java.awt.Dialog;
-import java.io.IOException;
 import java.text.MessageFormat;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.RepaintManager;
 
 
 import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
 import org.openide.WizardDescriptor;
-import org.openide.awt.StatusDisplayer;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.CallableSystemAction;
-import org.openide.windows.WindowManager;
-import org.unesco.jisis.corelib.client.ConnectionNIO;
+import org.slf4j.LoggerFactory;
+import org.unesco.jisis.corelib.client.ConnectionInfo;
 import org.unesco.jisis.corelib.client.ConnectionPool;
-import org.unesco.jisis.corelib.exceptions.DbException;
-import org.unesco.jisis.jisisutils.threads.IdeCursor;
+import org.unesco.jisis.corelib.common.DbInfo;
+import org.unesco.jisis.corelib.common.IConnection;
+import org.unesco.jisis.corelib.server.DbServerService;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.DirectConnectOpen;
+import org.unesco.jisis.jisisutils.proxy.MRUDatabasesOptions;
 import org.unesco.jisis.windows.connection.ConnTopComponent;
+import org.unesco.jisis.windows.databases.DbTopComponent;
 
 // An example action demonstrating how the wizard could be called from within
 // your code. You can copy-paste the code below wherever you need.
 public final class ConnectionOpenWizardAction extends CallableSystemAction {
 
    private WizardDescriptor.Panel<org.openide.WizardDescriptor>[] panels;
+   
+   protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ConnectionOpenWizardAction.class);
 
    @Override
    public void performAction() {
@@ -35,14 +37,25 @@ public final class ConnectionOpenWizardAction extends CallableSystemAction {
       // {0} will be replaced by WizardDesriptor.Panel.getComponent().getName()
       wizardDescriptor.setTitleFormat(new MessageFormat("{0}"));
       wizardDescriptor.setTitle(NbBundle.getMessage(ConnectionOpenWizardAction.class, "CTL_ConnOpenWizardPanel"));
-      Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);
-      dialog.setVisible(true);
-      dialog.toFront();
+//      Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);
+//      dialog.setVisible(true);
+      //dialog.toFront();
+      displayDialog(wizardDescriptor);
       boolean cancelled = wizardDescriptor.getValue() != WizardDescriptor.FINISH_OPTION;
+      //dialog.toBack();
+//      dialog.dispatchEvent(new WindowEvent(
+//                    dialog, WindowEvent.WINDOW_CLOSING));
+            
+      
       if (!cancelled) {
          finished(wizardDescriptor);
       }
    }
+   
+    private void displayDialog(WizardDescriptor wizardDescriptor) {
+        Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);
+        dialog.setVisible(true);
+    }
 
    /**
     * Initialize panels representing individual wizard's steps and sets various
@@ -68,6 +81,7 @@ public final class ConnectionOpenWizardAction extends CallableSystemAction {
                jc.putClientProperty("WizardPanel_contentData", steps);
                // Turn on subtitle creation on each step
                jc.putClientProperty("WizardPanel_autoWizardStyle", Boolean.TRUE);
+               
                // Show steps on the left side with the image on the background
                jc.putClientProperty("WizardPanel_contentDisplayed", Boolean.TRUE);
                // Turn on numbering of all steps
@@ -78,50 +92,48 @@ public final class ConnectionOpenWizardAction extends CallableSystemAction {
       return panels;
    }
 
-   private void finished(WizardDescriptor wd) {
-      final String hostname = (String) wd.getProperty("hostname");
-      final String port = (String) wd.getProperty("port");
-      final String username = (String) wd.getProperty("username");
-      final String password = (String) wd.getProperty("password");
+    private void finished(WizardDescriptor wd) {
+        final String hostname = (String) wd.getProperty("hostname");
+        final String port = (String) wd.getProperty("port");
+        final String username = (String) wd.getProperty("username");
+        final String password = (String) wd.getProperty("password");
 
-      int i = ConnectionPool.findConnection(hostname, Integer.parseInt(port));
-       if (i != -1) {
-            String errorMsg = "Connection to [" + hostname + "] on port ["+port+"] already established! ";
-            DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(errorMsg));
+        DirectConnectOpen.guiConnectToServer(hostname, port, username, password);
+        /**
+         * Check that server connection succeeded
+         */
+        if (ConnectionPool.findConnection(hostname, Integer.parseInt(port)) == -1) {
             return;
         }
-      final JFrame mainWin = (JFrame) WindowManager.getDefault().getMainWindow();
-      try {
-         StatusDisplayer.getDefault().setStatusText("Connection to Server Please Wait ...");
-         RepaintManager.currentManager(mainWin).paintDirtyRegions();
-         IdeCursor.changeCursorWaitStatus(true);
-         ConnectionNIO connection =   (ConnectionNIO) ConnectionNIO.connect(hostname, Integer.parseInt(port));
-        
-         /**
-          * Try to authenticate on server side
-          */
-          boolean success = connection.authenticate(username, password);
-          if (success) {
-              ConnectionPool.addConnection(connection);
-          } else {
-              String errorMsg = "Cannot Authenticate the User Name/Password pair\nPlease Try again";
-              DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(errorMsg));
-              connection.close();
-          }
-      } catch (DbException | IOException ex) {
-         String errorMsg = ex.getMessage();
-         DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(errorMsg));
+   
+        ConnTopComponent.findInstance().refresh();
 
-      } finally {
-          // clear status text
-          StatusDisplayer.getDefault().setStatusText(""); // NOI18N
-          RepaintManager.currentManager(mainWin).paintDirtyRegions();
-          IdeCursor.changeCursorWaitStatus(false);
-      }
-      ConnTopComponent.findInstance().refresh();
-      //return connections;
-   }
+        /**
+         * Do we have a database to open ?
+         */
+        String dbHome;
+        String dbName;
+        if (DbServerService.dbToOpenIsSet()) {
+            dbHome = DbServerService.getJisisDbHomeToOpen();
+            dbName = DbServerService.getJisisDbNameToOpen();
+            ConnectionInfo connectionInfo = ConnectionPool.getDefaultConnectionInfo();
+            IConnection connection = connectionInfo.getConnection();
+            final ClientDatabaseProxy db = new ClientDatabaseProxy(connectionInfo.getConnection());
+            DirectConnectOpen.openViewDatabase(db, dbHome, dbName);
+            connectionInfo.addDatabase(db);
 
+            final DbInfo dbInfo = new DbInfo(connection.getUserInfo(), connection.getServer(),
+                    connection.getPort(),
+                    dbHome, dbName);
+            MRUDatabasesOptions opts = MRUDatabasesOptions.getInstance();
+            opts.addDatabase(dbInfo);
+            DbTopComponent.findInstance().refresh();
+
+            //DbTopComponent.findInstance().requestActive();
+        }
+
+    }
+ 
    @Override
    public String getName() {
       return NbBundle.getMessage(ConnectionOpenWizardAction.class, "CTL_ConnOpenWizardAction");

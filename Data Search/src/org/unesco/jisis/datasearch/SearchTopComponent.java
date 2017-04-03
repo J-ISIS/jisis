@@ -56,8 +56,9 @@ import org.unesco.jisis.corelib.record.IRecord;
 import org.unesco.jisis.corelib.util.StringUtils;
 import org.unesco.jisis.fxbrowser.SwingFXWebView;
 import org.unesco.jisis.jisisutil.history.HistoryTextArea;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.SearchResult;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.SearchResult;
+
 
 class SearchComponent {
    public String tag_;   // field name (tag or FST entry name)
@@ -1316,7 +1317,7 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
        StringBuilder sb = new StringBuilder(); // Query as entered by user
        
        
- 
+       mfnListPageNumber_ = 0;
        if (this.isGuidedSearch_) {
           searchComponents_ = new ArrayList<>();
           for (JComponent[] fields : this.queryPanels_) {

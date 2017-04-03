@@ -26,13 +26,18 @@ import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.slf4j.LoggerFactory;
+import org.unesco.jisis.corelib.client.ConnectionInfo;
+import org.unesco.jisis.corelib.client.ConnectionPool;
 import org.unesco.jisis.corelib.common.Global;
+import org.unesco.jisis.corelib.common.IConnection;
 import org.unesco.jisis.corelib.server.DbServerService;
 import org.unesco.jisis.corelib.server.HomeManager;
 import org.unesco.jisis.jetty.webserver.JettyRunner;
 import org.unesco.jisis.jisisutil.history.HistoryModel;
 import org.unesco.jisis.jisisutil.history.JisisHistoryModelSaver;
 import org.unesco.jisis.jisisutils.gui.SwingUtils;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.DirectConnectOpen;
 
 
 public class JavaISIS extends ModuleInstall  {
@@ -67,8 +72,8 @@ public class JavaISIS extends ModuleInstall  {
             LOGGER.info("entering JavaISIS restored()");
 
             dbServer_ = new DbServerService();
-            System.out.println("Creating Reactor with port:" + dbServer_.getServerPort());
-            LOGGER.info("Creating Reactor with port: [{}]", dbServer_.getServerPort());
+            System.out.println("Creating Reactor with port:" + DbServerService.getServerPort());
+            LOGGER.info("Creating Reactor with port: [{}]", DbServerService.getServerPort());
 
             String[] homes = DbServerService.getDbHomeManager().getDbHomeNames();
             String homePath = DbServerService.getDbHomeManager().getDbHomePath(homes[0]);
@@ -107,9 +112,45 @@ public class JavaISIS extends ModuleInstall  {
             LifecycleManager.getDefault().exit();
         }
         System.out.println("exiting restored()");
-
+         WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+                @Override
+                public void run() {
+                   serverConnectAndOpenDatabase();
+                }
+               });
 //      DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message("restored done",
 //             NotifyDescriptor.INFORMATION_MESSAGE));
+    }
+    
+    private void serverConnectAndOpenDatabase() {
+        final String hostname = DbServerService.getJisisDbServerIP();
+        final String port = DbServerService.getServerPort() + "";
+        final String username = DbServerService.getJisisDbServerUserID();
+        final String password = DbServerService.getJisisDbServerUserPassword();
+
+        String dbHome;
+        String dbName;
+        /**
+         * Do we have a database to open ?
+         */
+        if (!DbServerService.dbToOpenIsSet()) {
+            return;
+        }
+        DirectConnectOpen.guiConnectToServer(hostname, port, username, password);
+        /**
+         * Check that server connection succeeded
+         */
+        if (ConnectionPool.findConnection(hostname, Integer.parseInt(port)) == -1) {
+            return;
+        }
+
+        dbHome = DbServerService.getJisisDbHomeToOpen();
+        dbName = DbServerService.getJisisDbNameToOpen();
+        ConnectionInfo connectionInfo = ConnectionPool.getDefaultConnectionInfo();
+        IConnection connection = connectionInfo.getConnection();
+        final ClientDatabaseProxy db = new ClientDatabaseProxy(connection);
+        DirectConnectOpen.openViewDatabase(db, dbHome, dbName);
+
     }
 
     @Override
@@ -126,11 +167,7 @@ public class JavaISIS extends ModuleInstall  {
         String title = NbBundle.getMessage(JavaISIS.class, "MSG_JavaIsis");
         NotifyDescriptor d = new NotifyDescriptor.Confirmation(label, title, NotifyDescriptor.OK_CANCEL_OPTION);
 
-        if (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION) {
-         
-            return true;
-        }
-        return false;
+        return DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION;
     }
 
 

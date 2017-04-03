@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.swing.tree.TreePath;
@@ -24,8 +23,8 @@ import org.unesco.jisis.corelib.common.IConnection;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.corelib.exceptions.TechnicalException;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 /**
  * Top component which displays something.
@@ -54,6 +53,7 @@ public final class ConnTopComponent extends TopComponent {
                 new ImageIcon(ImageUtilities.loadImage(CLOSE_ICON_PATH, true)));
         miCloseConnection.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent ae) {
                closeSelectedConnection();
               
@@ -65,6 +65,7 @@ public final class ConnTopComponent extends TopComponent {
                 new ImageIcon(ImageUtilities.loadImage(DEFAULT_ICON_PATH, true)));
         miSetDefault.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent ae) {
                 setDefault();
             }
@@ -232,11 +233,8 @@ public final class ConnTopComponent extends TopComponent {
                 }
                 LOGGER.debug("CLIENT - Close Connection - "+conn);
                 ConnectionPool.closeConnection(conn);
-            } catch (ClassCastException cce) {
+            } catch (ClassCastException | DbException cce) {
                 Exceptions.printStackTrace(cce);
-                GuiGlobal.outputErr("Connection not closed");
-            } catch (DbException ex) {
-                Exceptions.printStackTrace(ex);
                 GuiGlobal.outputErr("Connection not closed");
             }
         }
@@ -263,6 +261,7 @@ public final class ConnTopComponent extends TopComponent {
      * Gets default instance. Do not use directly: reserved for *.settings files only,
      * i.e. deserialization routines; otherwise you could get a non-deserialized instance.
      * To obtain the singleton instance, use {@link findInstance}.
+     * @return 
      */
     public static synchronized ConnTopComponent getDefault() {
         if (instance == null) {
@@ -273,6 +272,7 @@ public final class ConnTopComponent extends TopComponent {
 
     /**
      * Obtain the ConnTopComponent instance. Never call {@link #getDefault} directly!
+     * @return 
      */
     public static synchronized ConnTopComponent findInstance() {
         TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
@@ -299,10 +299,11 @@ public final class ConnTopComponent extends TopComponent {
 
    @Override
     public void componentClosed() {
-        // TODO add custom code on component closing
+        // TODO add custom code on component closingS
     }
 
-    /** replaces this in object stream */
+    /** replaces this in object stream
+     * @return  */
    @Override
     public Object writeReplace() {
         return new ResolvableHelper();

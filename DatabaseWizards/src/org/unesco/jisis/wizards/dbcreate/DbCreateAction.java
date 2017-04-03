@@ -21,7 +21,7 @@ import org.unesco.jisis.corelib.common.IConnection;
 import org.unesco.jisis.corelib.common.WorksheetDef;
 import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.gui.Util;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 import org.unesco.jisis.jisiscore.common.FDTModelEx;
 import org.unesco.jisis.jisiscore.common.FSTModelEx;
 import org.unesco.jisis.jisiscore.common.WKSModelEx;
@@ -30,6 +30,7 @@ import org.unesco.jisis.jisiscore.common.WKSModelEx;
 public final class DbCreateAction extends CallableSystemAction {
    private WizardDescriptor.Panel<WizardDescriptor>[] panels;
 
+   @Override
     public void performAction() {
         if (!ConnectionPool.ensureDefaultConnection()) {
             String errorMsg = NbBundle.getMessage(DbCreateAction.class, "MSG_NoConnection");
@@ -143,6 +144,7 @@ public final class DbCreateAction extends CallableSystemAction {
       return panels;
    }
 
+   @Override
    public String getName() {
       return NbBundle.getMessage(DbCreateAction.class, "CTL_DbCreateWizardAction");
    }
@@ -152,6 +154,7 @@ public final class DbCreateAction extends CallableSystemAction {
       return "org/unesco/jisis/wizards/dbcreate/new.png";
    }
 
+   @Override
    public HelpCtx getHelpCtx() {
       return HelpCtx.DEFAULT_HELP;
    }

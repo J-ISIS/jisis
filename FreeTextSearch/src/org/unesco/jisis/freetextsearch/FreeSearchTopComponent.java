@@ -40,10 +40,11 @@ import org.unesco.jisis.corelib.pft.ISISFormatter;
 import org.unesco.jisis.corelib.record.Record;
 import org.unesco.jisis.corelib.util.StringUtils;
 import org.unesco.jisis.jisisutil.history.HistoryTextArea;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
-import org.unesco.jisis.jisiscore.client.SearchResult;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
+
 import org.unesco.jisis.jisiscore.common.AsyncCallback;
+import org.unesco.jisis.jisisutils.proxy.SearchResult;
 import org.unesco.jisis.searchhistory.SearchHistoryAction;
 import org.unesco.jisis.searchhistory.SearchHistoryModel;
 

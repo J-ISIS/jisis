@@ -38,7 +38,7 @@ import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.corelib.exceptions.RecordNotFoundException;
 import org.unesco.jisis.corelib.record.IRecord;
 import org.unesco.jisis.fxbrowser.SwingFXWebView;
-import org.unesco.jisis.jisiscore.client.ClientDatabaseProxy;
+import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 
 
 /**

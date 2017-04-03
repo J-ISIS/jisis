@@ -20,7 +20,7 @@ import org.openide.util.ImageUtilities;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.gui.Util;
-import org.unesco.jisis.jisiscore.client.GuiGlobal;
+import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 
 /**
  * Action which shows RecordDataBrowser component.
@@ -32,6 +32,7 @@ public class RecordDataBrowserAction extends AbstractAction {
         putValue(SMALL_ICON, new ImageIcon(ImageUtilities.loadImage(RecordDataBrowserTopComponent.ICON_PATH, true)));
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt) {
 
         IDatabase db = Util.getDatabaseToUse(evt);
