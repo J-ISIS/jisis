@@ -233,9 +233,8 @@ public class DbViewTopComponent extends TopComponent implements Observer {
          String pftName = "RAW";
          String pftFormat = "";
           cmbSelectPft.setModel(new DefaultComboBoxModel(pftNames));
-         if (DbServerService.getJisisPFT().equals("_none_")) {
-             // Do nothing
-         } else {
+         if (DbServerService.dbToOpenIsSet() && !(DbServerService.getJisisPFT().equals("_none_"))) {
+             
              String name = DbServerService.getJisisPFT();
              for (int i=0; i< pftNames.length; i++) {
                  if (pftNames[i].equals(name)) {
@@ -244,8 +243,7 @@ public class DbViewTopComponent extends TopComponent implements Observer {
                      pftName = name;
                      break;
                  }
-             }
-             
+             }            
              
          }
          currentPft_ = new PrintFormat(pftName, pftFormat);       
