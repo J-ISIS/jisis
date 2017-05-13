@@ -13,14 +13,20 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.RepaintManager;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.awt.StatusDisplayer;
 import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
+import org.openide.util.Utilities;
+import org.openide.windows.WindowManager;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.gui.Util;
 import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
+import org.unesco.jisis.jisisutils.threads.IdeCursor;
 
 /**
  * Action which shows RecordDataBrowser component.
@@ -55,11 +61,14 @@ public class RecordDataBrowserAction extends AbstractAction {
             Exceptions.printStackTrace(ex);
         }
         GuiGlobal.setEnabledHitSortFileComponent(true);
+        IdeCursor.changeCursorWaitStatus(true);
+
         RecordDataBrowserTopComponent win = new RecordDataBrowserTopComponent(db);
 
         win.open();
         win.repaint();
         win.requestActive();
-
+        IdeCursor.changeCursorWaitStatus(false);
+     
     }
 }

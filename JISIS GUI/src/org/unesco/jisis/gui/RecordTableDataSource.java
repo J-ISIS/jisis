@@ -34,23 +34,23 @@ public class RecordTableDataSource implements IDistributedTableDataSource {
    private long firstMfn_ = -1;
 
 
-   public RecordTableDataSource(IDatabase db) {
-      db_      = db;
+    public RecordTableDataSource(IDatabase db) {
+        db_ = db;
         try {
             fdt_ = db_.getFieldDefinitionTable();
         } catch (DbException ex) {
             Exceptions.printStackTrace(ex);
         }
-      IRecord record = null;
+        IRecord record = null;
         try {
             record = db_.getFirst();
         } catch (DbException ex) {
             Exceptions.printStackTrace(ex);
         }
-      firstMfn_ = record.getMfn();
+        firstMfn_ = record.getMfn();
 
-      indexes_ = new long[0];    // for consistency
-   }
+        indexes_ = new long[0];    // for consistency
+    }
 
    public void setIndexMap(long indexes[]) {
       indexes_ = indexes;

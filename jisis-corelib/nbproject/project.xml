@@ -61,11 +61,15 @@
                 <package>ch.qos.logback.classic.joran</package>
                 <package>ch.qos.logback.classic.joran.action</package>
                 <package>ch.qos.logback.classic.jul</package>
+                <package>ch.qos.logback.classic.layout</package>
                 <package>ch.qos.logback.classic.log4j</package>
                 <package>ch.qos.logback.classic.net</package>
+                <package>ch.qos.logback.classic.net.server</package>
                 <package>ch.qos.logback.classic.pattern</package>
+                <package>ch.qos.logback.classic.pattern.color</package>
                 <package>ch.qos.logback.classic.selector</package>
                 <package>ch.qos.logback.classic.selector.servlet</package>
+                <package>ch.qos.logback.classic.servlet</package>
                 <package>ch.qos.logback.classic.sift</package>
                 <package>ch.qos.logback.classic.spi</package>
                 <package>ch.qos.logback.classic.turbo</package>
@@ -77,16 +81,23 @@
                 <package>ch.qos.logback.core.encoder</package>
                 <package>ch.qos.logback.core.filter</package>
                 <package>ch.qos.logback.core.helpers</package>
+                <package>ch.qos.logback.core.hook</package>
                 <package>ch.qos.logback.core.html</package>
                 <package>ch.qos.logback.core.joran</package>
                 <package>ch.qos.logback.core.joran.action</package>
                 <package>ch.qos.logback.core.joran.conditional</package>
                 <package>ch.qos.logback.core.joran.event</package>
+                <package>ch.qos.logback.core.joran.event.stax</package>
+                <package>ch.qos.logback.core.joran.node</package>
                 <package>ch.qos.logback.core.joran.spi</package>
                 <package>ch.qos.logback.core.joran.util</package>
+                <package>ch.qos.logback.core.joran.util.beans</package>
                 <package>ch.qos.logback.core.layout</package>
                 <package>ch.qos.logback.core.net</package>
+                <package>ch.qos.logback.core.net.server</package>
+                <package>ch.qos.logback.core.net.ssl</package>
                 <package>ch.qos.logback.core.pattern</package>
+                <package>ch.qos.logback.core.pattern.color</package>
                 <package>ch.qos.logback.core.pattern.parser</package>
                 <package>ch.qos.logback.core.pattern.util</package>
                 <package>ch.qos.logback.core.property</package>
@@ -97,6 +108,7 @@
                 <package>ch.qos.logback.core.sift</package>
                 <package>ch.qos.logback.core.spi</package>
                 <package>ch.qos.logback.core.status</package>
+                <package>ch.qos.logback.core.subst</package>
                 <package>ch.qos.logback.core.util</package>
                 <package>com.google.gson</package>
                 <package>com.google.gson.annotations</package>
@@ -201,6 +213,7 @@
                 <package>org.jsoup.safety</package>
                 <package>org.jsoup.select</package>
                 <package>org.slf4j</package>
+                <package>org.slf4j.event</package>
                 <package>org.slf4j.helpers</package>
                 <package>org.slf4j.impl</package>
                 <package>org.slf4j.spi</package>
@@ -228,16 +241,8 @@
                 <package>org.unesco.jisis.corelib.xml</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/jcl-over-slf4j-1.6.4.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jcl-over-slf4j-1.6.4.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/slf4j-api-1.6.4.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/slf4j-api-1.6.4.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/logback-core-1.0.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/logback-core-1.0.0.jar</binary-origin>
+                <runtime-relative-path>ext/logback-classic-1.2.3.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/logback-classic-1.2.3.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-io-2.1.jar</runtime-relative-path>
@@ -246,6 +251,10 @@
             <class-path-extension>
                 <runtime-relative-path>ext/multitreemap.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/multitreemap.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/logback-core-1.2.3.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/logback-core-1.2.3.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jisis-core.jar</runtime-relative-path>
@@ -260,10 +269,6 @@
                 <binary-origin>release/modules/ext/gson-2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/logback-classic-1.0.0.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/logback-classic-1.0.0.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
                 <runtime-relative-path>ext/commons-codec-1.7.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/commons-codec-1.7.jar</binary-origin>
             </class-path-extension>
@@ -272,8 +277,16 @@
                 <binary-origin>release/modules/ext/commons-lang3-3.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
+                <runtime-relative-path>ext/jcl-over-slf4j-1.7.25.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jcl-over-slf4j-1.7.25.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
                 <runtime-relative-path>ext/shiro-all-1.2.4.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/shiro-all-1.2.4.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/slf4j-api-1.7.25.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/slf4j-api-1.7.25.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-beanutils-1.9.1.jar</runtime-relative-path>

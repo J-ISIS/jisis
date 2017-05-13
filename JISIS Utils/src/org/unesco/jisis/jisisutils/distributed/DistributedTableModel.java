@@ -96,11 +96,12 @@ public class DistributedTableModel extends AbstractTableModel {
    }
 
  
+   @Override
    public Object getValueAt(int rowIndex, int columnIndex) {
 //       System.out.println("DistTableModel::getValueAt - tableDescription_.getRowCount()="+tableDescription_.getRowCount()
 //               +" rowIndex="+rowIndex+" columnIndex="+columnIndex);
-//       if (rowIndex <0 || rowIndex >=tableDescription_.getRowCount())
-//           return null;
+       if (rowIndex <0 || rowIndex >=tableDescription_.getRowCount())
+           return null;
       int fieldIndex = columnToField_[columnIndex];
       return tableClientCache_.retrieveRowFromCache(rowIndex)[fieldIndex];
    }

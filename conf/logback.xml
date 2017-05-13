@@ -1,5 +1,5 @@
                                          
-<configuration>
+<configuration debug="true">
    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
       <file>J-ISIS-log.txt</file>
 

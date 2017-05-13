@@ -4,6 +4,7 @@
  */
 package org.unesco.jisis.databrowser;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
@@ -20,6 +21,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
@@ -28,10 +30,13 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import org.openide.awt.StatusDisplayer;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -47,6 +52,8 @@ import org.unesco.jisis.gui.RecordTableDataSource;
 import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 import org.unesco.jisis.jisisutils.proxy.GuiGlobal;
 import org.unesco.jisis.jisisutils.distributed.DistributedTableModel;
+import org.unesco.jisis.jisisutils.distributed.PagingModel;
+import org.unesco.jisis.jisisutils.distributed.PagingToolBar;
 import org.unesco.jisis.jisisutils.gui.TextAreaEditor;
 import org.unesco.jisis.jisisutils.gui.TextAreaRenderer;
 import org.unesco.jisis.jisisutils.gui.TextPaneEditorEx;
@@ -63,7 +70,8 @@ public class RecordDataBrowserTopComponent extends TopComponent implements Obser
    private static final String PREFERRED_ID = "RecordDataBrowserTopComponent";
    private ClientDatabaseProxy db_;
    private RecordTableDataSource dataSource_;
-   private DistributedTableModel model_;
+   //private DistributedTableModel model_;
+   private PagingModel model_;
    private JTable nonScrollingColumns_;
    private ComponentOrientation orientation_ = ComponentOrientation.LEFT_TO_RIGHT;
 
@@ -102,7 +110,9 @@ public class RecordDataBrowserTopComponent extends TopComponent implements Obser
          dataSource_ = new RecordTableDataSource(db);
 //          long indexes[]= { 25L,20L,15L,10L,5L };
 //          dataSource_.setIndexMap(indexes);
-         model_ = new DistributedTableModel(dataSource_) {
+         //model_ = new DistributedTableModel(dataSource_) {
+         
+         model_ = new PagingModel(dataSource_) {
 
             /** Override isCellEditable */
             @Override
@@ -113,13 +123,23 @@ public class RecordDataBrowserTopComponent extends TopComponent implements Obser
       } catch (Exception e) {
          e.printStackTrace();
       }
-
+      
       initComponents();
+      // Use our own custom scrollpane.
+      scrollPane_ = PagingModel.createPagingScrollPaneForTable(table_, scrollPane_);
       setName(NbBundle.getMessage(RecordDataBrowserTopComponent.class, "CTL_RecordDataBrowserTopComponent"));
 
       setToolTipText(NbBundle.getMessage(RecordDataBrowserTopComponent.class, "HINT_RecordDataBrowserTopComponent"));
 
-      initTable();
+       initTable();
+
+       // Use our own custom scrollpane.
+       scrollPane_ = PagingModel.createPagingScrollPaneForTable(table_, scrollPane_);
+
+       PagingToolBar pagingToolBar = new PagingToolBar(model_, scrollPane_, table_);
+
+       pnlToolBar.add(pagingToolBar, BorderLayout.WEST);
+
       putClientProperty("print.printable", Boolean.TRUE); // NOI18N
 
 
@@ -436,6 +456,8 @@ public class RecordDataBrowserTopComponent extends TopComponent implements Obser
         jTextPane1 = new javax.swing.JTextPane();
         recordBrowserTabbedPane_ = new javax.swing.JTabbedPane();
         browserPanel_ = new javax.swing.JPanel();
+        pnlToolBar = new javax.swing.JPanel();
+        pnlTable = new javax.swing.JPanel();
         scrollPane_ = new javax.swing.JScrollPane();
         table_ = new javax.swing.JTable();
         searchPanel_ = new javax.swing.JPanel();
@@ -445,16 +467,57 @@ public class RecordDataBrowserTopComponent extends TopComponent implements Obser
 
         jScrollPane1.setViewportView(jTextPane1);
 
-        setLayout(new java.awt.BorderLayout());
+        browserPanel_.setBorder(javax.swing.BorderFactory.createTitledBorder("browserPanel"));
 
-        browserPanel_.setLayout(new java.awt.BorderLayout());
+        pnlToolBar.setBorder(javax.swing.BorderFactory.createTitledBorder("Page Navigation"));
+        pnlToolBar.setLayout(new java.awt.BorderLayout());
+
+        pnlTable.setBorder(javax.swing.BorderFactory.createTitledBorder("pnlTable"));
+
+        scrollPane_.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         table_.setAutoCreateColumnsFromModel(false);
         table_.setModel(model_);
         table_.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         scrollPane_.setViewportView(table_);
 
-        browserPanel_.add(scrollPane_, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout pnlTableLayout = new javax.swing.GroupLayout(pnlTable);
+        pnlTable.setLayout(pnlTableLayout);
+        pnlTableLayout.setHorizontalGroup(
+            pnlTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTableLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollPane_, javax.swing.GroupLayout.DEFAULT_SIZE, 842, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        pnlTableLayout.setVerticalGroup(
+            pnlTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlTableLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollPane_, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout browserPanel_Layout = new javax.swing.GroupLayout(browserPanel_);
+        browserPanel_.setLayout(browserPanel_Layout);
+        browserPanel_Layout.setHorizontalGroup(
+            browserPanel_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(browserPanel_Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(browserPanel_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        browserPanel_Layout.setVerticalGroup(
+            browserPanel_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(browserPanel_Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         recordBrowserTabbedPane_.addTab("Browser", browserPanel_);
 
@@ -469,13 +532,28 @@ public class RecordDataBrowserTopComponent extends TopComponent implements Obser
 
         recordBrowserTabbedPane_.addTab("Search", searchPanel_);
 
-        add(recordBrowserTabbedPane_, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(recordBrowserTabbedPane_)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(recordBrowserTabbedPane_)
+                .addContainerGap())
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel browserPanel_;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JPanel pnlTable;
+    private javax.swing.JPanel pnlToolBar;
     private javax.swing.JTabbedPane recordBrowserTabbedPane_;
     private javax.swing.JScrollPane scrollPane_;
     private javax.swing.JLabel searchLabel_;

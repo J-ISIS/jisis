@@ -1,6 +1,7 @@
 package org.unesco.jisis.dictionary;
 
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,7 +38,8 @@ import org.unesco.jisis.corelib.index.SearchableField;
 import org.unesco.jisis.corelib.index.TermParams;
 import org.unesco.jisis.gui.GuiUtils;
 import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
-import org.unesco.jisis.jisisutils.distributed.DistributedTableModel;
+import org.unesco.jisis.jisisutils.distributed.PagingModel;
+import org.unesco.jisis.jisisutils.distributed.PagingToolBar;
 import org.unesco.jisis.jisisutils.threads.IdeCursor;
 
 class Popupmenu_mouseAdapter extends java.awt.event.MouseAdapter {
@@ -79,7 +81,8 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
     private static final String PREFERRED_ID = "dictionaryTopComponent";
 
     private ClientDatabaseProxy db_;
-    private DistributedTableModel model_;
+    //private DistributedTableModel model_;
+    private PagingModel model_;
 
     private IndexInfo indexInfo_;
     private TableRowSorter sorter_;
@@ -116,10 +119,18 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
         try {
             this.setDisplayName("Dictionary" + " (" + db.getDbHome() + "//" + db.getDatabaseName() + ")");
 
-            model_ = new DistributedTableModel(new TermsTableDataSource(db));
+            //model_ = new DistributedTableModel(new TermsTableDataSource(db));
+            model_ = new PagingModel(new TermsTableDataSource(db));
 
             initComponents();
-
+            
+             // Use our own custom scrollpane.
+             scrollPane_ = PagingModel.createPagingScrollPaneForTable(termsTable_, scrollPane_);
+             
+             PagingToolBar pagingToolBar = new PagingToolBar(model_, scrollPane_, termsTable_);
+             
+             pnlToolBar.add(pagingToolBar,BorderLayout.WEST);
+         
             initIndexInfo();
 
             setName(NbBundle.getMessage(DictionaryTopComponent.class, "CTL_dictionaryTopComponent"));
@@ -387,6 +398,7 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
         tablePanel = new javax.swing.JPanel();
         scrollPane_ = new javax.swing.JScrollPane();
         termsTable_ = new javax.swing.JTable();
+        pnlToolBar = new javax.swing.JPanel();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setAutoscrolls(true);
@@ -511,7 +523,7 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblLastModified)
                     .addComponent(txtLastModified, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         lblIndexName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -520,23 +532,16 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
         txtIndexName.setEditable(false);
 
         tablePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        tablePanel.setLayout(new java.awt.BorderLayout());
 
         termsTable_.setAutoCreateColumnsFromModel(false);
         termsTable_.setModel(model_);
         scrollPane_.setViewportView(termsTable_);
 
-        javax.swing.GroupLayout tablePanelLayout = new javax.swing.GroupLayout(tablePanel);
-        tablePanel.setLayout(tablePanelLayout);
-        tablePanelLayout.setHorizontalGroup(
-            tablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tablePanelLayout.createSequentialGroup()
-                .addComponent(scrollPane_, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 142, Short.MAX_VALUE))
-        );
-        tablePanelLayout.setVerticalGroup(
-            tablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollPane_)
-        );
+        tablePanel.add(scrollPane_, java.awt.BorderLayout.CENTER);
+
+        pnlToolBar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        pnlToolBar.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -544,39 +549,44 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(lblIndexName, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtIndexName))
+                    .addComponent(quickSearchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(lblIndexName, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtIndexName, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(107, 107, 107)
+                        .addGap(8, 8, 8)
+                        .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addComponent(lblIndexContent)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(quickSearchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(18, 18, 18)
+                        .addComponent(pnlToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 30, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblIndexContent)
-                    .addComponent(lblIndexName)
-                    .addComponent(txtIndexName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtIndexName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblIndexName, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblIndexContent))
+                    .addComponent(pnlToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
+                        .addGap(47, 47, 47)
                         .addComponent(quickSearchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 265, Short.MAX_VALUE))
-                    .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addContainerGap())
+                    .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -823,6 +833,7 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
     private javax.swing.JLabel lblNumRecords;
     private javax.swing.JLabel lblNumTerms;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JPanel pnlToolBar;
     private javax.swing.JPanel quickSearchPanel;
     private javax.swing.JScrollPane scrollPane_;
     private javax.swing.JPanel tablePanel;

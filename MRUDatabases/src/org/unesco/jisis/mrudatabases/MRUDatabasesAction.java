@@ -217,48 +217,50 @@ public final class MRUDatabasesAction extends CallableSystemAction {
    }
 
    public static void openViewDatabase(final ClientDatabaseProxy db, final String dbHome, final String dbName) {
-      final JFrame frame = (JFrame) WindowManager.getDefault().getMainWindow();
-
-      // Set status text
-       IdeCursor.changeCursorWaitStatus(true);
-       
-      StatusDisplayer.getDefault().setStatusText("Reading Database Info - Please wait...");
-      RepaintManager.currentManager(frame).paintDirtyRegions();
+//      final JFrame frame = (JFrame) WindowManager.getDefault().getMainWindow();
+//
+//      // Set status text
+//       IdeCursor.changeCursorWaitStatus(true);
+//       
+//      StatusDisplayer.getDefault().setStatusText("Reading Database Info - Please wait...");
+//      RepaintManager.currentManager(frame).paintDirtyRegions();
 
     
 
-      Runnable openRun = new Runnable() {
-         @Override
-         public void run() {
-             if (!EventQueue.isDispatchThread()) {
+//      Runnable openRun = new Runnable() {
+//         @Override
+//         public void run() {
+//             if (!EventQueue.isDispatchThread()) {
                  try {
-                     //Global.output("Starting Open");
+//                     //Global.output("Starting Open");
+                     IdeCursor.changeCursorWaitStatus(true);
                      Date start = new Date();
                      db.getDatabase(dbHome, dbName, Global.DATABASE_DURABILITY_WRITE);
                      Date end = new Date();
                   //Global.output(Long.toString(end.getTime() - start.getTime())
                      //              + " milliseconds to open database");
 
-                     IdeCursor.changeCursorWaitStatus(true);
+                    
 
                  } catch (DbException ex) {
                      Exceptions.printStackTrace(ex);
-                 } finally {
-                  // clear status text
-                 
-                   IdeCursor.changeCursorWaitStatus(false);
-                   StatusDisplayer.getDefault().setStatusText("");
-                   RepaintManager.currentManager(frame).paintDirtyRegions();
-
-                  EventQueue.invokeLater(this);
-               }
-               // Second Invocation, we are on the event queue now
-            }
-         }
-      };
-
-      RequestProcessor.Task openTask = RequestProcessor.getDefault().post(openRun);
-      openTask.waitFinished();
+                 } 
+//                 finally {
+//                  // clear status text
+//                 
+                  IdeCursor.changeCursorWaitStatus(false);
+//                   StatusDisplayer.getDefault().setStatusText("");
+//                   RepaintManager.currentManager(frame).paintDirtyRegions();
+//
+//                  EventQueue.invokeLater(this);
+//               }
+//               // Second Invocation, we are on the event queue now
+//            }
+//         }
+//      };
+//
+//      RequestProcessor.Task openTask = RequestProcessor.getDefault().post(openRun);
+//      openTask.waitFinished();
       
       DbViewAction dbViewAction = new DbViewAction();
       dbViewAction.actionPerformed(null);    
