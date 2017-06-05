@@ -52,20 +52,20 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
       String lastDir = Global.getClientWorkPath();
       Global.prefs_.put("IMPEXP_OUTPUT_DIR", lastDir);
       txtOutputDir.setText(lastDir);
-      prepareSearchHistory();
-      prepareMarkedRecordsHistory();
-      cmbSearch.setEnabled(false);
-      rdbAllMfn.setEnabled(true);
-      rdbMfns.setEnabled(true);
-      rdbMarked.setEnabled(true);
-      
-      rdbOAI.setSelected(true);
-      rdbRDF.setSelected(false);
-      rdbSRW.setSelected(false);
+     
+       cmbSearch.setEnabled(false);
+       rdbAllMfn.setEnabled(true);
+       rdbMfns.setEnabled(true);
+       rdbMarked.setEnabled(true);
+       prepareSearchHistory();
+       prepareMarkedRecordsHistory();
+       prepareHitSortHistory();
+       rdbOAI.setSelected(true);
+       rdbRDF.setSelected(false);
+       rdbSRW.setSelected(false);
    }
     private void prepareSearchHistory() {
-
-      List<SearchResult> searchResults = db_.getSearchResults();
+         List<SearchResult> searchResults = db_.getSearchResults();
       String[] searches = {"No Search"};
       if (searchResults != null && searchResults.size() > 0) {
 
@@ -74,12 +74,44 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
          for (int i = 0; i < n; i++) {
             searches[i] = searchResults.get(i).toString();
          }
+      } else {
+         // Disable Search radio button and combo box
+         cmbSearch.setEnabled(false);
+         rdbSearchResult.setEnabled(false);
       }
       cmbSearch.setModel(new DefaultComboBoxModel(searches));
    }
+    
+     private void prepareHitSortHistory() {
+       
+        String dbHitSortFilePath = Global.getClientWorkPath() + File.separator
+                + db_.getDbName()
+                + Global.HIT_SORT_FILE_EXT;
+        File dbHitSortFile_ = new File(dbHitSortFilePath);
+
+        String dbHitSortHxfFilePath = Global.getClientWorkPath() + File.separator
+                + db_.getDbName()
+                + Global.HIT_SORT_HXF_FILE_EXT;
+        File dbHitSortHxfFile_ = new File(dbHitSortHxfFilePath);
+
+         String[] hitSortNames = new String[1];
+        if (!dbHitSortFile_.exists()) {
+            hitSortNames[0] = "No HitSorts";
+            // Disable Hit File radio button and combo box
+         cmbHitSortFile.setEnabled(false);
+         rdbHitSort.setEnabled(false);
+            
+        } else {
+            hitSortNames[0] = dbHitSortFilePath;
+        }
+
+      cmbHitSortFile.setModel(new DefaultComboBoxModel(hitSortNames));
+
+   }
+
 
    private void prepareMarkedRecordsHistory() {
-      List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
+         List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
       String[] markedSets = {"No Marked Sets"};
       if (markedRecords != null && !markedRecords.isEmpty()) {
 
@@ -88,8 +120,13 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
          for (int i = 0; i < n; i++) {
             markedSets[i] = markedRecords.get(i).toString();
          }
+      }else {
+         // Disable Search radio button and combo box
+         cmbMarked.setEnabled(false);
+         rdbMarked.setEnabled(false);
       }
       cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
+    
    }
    @Override
    public String getName() {
@@ -106,6 +143,8 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         expFileName = new javax.swing.JTextField();
@@ -131,7 +170,6 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
         cmbSearch = new javax.swing.JComboBox();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
-        lblHitSortFile = new javax.swing.JLabel();
         cmbHitSortFile = new javax.swing.JComboBox();
         txtOutputDir = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -139,6 +177,7 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
         rdbOAI = new javax.swing.JRadioButton();
         rdbRDF = new javax.swing.JRadioButton();
         rdbSRW = new javax.swing.JRadioButton();
+        rdbHitSort = new javax.swing.JRadioButton();
 
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 470));
 
@@ -186,10 +225,12 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel13.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.jLabel13.text")); // NOI18N
 
+        buttonGroup1.add(rdbMfnRange);
         rdbMfnRange.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         rdbMfnRange.setSelected(true);
         rdbMfnRange.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.rdbMfnRange.text")); // NOI18N
 
+        buttonGroup2.add(rdbAllMfn);
         rdbAllMfn.setSelected(true);
         rdbAllMfn.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.rdbAllMfn.text")); // NOI18N
         rdbAllMfn.addActionListener(new java.awt.event.ActionListener() {
@@ -198,8 +239,10 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
             }
         });
 
+        buttonGroup2.add(rdbMarked);
         rdbMarked.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.rdbMarked.text")); // NOI18N
 
+        buttonGroup2.add(rdbMfns);
         rdbMfns.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.rdbMfns.text")); // NOI18N
         rdbMfns.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -217,14 +260,13 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
 
         jLabel14.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.jLabel14.text")); // NOI18N
 
+        buttonGroup1.add(rdbSearchResult);
         rdbSearchResult.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         rdbSearchResult.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.rdbSearchResult.text")); // NOI18N
 
         jLabel15.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.jLabel15.text")); // NOI18N
 
         cmbSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        lblHitSortFile.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.lblHitSortFile.text")); // NOI18N
 
         cmbHitSortFile.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -254,6 +296,14 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
         rdbSRW.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbSRWActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(rdbHitSort);
+        rdbHitSort.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.rdbHitSort.text")); // NOI18N
+        rdbHitSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbHitSortActionPerformed(evt);
             }
         });
 
@@ -295,7 +345,7 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
                 .addGap(49, 49, 49)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbEncoding, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cmbEncoding, 0, 209, Short.MAX_VALUE)
                 .addGap(224, 224, 224))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,20 +373,18 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
                                         .addComponent(rdbSearchResult)
                                         .addGap(18, 18, 18)
                                         .addComponent(jLabel15))
-                                    .addComponent(lblHitSortFile))
+                                    .addComponent(rdbHitSort))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtMfns)
                                     .addComponent(cmbMarked, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cmbSearch, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(3, 3, 3)
-                                                .addComponent(jLabel14))
-                                            .addComponent(cmbHitSortFile, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(54, 54, 54)))))))
-                .addContainerGap(50, Short.MAX_VALUE))
+                                        .addGap(3, 3, 3)
+                                        .addComponent(jLabel14)
+                                        .addGap(54, 147, Short.MAX_VALUE))
+                                    .addComponent(cmbHitSortFile, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addGap(50, 50, 50))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,11 +426,11 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
                     .addComponent(rdbSearchResult)
                     .addComponent(jLabel15)
                     .addComponent(cmbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(44, 44, 44)
+                .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbHitSortFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblHitSortFile))
-                .addGap(28, 28, 28)
+                    .addComponent(rdbHitSort))
+                .addGap(26, 26, 26)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -398,7 +446,7 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7)
                     .addComponent(txtOutputTagMFN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -463,8 +511,21 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
       rdbSRW.setSelected(false);
    }//GEN-LAST:event_rdbOAIActionPerformed
 
+    private void rdbHitSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbHitSortActionPerformed
+        cmbHitSortFile.setEnabled(true);
+        cmbSearch.setEnabled(false);
+        cmbMarked.setEnabled(false);
+
+        rdbAllMfn.setEnabled(false);
+        rdbMfns.setEnabled(false);
+        txtMfns.setEnabled(false);
+        rdbMarked.setEnabled(false);
+    }//GEN-LAST:event_rdbHitSortActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox cmbEncoding;
     private javax.swing.JComboBox cmbHitSortFile;
     private javax.swing.JComboBox cmbMarked;
@@ -483,8 +544,8 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JLabel lblHitSortFile;
     private javax.swing.JRadioButton rdbAllMfn;
+    private javax.swing.JRadioButton rdbHitSort;
     private javax.swing.JRadioButton rdbMarked;
     private javax.swing.JRadioButton rdbMfnRange;
     private javax.swing.JRadioButton rdbMfns;
@@ -547,15 +608,22 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
       return (num == null) ? -1 : num.intValue();
    }
 
-   public int getMfnsRangeOption() {
-      if (rdbAllMfn.isSelected()) {
-         return Global.MFNS_OPTION_ALL;
-      } else if (rdbMfns.isSelected()) {
-         return Global.MFNS_OPTION_RANGE;
-      } else {
-         return Global.MFNS_OPTION_MARKED;
-      }
-   }
+  
+    public int getMfnsRangeOption() {
+        if (rdbMfnRange.isSelected() && rdbAllMfn.isSelected()) {
+            return Global.MFNS_OPTION_ALL;
+        } else if (rdbMfnRange.isSelected() && rdbMfns.isSelected()) {
+            return Global.MFNS_OPTION_RANGE;
+        } else if (rdbMfnRange.isSelected() && rdbMarked.isSelected()) {
+            return Global.MFNS_OPTION_MARKED;
+        } else if (rdbSearchResult.isSelected()) {
+            return Global.MFNS_OPTION_SEARCH;
+        } else if (rdbHitSort.isSelected()) {
+            return Global.MFNS_OPTION_HITSORT;
+        } else {
+            return Global.MFNS_OPTION_ALL;
+        }
+    }
     public int getDCOption() {
       if (rdbOAI.isSelected()) {
          return Global.DUBLIN_CORE_OAI;

@@ -5,6 +5,7 @@
 
 package org.unesco.jisis.jisisutils.proxy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.unesco.jisis.corelib.util.Util;
@@ -15,7 +16,7 @@ import org.unesco.jisis.corelib.util.Util;
  *
  * @author jcd
  */
-public class SearchResult {
+public class SearchResult implements Serializable {
    private int searchNumber_;
    private String dbName_;
 

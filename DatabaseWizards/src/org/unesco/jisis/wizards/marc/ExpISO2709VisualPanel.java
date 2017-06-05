@@ -85,7 +85,7 @@ public final class ExpISO2709VisualPanel extends JPanel {
 
    }
 
-   private void prepareMarkedRecordsHistory() {
+   private void prepareMarkedRecordsHistory() {      
       List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
       String[] markedSets = {"No Marked Sets"};
       if (markedRecords != null && !markedRecords.isEmpty()) {
@@ -103,21 +103,44 @@ public final class ExpISO2709VisualPanel extends JPanel {
       cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
 
    }
+   
     private void prepareHitSortHistory() {
-      List<HitSortResult> hitSortResults = db_.getHitSortResults();
-      String[] hitSortNames = {"No HitSorts"};
-      if (hitSortResults != null && !hitSortResults.isEmpty()) {
+       
+        String dbHitSortFilePath = Global.getClientWorkPath() + File.separator
+                + db_.getDbName()
+                + Global.HIT_SORT_FILE_EXT;
+        File dbHitSortFile_ = new File(dbHitSortFilePath);
 
-         int n = hitSortResults.size();
-         hitSortNames = new String[n];
-         for (int i = 0; i < n; i++) {
-            hitSortNames[i] = hitSortResults.get(i).toString();
-         }
-      }else {
-         // Disable Search radio button and combo box
+        String dbHitSortHxfFilePath = Global.getClientWorkPath() + File.separator
+                + db_.getDbName()
+                + Global.HIT_SORT_HXF_FILE_EXT;
+        File dbHitSortHxfFile_ = new File(dbHitSortHxfFilePath);
+
+         String[] hitSortNames = new String[1];
+        if (!dbHitSortFile_.exists()) {
+            hitSortNames[0] = "No HitSorts";
+            // Disable Hit File radio button and combo box
          cmbHitSortFile.setEnabled(false);
          rdbHitSort.setEnabled(false);
-      }
+            
+        } else {
+            hitSortNames[0] = dbHitSortFilePath;
+        }
+
+//      List<HitSortResult> hitSortResults = db_.getHitSortResults();
+//      String[] hitSortNames = {"No HitSorts"};
+//      if (hitSortResults != null && !hitSortResults.isEmpty()) {
+//
+//         int n = hitSortResults.size();
+//         hitSortNames = new String[n];
+//         for (int i = 0; i < n; i++) {
+//            hitSortNames[i] = hitSortResults.get(i).toString();
+//         }
+//      }else {
+//         // Disable Search radio button and combo box
+//         cmbHitSortFile.setEnabled(false);
+//         rdbHitSort.setEnabled(false);
+//      }
       cmbHitSortFile.setModel(new DefaultComboBoxModel(hitSortNames));
 
    }
@@ -548,7 +571,7 @@ public final class ExpISO2709VisualPanel extends JPanel {
                             .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -572,7 +595,7 @@ public final class ExpISO2709VisualPanel extends JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(exportMfnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(optionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(optionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -715,12 +738,19 @@ public final class ExpISO2709VisualPanel extends JPanel {
    }
 
    public int getSearchHistoryIndex() {
-      int index = cmbSearch.getSelectedIndex();
+      int index = -1;
+      if (rdbSearchResult.isSelected()) {
+          index = cmbSearch.getSelectedIndex();
+      }
       return index;
    }
 
    public int getMarkedRecordsIndex() {
-      int index = cmbMarked.getSelectedIndex();
+        int index = -1;
+        if (rdbMarked.isSelected()) {
+            index = cmbMarked.getSelectedIndex();
+        }
+       
       return index;
    }
 
@@ -787,14 +817,19 @@ public final class ExpISO2709VisualPanel extends JPanel {
    }
 
    public int getMfnsRangeOption() {
-      if (rdbAllMfn.isSelected()) {
-         return Global.MFNS_OPTION_ALL;
-      } else if (rdbMfns.isSelected()) {
-         return Global.MFNS_OPTION_RANGE;
-      } else {
-         return Global.MFNS_OPTION_MARKED;
-      }
-
+      if (rdbMfnRange.isSelected() && rdbAllMfn.isSelected()) {
+           return Global.MFNS_OPTION_ALL;
+       } else if (rdbMfnRange.isSelected() && rdbMfns.isSelected()) {
+           return Global.MFNS_OPTION_RANGE;
+       } else if (rdbMfnRange.isSelected() && rdbMarked.isSelected()) {
+           return Global.MFNS_OPTION_MARKED;
+       } else if (rdbSearchResult.isSelected()) {
+           return Global.MFNS_OPTION_SEARCH;
+       } else if (rdbHitSort.isSelected()) {
+           return Global.MFNS_OPTION_HITSORT;
+       } else {
+           return Global.MFNS_OPTION_ALL;
+       }
    }
 
    public String getMfnRanges() {

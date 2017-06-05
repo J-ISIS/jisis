@@ -79,6 +79,13 @@ public final class expWizardAction extends CallableSystemAction {
         int fieldTerminator    = (Integer) wd.getProperty("fieldTerminator");
         int recordTerminator   = (Integer) wd.getProperty("recordTerminator");
         int subfieldDelimiter  = (Integer) wd.getProperty("subfieldDelimiter");
+        
+         
+//      int                 mfnSelectionOption = (Integer) parameters.get("mfnSelectionOption");
+//      String              mfnRangesString    = (String) parameters.get("mfnRanges");
+//     
+//      int                 searchHistoryIndex = (Integer) parameters.get("searchHistoryIndex");
+//      int                 markedHistoryIndex = (Integer) parameters.get("markedHistoryIndex");
         return true;
    }
 

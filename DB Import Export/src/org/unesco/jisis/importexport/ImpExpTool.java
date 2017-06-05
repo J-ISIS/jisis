@@ -2141,7 +2141,54 @@ public class ImpExpTool {
       DialogDisplayer.getDefault().notify(d);
    }
 
-   
+    private static MfnRange[] getHitList(IDatabase db) {
+
+        String dbHitSortFilePath = Global.getClientWorkPath() + File.separator
+                + db.getDbName()
+                + Global.HIT_SORT_FILE_EXT;
+        File dbHitSortFile = new File(dbHitSortFilePath);
+
+        String dbHitSortHxfFilePath = Global.getClientWorkPath() + File.separator
+                + db.getDbName()
+                + Global.HIT_SORT_HXF_FILE_EXT;
+        File dbHitSortHxfFile_ = new File(dbHitSortHxfFilePath);
+
+        List<MfnRange> ranges =  new ArrayList<>();
+        if (!dbHitSortFile.exists()) {
+            NotifyDescriptor d
+                    = new NotifyDescriptor.Message(NbBundle.getMessage(ImpExpTool.class,
+                            "MSG_NO_HIT_SORT_FILE"));
+            DialogDisplayer.getDefault().notify(d);
+        } else {
+       
+
+        BufferedReader in;
+        try {
+            String fullFilepath = dbHitSortFile.getAbsolutePath();
+
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(fullFilepath), "UTF8"));
+
+            // Read the hit sort file
+            String s;
+
+            while ((s = in.readLine()) != null) {
+
+                // The mfn is in positions 0:9
+                long mfn = Long.parseLong(s.substring(0, 9));
+                ranges.add(new MfnRange(mfn, mfn));
+
+            }
+            in.close();
+
+        } catch (Exception e) {
+            System.err.println("Error writing to file");
+            Exceptions.printStackTrace(e);
+        }
+        }
+        MfnRange[] mfnRanges = ranges.stream().toArray(MfnRange[]::new);
+        return mfnRanges;
+
+    }
 
    private static MfnRange[] getMfnRanges(IDatabase db, int mfnSelectionOption,
            String mfnRangesString, int searchHistoryIndex, int markedHistoryIndex) {
@@ -2183,6 +2230,10 @@ public class ImpExpTool {
                   mfnRanges[i] = new MfnRange(mfn, mfn);
                }
                break;
+              case Global.MFNS_OPTION_HITSORT:
+
+                 mfnRanges = getHitList(db);
+                 break;
          }
       } catch (DbException ex) {
          Exceptions.printStackTrace(ex);
@@ -3025,6 +3076,7 @@ public class ImpExpTool {
     }
 
 
+   
 
    
 

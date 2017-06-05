@@ -39,7 +39,6 @@ class NoTabExpansionCharStream extends SimpleCharStream {
    }
    @Override
     public void setTabSize(int i) { tabSize = i; }
-   @Override
     public int getTabSize(int i) { return tabSize; }
 }
 public class FmtDocumentEx extends DefaultStyledDocument implements FmtParserConstants {

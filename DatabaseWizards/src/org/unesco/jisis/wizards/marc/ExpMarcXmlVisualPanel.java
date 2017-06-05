@@ -62,11 +62,12 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
 
         prepareSearchHistory();
         prepareMarkedRecordsHistory();
+        prepareHitSortHistory();
     }
 
    private void prepareSearchHistory() {
 
-      List<SearchResult> searchResults = db_.getSearchResults();
+       List<SearchResult> searchResults = db_.getSearchResults();
       String[] searches = {"No Search"};
       if (searchResults != null && searchResults.size() > 0) {
 
@@ -75,12 +76,17 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
          for (int i = 0; i < n; i++) {
             searches[i] = searchResults.get(i).toString();
          }
+      } else {
+         // Disable Search radio button and combo box
+         cmbSearch.setEnabled(false);
+         rdbSearchResult.setEnabled(false);
       }
       cmbSearch.setModel(new DefaultComboBoxModel(searches));
+     
    }
 
    private void prepareMarkedRecordsHistory() {
-      List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
+       List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
       String[] markedSets = {"No Marked Sets"};
       if (markedRecords != null && !markedRecords.isEmpty()) {
 
@@ -89,8 +95,39 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
          for (int i = 0; i < n; i++) {
             markedSets[i] = markedRecords.get(i).toString();
          }
+      }else {
+         // Disable Search radio button and combo box
+         cmbMarked.setEnabled(false);
+         rdbMarked.setEnabled(false);
       }
       cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
+      
+   }
+    private void prepareHitSortHistory() {
+       
+        String dbHitSortFilePath = Global.getClientWorkPath() + File.separator
+                + db_.getDbName()
+                + Global.HIT_SORT_FILE_EXT;
+        File dbHitSortFile_ = new File(dbHitSortFilePath);
+
+        String dbHitSortHxfFilePath = Global.getClientWorkPath() + File.separator
+                + db_.getDbName()
+                + Global.HIT_SORT_HXF_FILE_EXT;
+        File dbHitSortHxfFile_ = new File(dbHitSortHxfFilePath);
+
+         String[] hitSortNames = new String[1];
+        if (!dbHitSortFile_.exists()) {
+            hitSortNames[0] = "No HitSorts";
+            // Disable Hit File radio button and combo box
+         cmbHitSortFile.setEnabled(false);
+         rdbHitSort.setEnabled(false);
+            
+        } else {
+            hitSortNames[0] = dbHitSortFilePath;
+        }
+
+      cmbHitSortFile.setModel(new DefaultComboBoxModel(hitSortNames));
+
    }
 
    @Override
@@ -133,11 +170,11 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
         cmbSearch = new javax.swing.JComboBox();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
-        lblHitSortFile = new javax.swing.JLabel();
         cmbHitSortFile = new javax.swing.JComboBox();
         txtOutputDir = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         cmbMarked = new javax.swing.JComboBox();
+        rdbHitSort = new javax.swing.JRadioButton();
 
         setPreferredSize(new java.awt.Dimension(800, 470));
 
@@ -228,8 +265,6 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
 
         cmbSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        lblHitSortFile.setText(org.openide.util.NbBundle.getMessage(ExpMarcXmlVisualPanel.class, "ExpMarcXmlVisualPanel.lblHitSortFile.text")); // NOI18N
-
         cmbHitSortFile.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         txtOutputDir.setText(org.openide.util.NbBundle.getMessage(ExpMarcXmlVisualPanel.class, "ExpMarcXmlVisualPanel.txtOutputDir.text")); // NOI18N
@@ -238,6 +273,14 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
         jLabel1.setText(org.openide.util.NbBundle.getMessage(ExpMarcXmlVisualPanel.class, "ExpMarcXmlVisualPanel.jLabel1.text")); // NOI18N
 
         cmbMarked.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        buttonGroup1.add(rdbHitSort);
+        rdbHitSort.setText(org.openide.util.NbBundle.getMessage(ExpMarcXmlVisualPanel.class, "ExpMarcXmlVisualPanel.rdbHitSort.text")); // NOI18N
+        rdbHitSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbHitSortActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -299,20 +342,18 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
                                         .addComponent(rdbSearchResult)
                                         .addGap(18, 18, 18)
                                         .addComponent(jLabel15))
-                                    .addComponent(lblHitSortFile))
+                                    .addComponent(rdbHitSort))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtMfns)
                                     .addComponent(cmbMarked, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cmbSearch, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(3, 3, 3)
-                                                .addComponent(jLabel14))
-                                            .addComponent(cmbHitSortFile, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(54, 54, 54)))))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(3, 3, 3)
+                                        .addComponent(jLabel14)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(cmbHitSortFile, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addGap(81, 81, 81))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,11 +392,11 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
                     .addComponent(rdbSearchResult)
                     .addComponent(jLabel15)
                     .addComponent(cmbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(44, 44, 44)
+                .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbHitSortFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblHitSortFile))
-                .addGap(28, 28, 28)
+                    .addComponent(rdbHitSort))
+                .addGap(26, 26, 26)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -371,7 +412,7 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7)
                     .addComponent(txtOutputTagMFN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(177, 177, 177))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -400,6 +441,18 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
     private void txtMfnsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMfnsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMfnsActionPerformed
+
+    private void rdbHitSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbHitSortActionPerformed
+        cmbHitSortFile.setEnabled(true);
+        cmbSearch.setEnabled(false);
+        cmbMarked.setEnabled(false);
+
+        rdbAllMfn.setEnabled(false);
+        rdbMfns.setEnabled(false);
+        txtMfns.setEnabled(false);
+        rdbMarked.setEnabled(false);
+    }//GEN-LAST:event_rdbHitSortActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -421,8 +474,8 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JLabel lblHitSortFile;
     private javax.swing.JRadioButton rdbAllMfn;
+    private javax.swing.JRadioButton rdbHitSort;
     private javax.swing.JRadioButton rdbMarked;
     private javax.swing.JRadioButton rdbMfnRange;
     private javax.swing.JRadioButton rdbMfns;
@@ -486,14 +539,19 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
    }
 
    public int getMfnsRangeOption() {
-      if (rdbAllMfn.isSelected()) {
-         return Global.MFNS_OPTION_ALL;
-      } else if (rdbMfns.isSelected()) {
-         return Global.MFNS_OPTION_RANGE;
-      } else {
-         return Global.MFNS_OPTION_MARKED;
-      }
-
+      if (rdbMfnRange.isSelected() && rdbAllMfn.isSelected()) {
+           return Global.MFNS_OPTION_ALL;
+       } else if (rdbMfnRange.isSelected() && rdbMfns.isSelected()) {
+           return Global.MFNS_OPTION_RANGE;
+       } else if (rdbMfnRange.isSelected() && rdbMarked.isSelected()) {
+           return Global.MFNS_OPTION_MARKED;
+       } else if (rdbSearchResult.isSelected()) {
+           return Global.MFNS_OPTION_SEARCH;
+       } else if (rdbHitSort.isSelected()) {
+           return Global.MFNS_OPTION_HITSORT;
+       } else {
+           return Global.MFNS_OPTION_ALL;
+       }
    }
 
    public String getMfnRanges() {

@@ -77,6 +77,7 @@ public class ExpISO2709WizardPanel implements WizardDescriptor.Panel {
     // by the user.
     public void readSettings(Object settings) {}
     
+    @Override
     public void storeSettings(Object settings) {
         WizardDescriptor wd = (WizardDescriptor) settings;
         ExpISO2709VisualPanel panel = (ExpISO2709VisualPanel) getComponent();
@@ -88,7 +89,7 @@ public class ExpISO2709WizardPanel implements WizardDescriptor.Panel {
 
         String isoFile = panel.getSelectedFile();
 
-        int mfnSelectionOption = panel.getMfnsRangeOption();
+         int mfnSelectionOption = panel.getMfnsRangeOption();
         String mfnRanges       = panel.getMfnRanges();
         int outputLineLength   = panel.getOutputLineLength();
         String reformattingFST = panel.getReformattingFST();

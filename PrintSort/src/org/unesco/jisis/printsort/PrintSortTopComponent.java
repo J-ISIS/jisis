@@ -1177,9 +1177,9 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                 IContext context = null;
                 String outputFormat = getOutputFormat();
                 if (outputFormat.equals("HTML")) {
-                    context = new HtmlContext();
+                    context = new HtmlContext(null);
                 } else {
-                    context = new PlainTextContext();
+                    context = new PlainTextContext(null);
                 }
                 /**
                  * Process Heading Format *
@@ -1229,9 +1229,9 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                     // GuiGlobal.output("Heading Dummy Record:" + dummyRecord.toString());
                     IContext context = null;
                     if (getOutputFormat().equals("HTML")) {
-                        context = new HtmlContext();
+                        context = new HtmlContext(null);
                     } else {
-                        context = new PlainTextContext();
+                        context = new PlainTextContext(null);
                     }
                     headingFormatter.setContext(context);
                     headingFormatter.setRecord(db_, dummyRecord);
@@ -2186,9 +2186,9 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                     IContext context = null;
                     String outputFormat = getOutputFormat();
                     if (outputFormat.equals("HTML")) {
-                        context = new HtmlContext();
+                        context = new HtmlContext(null);
                     } else {
-                        context = new PlainTextContext();
+                        context = new PlainTextContext(null);
                     }
                //**************************************
 

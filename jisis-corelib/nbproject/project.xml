@@ -229,7 +229,6 @@
                 <package>org.unesco.jisis.corelib.pft.cisis</package>
                 <package>org.unesco.jisis.corelib.pft.interpretor</package>
                 <package>org.unesco.jisis.corelib.pft.parser.cc</package>
-                <package>org.unesco.jisis.corelib.pft.parser.cup</package>
                 <package>org.unesco.jisis.corelib.picklist</package>
                 <package>org.unesco.jisis.corelib.record</package>
                 <package>org.unesco.jisis.corelib.searchengine</package>
@@ -247,6 +246,10 @@
             <class-path-extension>
                 <runtime-relative-path>ext/commons-io-2.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/commons-io-2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/joda-time-2.9.9.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/joda-time-2.9.9.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/multitreemap.jar</runtime-relative-path>

@@ -5,6 +5,7 @@
 
 package org.unesco.jisis.jisisutils.proxy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,56 +13,56 @@ import java.util.List;
  *
  * @author jcd
  */
-public class MarkedRecords {
-   private int markedSetNumber;
-   private String dbName;
+public class MarkedRecords implements Serializable {
+   private int markedSetNumber_;
+   private String dbName_;
 
 
-   private ArrayList<Long> mfns;
-   private String markedSetName;
+   private ArrayList<Long> mfns_;
+   private String markedSetName_;
 
    @Override
    public String toString() {
-      return "MarkedRecords{" + "markedSetNumber=" + markedSetNumber + "dbName="+dbName
-              +" mfns=" + mfns + "markedSetName=" + markedSetName + '}';
+      return "MarkedRecords{" + "markedSetNumber=" + markedSetNumber_ + "dbName="+dbName_
+              +" mfns=" + mfns_ + "markedSetName=" + markedSetName_ + '}';
    }
 
    public MarkedRecords(int markedSetNumber, String dbName, String markedSetName,List<Long> mfns) {
-      this.markedSetNumber = markedSetNumber;
-      this.dbName = dbName;
-      this.markedSetName = markedSetName;
-      this.mfns = new ArrayList<Long>(mfns);
+      this.markedSetNumber_ = markedSetNumber;
+      this.dbName_ = dbName;
+      this.markedSetName_ = markedSetName;
+      this.mfns_ = new ArrayList<Long>(mfns);
 
    }
 
     public String getDbName() {
-      return dbName;
+      return dbName_;
    }
 
    public void setDbName(String dbName) {
-      this.dbName = dbName;
+      this.dbName_ = dbName;
    }
    public List<Long> getMfns() {
-      return mfns;
+      return mfns_;
    }
 
    public void setMfns(List<Long> mfns) {
-      this.mfns = new ArrayList<Long>(mfns);
+      this.mfns_ = new ArrayList<Long>(mfns);
    }
 
    public int getMarkedSetNumber() {
-      return markedSetNumber;
+      return markedSetNumber_;
    }
 
    public void setMarkedSetNumber(int markedSetNumber) {
-      this.markedSetNumber = markedSetNumber;
+      this.markedSetNumber_ = markedSetNumber;
    }
 
    public String getMarkedSetName() {
-      return markedSetName;
+      return markedSetName_;
    }
 
    public void setMarkedSetName(String markedSetName) {
-      this.markedSetName = markedSetName;
+      this.markedSetName_ = markedSetName;
    }
 }
