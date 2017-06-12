@@ -560,7 +560,8 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
         if (db_.getErrorMsg() != null) {
             GuiGlobal.outputErr(db_.getErrorMsg());
         }
-        updateDatabaseInfo();
+        updateDbInfoForIndex();
+        setIndexChanged();
         return ret;
     }
 
@@ -571,7 +572,8 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
         if (db_.getErrorMsg() != null) {
             GuiGlobal.outputErr(db_.getErrorMsg());
         }
-        updateDatabaseInfo();
+        updateDbInfoForIndex();
+        setIndexChanged();
         return ret;
     }
 
@@ -998,7 +1000,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
         if (db_.getErrorMsg() != null) {
             GuiGlobal.outputErr(db_.getErrorMsg());
         }
-        updateDatabaseInfo();
+        updateDbInfoForIndex();
         setIndexChanged();
         return ret;
     }

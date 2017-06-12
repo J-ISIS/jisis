@@ -124,6 +124,26 @@
             </module-dependencies>
             <public-packages/>
             <class-path-extension>
+                <runtime-relative-path>ext/a2jruntime.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/a2jruntime.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/ki-jzkit-hss-1_2_1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/ki-jzkit-hss-1_2_1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/ki-util.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/ki-util.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/commons-logging.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-logging.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/log4j-1.2.16.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/log4j-1.2.16.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
                 <runtime-relative-path>ext/ki-jzkit-iface-1_2_1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/ki-jzkit-iface-1_2_1.jar</binary-origin>
             </class-path-extension>
@@ -132,36 +152,16 @@
                 <binary-origin>release/modules/ext/xalan.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/log4j-1.2.16.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/log4j-1.2.16.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/ki-util.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/ki-util.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
                 <runtime-relative-path>ext/ki-jzkit-z3950-1_2_1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/ki-jzkit-z3950-1_2_1.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/a2jruntime.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/a2jruntime.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/commons-logging.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/commons-logging.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/jdom.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jdom.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-logging-api.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/commons-logging-api.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/ki-jzkit-hss-1_2_1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/ki-jzkit-hss-1_2_1.jar</binary-origin>
+                <runtime-relative-path>ext/jdom.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jdom.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>
