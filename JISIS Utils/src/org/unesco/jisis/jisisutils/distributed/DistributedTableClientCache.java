@@ -4,6 +4,7 @@ package org.unesco.jisis.jisisutils.distributed;
 
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.util.Exceptions;
 
 import org.openide.util.RequestProcessor;
 import org.slf4j.LoggerFactory;
@@ -99,29 +100,14 @@ public class DistributedTableClientCache {
 
    private Object[][] rows = null;
 
+   
    private void doRetrieveData() {
-      Runnable retrieveRun = new Runnable() {
-         public void run() {
-            final ProgressHandle progressHandle = ProgressHandleFactory.createHandle(Retrieving_data);
-            progressHandle.start();
-            progressHandle.switchToIndeterminate();
-            
-            // RETRIEVE THE DATA
-            try {
-               rows = tableDataSource_.retrieveRows(fromIndex_, toIndex_, progressHandle);
-            } catch (Exception ex) {
-               ex.printStackTrace();
+         try {
+             rows = tableDataSource_.retrieveRows(fromIndex_, toIndex_, null);
 
-               throw new RuntimeException("Problem occurred retrieving table data \n");
-            }
-            progressHandle.finish();
+         } catch (Exception ex) {
+             Exceptions.printStackTrace(ex);
          }
-      };
-      
-      //ProgHandle.start(99);
-      RequestProcessor.Task task = RequestProcessor.getDefault().post(retrieveRun);
-      task.waitFinished();
-      //task.cancel();
       
    }
 

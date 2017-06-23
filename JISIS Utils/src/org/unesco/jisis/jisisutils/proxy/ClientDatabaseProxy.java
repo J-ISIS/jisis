@@ -470,6 +470,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
         }
         currentRecordMfn_ = record.getMfn();
         db_.getClientDatabaseInfo().setRecordsCount(recordsCount);
+        db_.getClientDatabaseInfo().setLastMfn(db_.getLastMfn());
         // Note that setDatabaseChanged includes notifies for the DB and indexes */
         setDatabaseChanged();
         return record;
@@ -499,9 +500,9 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
          * addRecord adds a record to the database WITHOUT UPDATING THE INDEX
          * Thus just update DB info and not Index info
          */
-//        updateDbInfoForDb();
-//
-//        setDatabaseChanged();
+        updateDbInfoForDb();
+
+        setDatabaseChanged();
         return rec;
     }
 
@@ -511,7 +512,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
         if (db_.getErrorMsg() != null) {
             GuiGlobal.outputErr(db_.getErrorMsg());
         }
-        currentRecordMfn_ = record.getMfn();
+        currentRecordMfn_ = rec.getMfn();
         updateDatabaseInfo();
         setDatabaseChanged();
         return rec;
@@ -523,7 +524,7 @@ public class ClientDatabaseProxy implements IDatabase, IDatabaseEx {
         if (db_.getErrorMsg() != null) {
             GuiGlobal.outputErr(db_.getErrorMsg());
         }
-        currentRecordMfn_ = record.getMfn();
+        currentRecordMfn_ = rec.getMfn();
           /**
          * updateRecordEx update a record to the database WITHOUT UPDATING THE INDEX
          * Thus just update DB info and not Index info

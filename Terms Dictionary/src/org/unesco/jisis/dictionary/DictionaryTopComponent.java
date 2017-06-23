@@ -40,7 +40,7 @@ import org.unesco.jisis.gui.GuiUtils;
 import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 import org.unesco.jisis.jisisutils.distributed.PagingModel;
 import org.unesco.jisis.jisisutils.distributed.PagingToolBar;
-import org.unesco.jisis.jisisutils.threads.IdeCursor;
+
 
 class Popupmenu_mouseAdapter extends java.awt.event.MouseAdapter {
    JPopupMenu popup;
@@ -104,9 +104,8 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
     public DictionaryTopComponent(IDatabase db) {
 
         final JFrame mainWin = (JFrame) WindowManager.getDefault().getMainWindow();
-        IdeCursor.changeCursorWaitStatus(true);
-        StatusDisplayer.getDefault().setStatusText("Loading Indexed Tems, please wait...");
-        RepaintManager.currentManager(mainWin).paintDirtyRegions();
+        
+       
         if (db instanceof ClientDatabaseProxy) {
             db_ = (ClientDatabaseProxy) db;
         } else {
@@ -120,7 +119,7 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
             this.setDisplayName("Dictionary" + " (" + db.getDbHome() + "//" + db.getDatabaseName() + ")");
 
             //model_ = new DistributedTableModel(new TermsTableDataSource(db));
-            model_ = new PagingModel(new TermsTableDataSource(db));
+            model_ = new PagingModel(new TermsTableDataSource(db, mainWin));
 
             initComponents();
             
@@ -163,7 +162,7 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
 
             termsTable_.setRowSelectionAllowed(true);
             termsTable_.setCellSelectionEnabled(true);
-
+            
 //         sorter_ = new FilterOnlyTableRowSorter<DistributedTableModel>(termsTable_);
 //         termsTable_.setRowSorter(sorter_);
             suggestionBox = new javax.swing.JPopupMenu();
@@ -194,6 +193,7 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
                 }
             });
             suggestionList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+                @Override
                 public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                     suggestionListValueChanged(evt);
                 }
@@ -240,6 +240,7 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
 
             cmbFstEntry.addActionListener(new java.awt.event.ActionListener() {
 
+                @Override
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     searchableFieldClicked(evt);
                 }
@@ -277,10 +278,6 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
             new GeneralDatabaseException(ex).displayWarning();
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
-        } finally {
-            IdeCursor.changeCursorWaitStatus(false);
-            StatusDisplayer.getDefault().setStatusText("");
-            RepaintManager.currentManager(mainWin).paintDirtyRegions();
         }
     }
 

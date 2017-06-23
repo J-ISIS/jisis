@@ -143,6 +143,8 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
    private int mfnListPageNumber_ = 0;
    private int mfnListItemsPerPage_ = 100;
    
+   private boolean disableSuggestions_;
+   
     protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SearchTopComponent.class);
 
    /** Creates new form srchTopComponent
@@ -567,19 +569,23 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
 
    }
 
-   private void queryFieldTyped(java.awt.event.KeyEvent evt) {
-      if (evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
-         // update suggestions
-      } else if (!Pattern.matches("(\\p{L}|\\p{N}|=|:|\\-)", String.valueOf(evt.getKeyChar()))) {
-         return;
-      }
+    private void queryFieldTyped(java.awt.event.KeyEvent evt) {
+        if (disableSuggestions_) {
+            return;
+        }
+        if (evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
+            // update suggestions
+        } else if (!Pattern.matches("(\\p{L}|\\p{N}|=|:|\\-)", String.valueOf(evt.getKeyChar()))) {
+            return;
+        }
 
-      int index = 0;
-      for (index = 0; index < this.queryPanels_.size(); index += 1) {
-         if (this.queryPanels_.get(index)[3] == evt.getSource()) {
-            break;
-         }
-      }
+        int index;
+        for (index = 0; index < this.queryPanels_.size(); index += 1) {
+            if (this.queryPanels_.get(index)[3] == evt.getSource()) {
+                break;
+            }
+        }
+     
 
       /* Something was typed */
       if (suggestionTimerTask_ != null) {
@@ -596,23 +602,26 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
     * @param evt
     * @param searchableField
     */
-   private void searchableFieldChanged(ActionEvent evt, SearchableField searchableField) {
-       int index = 0;
-      for (index = 0; index < this.queryPanels_.size(); index += 1) {
-         if (this.queryPanels_.get(index)[1] == evt.getSource()) {
-            break;
-         }
-      }
+    private void searchableFieldChanged(ActionEvent evt, SearchableField searchableField) {
+        if (disableSuggestions_) {
+            return;
+        }
+        int index = 0;
+        for (index = 0; index < this.queryPanels_.size(); index += 1) {
+            if (this.queryPanels_.get(index)[1] == evt.getSource()) {
+                break;
+            }
+        }
         if (suggestionTimerTask_ != null) {
-         suggestionTimerTask_.cancel();
-      }
+            suggestionTimerTask_.cancel();
+        }
 
-      showRetrievingTerms();
-      suggestionTimerTask_ = new SuggestionTimerTask(this, (JComboBox) this.queryPanels_.get(index)[1],
-              (JTextComponent) this.queryPanels_.get(index)[3]);
-      suggestionTimer_.schedule(this.suggestionTimerTask_, 500);
-   }
-   // </editor-fold>
+        showRetrievingTerms();
+        suggestionTimerTask_ = new SuggestionTimerTask(this, (JComboBox) this.queryPanels_.get(index)[1],
+                (JTextComponent) this.queryPanels_.get(index)[3]);
+        suggestionTimer_.schedule(this.suggestionTimerTask_, 500);
+    }
+ 
 
    public void showRetrievingTerms() {
       // Set status text
@@ -670,7 +679,7 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
              params.add(TermParams.TERMS_SORT, TermParams.TERMS_SORT_COUNT);
          }
          //no lower bound, upper bound or rows
-         int maxTerms = 200;
+         int maxTerms = 150;
          params.add(TermParams.TERMS_LIMIT, String.valueOf(maxTerms));
          //List<DictionaryTerm> v = db_.getTermSuggestions(value,fieldNames, 100);
          List<DictionaryTerm> list = db_.getTermSuggestions(params);
@@ -1207,6 +1216,11 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
         jPanel2.add(btnDictionaryOptions);
 
         chkbDisableSuggestions.setText(org.openide.util.NbBundle.getMessage(SearchTopComponent.class, "SearchTopComponent.chkbDisableSuggestions.text")); // NOI18N
+        chkbDisableSuggestions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkbDisableSuggestionsActionPerformed(evt);
+            }
+        });
         jPanel2.add(chkbDisableSuggestions);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1681,6 +1695,12 @@ private void btnDictionaryOptionsActionPerformed(java.awt.event.ActionEvent evt)
         mfnListPageNumber_ = 0;
         this.titleBoxActionPerformed(null);
     }//GEN-LAST:event_chkbSortByMfnActionPerformed
+
+    private void chkbDisableSuggestionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkbDisableSuggestionsActionPerformed
+       // TODO add your handling code here:
+       disableSuggestions_ = chkbDisableSuggestions.isSelected();
+
+    }//GEN-LAST:event_chkbDisableSuggestionsActionPerformed
 
 
 

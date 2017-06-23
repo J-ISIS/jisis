@@ -19,6 +19,8 @@ V0:\'Africa\'\n
 V0:\'BNF\'
 [jeanclaude_outputFileName]
 s1.html
+[shreiber_outputFileName]
+index.txt
 [jeanclaude_txtHeadingFormat]
 mhl,\'<hr /><p style=\"text-align:justify;color:Navy;font-weight : bold;margin-left:20px;margin-right:40px\"><strong>\'v1\'</strong></p>\'
 mhl,\'<hr /><p style=\"text-align:justify;color:Navy;font-weight : bold;margin-right:40px\"><strong>\'v1\'</strong></p>\'
@@ -30,6 +32,26 @@ mhl,\'<hr /><strong><p style=text-align:justify;olor:Navy;strong;margin-right:40
 1
 [PATR_txtOutputDir]
 C:\\J-ISIS 2014\\jisis\\work
+[shreiber_txtHeadingFormat]
+if p( V10) then #v10   else   \'  ,\'  fi,   F(val(V20),5,0)
+if p( V10) then #v10   else   \'  ,\'  fi   F(V20,5,0)
+if p( V10) then #v10   else   \'  ,\'  fi   F(V20,5)
+if p( V10) then #v10   else   \'  ,\'  fi  \' F(V20,5)
+if p( V10) then #v10 \'  else   \'  ,\' fi  \' V20
+if p( V10) then #v10 \' : \'  fi   V20\"; \"
+if p( V10) then #v10 \' :\'  fi, V20+|; |
+if p( V10) then #v10, \' :\'  fi, V20+|; |
+V10,V20
+#v10,v20+|; |
+#v10,v20\", \",
+v10,v20\", \",
+v10,( v20\", \")#/
+#/v10,( v20\", \")
+v10,( v20\", \")
+/#,v10, v20\", \"
+/#,v10, (v20,|, |)
+/#,v10,\'\\t\',v20
+/#,v10,\'\\t\'
 [PATR_txtMfns]
 6
 1
@@ -38,6 +60,8 @@ _270:\"1966\"
 _270:1966
 [SciELO_FreeTextSearch]
 v0:\'Cristiano\'
+[shreiber_txtOutputDir]
+C:\\J-ISIS 2016\\jisis\\work
 [jeanclaude_FreeTextSearch]
 v0:\'Jean\'
 [CDS_txtMfns]

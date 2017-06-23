@@ -423,6 +423,9 @@
                           <ResourceString bundle="org/unesco/jisis/datasearch/Bundle.properties" key="SearchTopComponent.chkbDisableSuggestions.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkbDisableSuggestionsActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>

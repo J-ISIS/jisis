@@ -45,6 +45,7 @@ import org.unesco.jisis.corelib.client.ConnectionInfo;
 import org.unesco.jisis.corelib.client.ConnectionPool;
 import org.unesco.jisis.corelib.common.Global;
 import org.unesco.jisis.corelib.common.IDatabase;
+import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.corelib.exceptions.DefaultDBNotFoundException;
 import org.unesco.jisis.gui.GuiUtils;
 import org.unesco.jisis.gui.MultiSortTableCellHeaderRenderer;
@@ -78,73 +79,72 @@ public class RecordDataBrowserTopComponent extends TopComponent implements Obser
 
 
 
-   public RecordDataBrowserTopComponent(IDatabase db) {
+    public RecordDataBrowserTopComponent(IDatabase db) {
 
-      if (db instanceof ClientDatabaseProxy) {
-         db_ = (ClientDatabaseProxy) db;
-      } else {
-         throw new RuntimeException("RecordDataBrowserTopComponent: Cannot cast DB to ClientDatabaseProxy");
-      }
-      /* Register this TopComponent as attached to this DB */
-      db_.addWindow(this);
+        if (db instanceof ClientDatabaseProxy) {
+            db_ = (ClientDatabaseProxy) db;
+        } else {
+            throw new RuntimeException("RecordDataBrowserTopComponent: Cannot cast DB to ClientDatabaseProxy");
+        }
+        /* Register this TopComponent as attached to this DB */
+        db_.addWindow(this);
 
-      /* Add this TopComponent as Observer to DB changes */
-      db_.addObserver((Observer) this);
-      /* Add this TopComponent as Observer to HitSortFile change */
-      GuiGlobal.addHitSortFileObserver((Observer) this);
+        /* Add this TopComponent as Observer to DB changes */
+        db_.addObserver((Observer) this);
+        /* Add this TopComponent as Observer to HitSortFile change */
+        GuiGlobal.addHitSortFileObserver((Observer) this);
 
-      GuiGlobal.setEnabledHitSortFileComponent(true);
-      try {
-         long recCount = db_.getRecordsCount();
-         long maxMFN = db_.getLastMfn();
-         System.out.println("RecordDataBrowserTopComponent recCount=" + recCount +
-                 " maxMFN=" + maxMFN);
+        GuiGlobal.setEnabledHitSortFileComponent(true);
+        initComponents();
+        // Use our own custom scrollpane.
+        scrollPane_ = PagingModel.createPagingScrollPaneForTable(table_, scrollPane_);
+        setName(NbBundle.getMessage(RecordDataBrowserTopComponent.class, "CTL_RecordDataBrowserTopComponent"));
 
-         /* Display the db name on the tab index */
-         this.setDisplayName("DB Browser" + " (" +db.getDbHome()+"//"+ db.getDatabaseName() + ")");
-         /* Create the Table model for this DB, overriding the isCellEditable
+        setToolTipText(NbBundle.getMessage(RecordDataBrowserTopComponent.class, "HINT_RecordDataBrowserTopComponent"));
+        try {
+            /* Display the db name on the tab index */
+            this.setDisplayName("DB Browser" + " (" + db.getDbHome() + "//" + db.getDatabaseName() + ")");
+        } catch (DbException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+       
+        buildTableModel();
+        table_.setModel(model_);
+         initTable();
+
+    }
+   
+    private void buildTableModel() {
+        try {
+
+            /* Create the Table model for this DB, overriding the isCellEditable
           * method so that we can edit the cell for showing the scroll bar.
           * Editing is later-on disabled by calling setEditable(false) on the
           * JTextArea of the cell editor. Rather tricky, but it works.
-          */
-         dataSource_ = new RecordTableDataSource(db);
-//          long indexes[]= { 25L,20L,15L,10L,5L };
-//          dataSource_.setIndexMap(indexes);
-         //model_ = new DistributedTableModel(dataSource_) {
-         
-         model_ = new PagingModel(dataSource_) {
+             */
+            dataSource_ = new RecordTableDataSource(db_);
 
-            /** Override isCellEditable */
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-               return true;
-            }
-         };
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
-      
-      initComponents();
-      // Use our own custom scrollpane.
-      scrollPane_ = PagingModel.createPagingScrollPaneForTable(table_, scrollPane_);
-      setName(NbBundle.getMessage(RecordDataBrowserTopComponent.class, "CTL_RecordDataBrowserTopComponent"));
+            model_ = new PagingModel(dataSource_) {
 
-      setToolTipText(NbBundle.getMessage(RecordDataBrowserTopComponent.class, "HINT_RecordDataBrowserTopComponent"));
+                /**
+                 * Override isCellEditable
+                 */
+                @Override
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return true;
+                }
+            };
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-       initTable();
+        // Use our own custom scrollpane.
+        scrollPane_ = PagingModel.createPagingScrollPaneForTable(table_, scrollPane_);
 
-       // Use our own custom scrollpane.
-       scrollPane_ = PagingModel.createPagingScrollPaneForTable(table_, scrollPane_);
+        PagingToolBar pagingToolBar = new PagingToolBar(model_, scrollPane_, table_);
 
-       PagingToolBar pagingToolBar = new PagingToolBar(model_, scrollPane_, table_);
-
-       pnlToolBar.add(pagingToolBar, BorderLayout.WEST);
-
-      putClientProperty("print.printable", Boolean.TRUE); // NOI18N
-
-
-   //        setIcon(Utilities.loadImage(ICON_PATH, true));
-   }
+        pnlToolBar.add(pagingToolBar, BorderLayout.WEST);
+    }
 
 
    private void initTable() {
@@ -198,8 +198,15 @@ public class RecordDataBrowserTopComponent extends TopComponent implements Obser
       }
 
 
+      
+       TableColumn column;
+       int numCols = table_.getColumnCount();
+       while (table_.getColumnCount() > 0) {
+           column = table_.getColumnModel().getColumn(numCols - 1);
+           table_.removeColumn(column);
+           numCols--;
+       }
       /* Create the columns with our cell renderer and editor */
-      TableColumn column = null;
       for (int i = 0; i < model_.getColumnCount(); i++) {
          int w = (i == 0) ? 100 : 150;
          if (model_.getColumnClass(i).equals(Object.class)) {
@@ -477,7 +484,6 @@ public class RecordDataBrowserTopComponent extends TopComponent implements Obser
         scrollPane_.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         table_.setAutoCreateColumnsFromModel(false);
-        table_.setModel(model_);
         table_.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         scrollPane_.setViewportView(table_);
 
@@ -672,13 +678,10 @@ public class RecordDataBrowserTopComponent extends TopComponent implements Obser
          return;
       }
       if (db_.databaseHasChanged()) {
-         model_.clearCache();
-         model_.fireTableDataChanged();
-         /* Have to reset the model otherwise it was not working
-          * it may come from ETable and maybe not necessary
-          * for JTable
-          */
-         table_.setModel(model_);
+          buildTableModel();
+        table_.setModel(model_);
+         initTable();
+         
          table_.updateUI();
          nonScrollingColumns_.updateUI();
 //      String msg= "Database was changed !";

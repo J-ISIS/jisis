@@ -1173,7 +1173,7 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
             String headingPft;
             ISISFormatter headingFormatter = null;
             if (getPrintWithHeadings()) {
-                // Yes print the headins
+                // Yes print the headings
                 IContext context = null;
                 String outputFormat = getOutputFormat();
                 if (outputFormat.equals("HTML")) {
@@ -1319,7 +1319,7 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                 }
             }
 
-            if (!hasHtmlHeader) {
+            if (getOutputFormat().equals("HTML") && !hasHtmlHeader) {
                 printStream_.print(HtmlContext.getXhtmlBegin(db_.getDatabaseName()));
             }
 

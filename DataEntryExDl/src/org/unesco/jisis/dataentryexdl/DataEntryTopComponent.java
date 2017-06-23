@@ -958,7 +958,10 @@ public class DataEntryTopComponent extends TopComponent implements Observer {
       long mfn = currRec_.getMfn();
       try {
          db_.deleteRecord(mfn);
-         newRecord();
+         long displayMfn = db_.getCurrentRecordMfn();
+         IRecord rec = db_.getRecord(displayMfn);
+         setRecord(rec);
+         
       } catch (DbException ex) {
          new RecordNotDeleted(ex).displayWarning();
       }
