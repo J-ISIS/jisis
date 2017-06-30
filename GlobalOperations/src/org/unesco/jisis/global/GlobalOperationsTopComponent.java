@@ -1058,7 +1058,7 @@ public final class GlobalOperationsTopComponent extends TopComponent implements 
         }
 
         // Check field tag > 0
-        int itag = (Integer) spinnerFieldTag.getValue();
+        int itag = (Integer) spinnerFieldTagDelete.getValue();
         if (itag == 0) {
             String message = NbBundle.getMessage(GlobalOperationsTopComponent.class,
                 "MSG_FIELD_TAG_MAY_NOT_BE_ZERO");
