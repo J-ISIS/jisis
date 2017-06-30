@@ -1,12 +1,17 @@
 package org.unesco.jisis.wizards.marc;
 
+import java.awt.Component;
+import java.awt.Rectangle;
 import java.io.File;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JFormattedTextField;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.text.MaskFormatter;
 import org.marc4j.Constants;
 import org.openide.util.NbBundle;
@@ -65,45 +70,104 @@ public final class ExpISO2709VisualPanel extends JPanel {
         prepareMarkedRecordsHistory();
         prepareHitSortHistory();
     }
-   private void prepareSearchHistory() {
+    private void prepareSearchHistory() {
 
-      List<SearchResult> searchResults = db_.getSearchResults();
-      String[] searches = {"No Search"};
-      if (searchResults != null && searchResults.size() > 0) {
+        List<SearchResult> searchResults = db_.getSearchResults();
+        String[] searches = {"No Search"};
+        if (searchResults != null && searchResults.size() > 0) {
 
-         int n = searchResults.size();
-         searches = new String[n];
-         for (int i = 0; i < n; i++) {
-            searches[i] = searchResults.get(i).toString();
-         }
-      } else {
-         // Disable Search radio button and combo box
-         cmbSearch.setEnabled(false);
-         rdbSearchResult.setEnabled(false);
-      }
-      cmbSearch.setModel(new DefaultComboBoxModel(searches));
+            int n = searchResults.size();
+            searches = new String[n];
+            for (int i = 0; i < n; i++) {
+                searches[i] = searchResults.get(i).toString();
+            }
+        } else {
+            // Disable Search radio button and combo box
+            cmbSearch.setEnabled(false);
+            rdbSearchResult.setEnabled(false);
+        }
+        cmbSearch.setModel(new DefaultComboBoxModel(searches));
+        /**
+         * Make Combo text display short, and tool tip for full text 
+         */
+        cmbSearch.setPrototypeDisplayValue("Short");
+        cmbSearch.setRenderer(new DefaultListCellRenderer() {
 
-   }
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbSearch.setToolTipText(value.toString());
+                    return this;
+                }
 
-   private void prepareMarkedRecordsHistory() {      
-      List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
-      String[] markedSets = {"No Marked Sets"};
-      if (markedRecords != null && !markedRecords.isEmpty()) {
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbSearch.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
 
-         int n = markedRecords.size();
-         markedSets = new String[n];
-         for (int i = 0; i < n; i++) {
-            markedSets[i] = markedRecords.get(i).toString();
-         }
-      }else {
-         // Disable Search radio button and combo box
-         cmbMarked.setEnabled(false);
-         rdbMarked.setEnabled(false);
-      }
-      cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
+    }
 
-   }
-   
+    private void prepareMarkedRecordsHistory() {
+        List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
+        String[] markedSets = {"No Marked Sets"};
+        if (markedRecords != null && !markedRecords.isEmpty()) {
+
+            int n = markedRecords.size();
+            markedSets = new String[n];
+            for (int i = 0; i < n; i++) {
+                markedSets[i] = markedRecords.get(i).toString();
+            }
+        } else {
+            // Disable Search radio button and combo box
+            cmbMarked.setEnabled(false);
+            rdbMarked.setEnabled(false);
+        }
+        cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
+        cmbMarked.setPrototypeDisplayValue("Short");
+        cmbMarked.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbMarked.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbMarked.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
+
+    }
+
     private void prepareHitSortHistory() {
        
         String dbHitSortFilePath = Global.getClientWorkPath() + File.separator

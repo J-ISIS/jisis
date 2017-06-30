@@ -4,10 +4,15 @@
  */
 package org.unesco.jisis.wizards.marc;
 
+import java.awt.Component;
+import java.awt.Rectangle;
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
+import javax.swing.SwingUtilities;
 import org.openide.util.NbBundle;
 import org.unesco.jisis.corelib.client.ConnectionInfo;
 import org.unesco.jisis.corelib.client.ConnectionPool;
@@ -79,11 +84,43 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
          cmbSearch.setEnabled(false);
          rdbSearchResult.setEnabled(false);
       }
-      cmbSearch.setModel(new DefaultComboBoxModel(searches));
-   }
-    
-     private void prepareHitSortHistory() {
-       
+        cmbSearch.setModel(new DefaultComboBoxModel(searches));
+
+        /**
+         * Make Combo text display short, and tool tip for full text
+         */
+        cmbSearch.setPrototypeDisplayValue("Short");
+        cmbSearch.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbSearch.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbSearch.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
+    }
+
+    private void prepareHitSortHistory() {
+
         String dbHitSortFilePath = Global.getClientWorkPath() + File.separator
                 + db_.getDbName()
                 + Global.HIT_SORT_FILE_EXT;
@@ -94,44 +131,74 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
                 + Global.HIT_SORT_HXF_FILE_EXT;
         File dbHitSortHxfFile_ = new File(dbHitSortHxfFilePath);
 
-         String[] hitSortNames = new String[1];
+        String[] hitSortNames = new String[1];
         if (!dbHitSortFile_.exists()) {
             hitSortNames[0] = "No HitSorts";
             // Disable Hit File radio button and combo box
-         cmbHitSortFile.setEnabled(false);
-         rdbHitSort.setEnabled(false);
-            
+            cmbHitSortFile.setEnabled(false);
+            rdbHitSort.setEnabled(false);
+
         } else {
             hitSortNames[0] = dbHitSortFilePath;
         }
 
-      cmbHitSortFile.setModel(new DefaultComboBoxModel(hitSortNames));
+        cmbHitSortFile.setModel(new DefaultComboBoxModel(hitSortNames));
 
-   }
+    }
 
+    private void prepareMarkedRecordsHistory() {
+        List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
+        String[] markedSets = {"No Marked Sets"};
+        if (markedRecords != null && !markedRecords.isEmpty()) {
 
-   private void prepareMarkedRecordsHistory() {
-         List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
-      String[] markedSets = {"No Marked Sets"};
-      if (markedRecords != null && !markedRecords.isEmpty()) {
+            int n = markedRecords.size();
+            markedSets = new String[n];
+            for (int i = 0; i < n; i++) {
+                markedSets[i] = markedRecords.get(i).toString();
+            }
+        } else {
+            // Disable Search radio button and combo box
+            cmbMarked.setEnabled(false);
+            rdbMarked.setEnabled(false);
+        }
+        cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
+        
+         cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
+        cmbMarked.setPrototypeDisplayValue("Short");
+        cmbMarked.setRenderer(new DefaultListCellRenderer() {
 
-         int n = markedRecords.size();
-         markedSets = new String[n];
-         for (int i = 0; i < n; i++) {
-            markedSets[i] = markedRecords.get(i).toString();
-         }
-      }else {
-         // Disable Search radio button and combo box
-         cmbMarked.setEnabled(false);
-         rdbMarked.setEnabled(false);
-      }
-      cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
-    
-   }
-   @Override
-   public String getName() {
-      return NbBundle.getMessage(ExpDCVisualPanel.class, "MSG_ExpDCVisualPanel");
-   }
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbMarked.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbMarked.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
+
+    }
+
+    @Override
+    public String getName() {
+        return NbBundle.getMessage(ExpDCVisualPanel.class, "MSG_ExpDCVisualPanel");
+    }
 
 
    /**

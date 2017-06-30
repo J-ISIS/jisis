@@ -10,10 +10,15 @@
  */
 package org.unesco.jisis.wizards.marc;
 
+import java.awt.Component;
+import java.awt.Rectangle;
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
+import javax.swing.SwingUtilities;
 import org.openide.util.NbBundle;
 import org.unesco.jisis.corelib.client.ConnectionInfo;
 import org.unesco.jisis.corelib.client.ConnectionPool;
@@ -82,6 +87,37 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
          rdbSearchResult.setEnabled(false);
       }
       cmbSearch.setModel(new DefaultComboBoxModel(searches));
+      /**
+         * Make Combo text display short, and tool tip for full text 
+         */
+        cmbSearch.setPrototypeDisplayValue("Short");
+        cmbSearch.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbSearch.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbSearch.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
      
    }
 
@@ -101,6 +137,36 @@ public class ExpMarcXmlVisualPanel extends javax.swing.JPanel {
          rdbMarked.setEnabled(false);
       }
       cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
+      
+       cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
+        cmbMarked.setPrototypeDisplayValue("Short");
+        cmbMarked.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbMarked.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbMarked.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
       
    }
     private void prepareHitSortHistory() {

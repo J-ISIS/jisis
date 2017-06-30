@@ -107,7 +107,6 @@
                                   <Group type="102" attributes="0">
                                       <EmptySpace min="3" pref="3" max="3" attributes="0"/>
                                       <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="54" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="cmbHitSortFile" alignment="0" max="32767" attributes="0"/>
                               </Group>
