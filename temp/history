@@ -1,24 +1,10 @@
 [PATR_outputFileName]
 PATR-test2.html
 PATR-test1.html
-[CDS_outputFileName]
-testsort2.txt
-testsort1.txt
-testsort.txt
-testsort.html.txt
-testsort.html
-test4.html
-test3.html
-test2.html
-test1.html
-[jeanclaude_txtOutputDir]
-K:\\J-ISIS 2015\\jisis\\work
 [CDS_FreeTextSearch]
 V0:\'Africa\'\n
 [VIAF_FreeTextSearch]
 V0:\'BNF\'
-[jeanclaude_outputFileName]
-s1.html
 [shreiber_outputFileName]
 index.txt
 [jeanclaude_txtHeadingFormat]
@@ -28,10 +14,10 @@ mhl,\'<hr /><strong><p style=\"text-align:justify;color:Navy;font-weight : bold;
 mhl,\'<hr /><strong><p style=\"text-align:justify;color:Navy;strong;margin-right:40px\">\'v1\'</strong></p>\'
 mhl,\'<hr /><strong><p style=text-align:justify;olor:Navy;strong;margin-right:40px\">\'v1\'</strong></p>\'
 mhl,\'<hr /><strong><p style=text-align:justify;olor:Navy;strong;margin-right:40px\">\'v1\'</strong</p>\'
+[test to delete_txtMfnListAdd]
+1
 [CDS_txtMfnsSort]
 1
-[PATR_txtOutputDir]
-C:\\J-ISIS 2014\\jisis\\work
 [shreiber_txtHeadingFormat]
 if p( V10) then #v10   else   \'  ,\'  fi,   F(val(V20),5,0)
 if p( V10) then #v10   else   \'  ,\'  fi   F(V20,5,0)
@@ -52,6 +38,8 @@ v10,( v20\", \")
 /#,v10, (v20,|, |)
 /#,v10,\'\\t\',v20
 /#,v10,\'\\t\'
+[test to delete_txtContentAdd]
+^aParis
 [PATR_txtMfns]
 6
 1
@@ -60,15 +48,6 @@ _270:\"1966\"
 _270:1966
 [SciELO_FreeTextSearch]
 v0:\'Cristiano\'
-[shreiber_txtOutputDir]
-C:\\J-ISIS 2016\\jisis\\work
-[jeanclaude_FreeTextSearch]
-v0:\'Jean\'
-[CDS_txtMfns]
-10-11
-5-6
-3-4
-1,2
 [ASFAEX_expertSearch]
 _120:TW\\=EASTERN
 _120:TW\\=eastern
@@ -87,3 +66,30 @@ C:\\J-ISIS 2014\\jisis\\work
 _24:activities
 _24:activitie
 _24:ACTIVITIES
+[CDS_outputFileName]
+testsort2.txt
+testsort1.txt
+testsort.txt
+testsort.html.txt
+testsort.html
+test4.html
+test3.html
+test2.html
+test1.html
+[jeanclaude_txtOutputDir]
+K:\\J-ISIS 2015\\jisis\\work
+[test to delete_txtMfnListDelete]
+1
+[jeanclaude_outputFileName]
+s1.html
+[PATR_txtOutputDir]
+C:\\J-ISIS 2014\\jisis\\work
+[shreiber_txtOutputDir]
+C:\\J-ISIS 2016\\jisis\\work
+[jeanclaude_FreeTextSearch]
+v0:\'Jean\'
+[CDS_txtMfns]
+10-11
+5-6
+3-4
+1,2

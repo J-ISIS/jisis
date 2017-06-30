@@ -11,8 +11,10 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+import java.awt.Component;
 
 import java.awt.EventQueue;
+import java.awt.Rectangle;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -180,7 +182,69 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
             }
         }
         cmbSearch.setModel(new DefaultComboBoxModel(searches));
+          /**
+         * Make Combo text display short, and tool tip for full text
+         */
+        cmbSearch.setPrototypeDisplayValue("Short");
+        cmbSearch.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbSearch.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbSearch.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
         cmbSearchSort.setModel(new DefaultComboBoxModel(searches));
+          /**
+         * Make Combo text display short, and tool tip for full text
+         */
+        cmbSearchSort.setPrototypeDisplayValue("Short");
+        cmbSearchSort.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbSearchSort.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbSearchSort.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
     }
 
     private void prepareMarkedRecordsHistory() {
@@ -195,8 +259,70 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
             }
         }
         cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
-        cmbMarkedSort.setModel(new DefaultComboBoxModel(markedSets));
+          /**
+         * Make Combo text display short, and tool tip for full text
+         */
+        cmbMarked.setPrototypeDisplayValue("Short");
+        cmbMarked.setRenderer(new DefaultListCellRenderer() {
 
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbMarked.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbMarked.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
+        
+        cmbMarkedSort.setModel(new DefaultComboBoxModel(markedSets));
+        /**
+         * Make Combo text display short, and tool tip for full text
+         */
+        cmbMarkedSort.setPrototypeDisplayValue("Short");
+        cmbMarkedSort.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbMarkedSort.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbMarkedSort.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
     }
 
     private void setTableSortKeys() {

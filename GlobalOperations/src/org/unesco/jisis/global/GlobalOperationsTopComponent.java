@@ -6,7 +6,9 @@
 package org.unesco.jisis.global;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Rectangle;
 import java.awt.event.FocusAdapter;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -20,12 +22,15 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.MaskFormatter;
@@ -1713,9 +1718,104 @@ public final class GlobalOperationsTopComponent extends TopComponent implements 
             searches[i] = searchHistoryModel.getElementAt(i).toString();
          }
       }
-     cmbSearchSetAdd.setModel(new DefaultComboBoxModel(searches));
-     cmbSearchSetDelete.setModel(new DefaultComboBoxModel(searches));
-     cmbSearchSetReplace.setModel(new DefaultComboBoxModel(searches));
+        cmbSearchSetAdd.setModel(new DefaultComboBoxModel(searches));
+        /**
+         * Make Combo text display short, and tool tip for full text
+         */
+        cmbSearchSetAdd.setPrototypeDisplayValue("Short");
+        cmbSearchSetAdd.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbSearchSetAdd.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbSearchSetAdd.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
+        
+        cmbSearchSetDelete.setModel(new DefaultComboBoxModel(searches));
+        /**
+         * Make Combo text display short, and tool tip for full text
+         */
+        cmbSearchSetDelete.setPrototypeDisplayValue("Short");
+        cmbSearchSetDelete.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbSearchSetDelete.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbSearchSetDelete.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
+        
+        cmbSearchSetReplace.setModel(new DefaultComboBoxModel(searches));
+        /**
+         * Make Combo text display short, and tool tip for full text
+         */
+        cmbSearchSetReplace.setPrototypeDisplayValue("Short");
+        cmbSearchSetReplace.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbSearchSetReplace.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbSearchSetReplace.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
    }
     private void prepareMarkedRecordsHistory() {
       List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
@@ -1728,9 +1828,95 @@ public final class GlobalOperationsTopComponent extends TopComponent implements 
             markedSets[i] = markedRecords.get(i).toString();
          }
       }
-      cmbMarkedSetAdd.setModel(new DefaultComboBoxModel(markedSets));
-      cmbMarkedSetDelete.setModel(new DefaultComboBoxModel(markedSets));
-      cmbMarkedSetReplace.setModel(new DefaultComboBoxModel(markedSets));
+        cmbMarkedSetAdd.setModel(new DefaultComboBoxModel(markedSets));
+        cmbMarkedSetAdd.setPrototypeDisplayValue("Short");
+        cmbMarkedSetAdd.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbMarkedSetAdd.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbMarkedSetAdd.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
+        
+        cmbMarkedSetDelete.setModel(new DefaultComboBoxModel(markedSets));
+        cmbMarkedSetDelete.setPrototypeDisplayValue("Short");
+        cmbMarkedSetDelete.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbMarkedSetDelete.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbMarkedSetDelete.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
+        
+        cmbMarkedSetReplace.setModel(new DefaultComboBoxModel(markedSets));
+        cmbMarkedSetReplace.setPrototypeDisplayValue("Short");
+        cmbMarkedSetReplace.setRenderer(new DefaultListCellRenderer() {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index,
+                        isSelected, cellHasFocus);
+                if (index == -1) {
+                    cmbMarkedSetReplace.setToolTipText(value.toString());
+                    return this;
+                }
+
+                setToolTipText(value.toString());
+                Rectangle textRect
+                        = new Rectangle(cmbMarkedSetReplace.getSize().width,
+                                getPreferredSize().height);
+                String shortText = SwingUtilities.layoutCompoundLabel(this,
+                        getFontMetrics(getFont()),
+                        value.toString(), null,
+                        getVerticalAlignment(), getHorizontalAlignment(),
+                        getHorizontalTextPosition(), getVerticalTextPosition(),
+                        textRect, new Rectangle(), textRect,
+                        getIconTextGap());
+                setText(shortText);
+                return this;
+            }
+        });
 
    }
     /**
