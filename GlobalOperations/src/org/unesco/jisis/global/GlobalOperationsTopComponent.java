@@ -7,6 +7,7 @@ package org.unesco.jisis.global;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Rectangle;
 import java.awt.event.FocusAdapter;
@@ -55,6 +56,7 @@ import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.corelib.common.MfnRange;
 import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.corelib.record.Record;
+import org.unesco.jisis.gui.LargeComboBoxRenderer;
 import org.unesco.jisis.jisisutil.history.HistoryTextArea;
 import org.unesco.jisis.jisisutil.history.HistoryTextField;
 
@@ -1708,217 +1710,81 @@ public final class GlobalOperationsTopComponent extends TopComponent implements 
     
 
     private void prepareSearchHistory() {
-      List<SearchResult> searchResults = db_.getSearchResults();
-      String[] searches = {NO_SEARCH_SETS};
-      if (searchResults != null && searchResults.size() > 0) {
-         SearchHistoryModel searchHistoryModel = new SearchHistoryModel(searchResults);
-         int n = searchHistoryModel.getSize();
-         searches = new String[n];
-         for (int i = 0; i < n; i++) {
-            searches[i] = searchHistoryModel.getElementAt(i).toString();
-         }
-      }
+        List<SearchResult> searchResults = db_.getSearchResults();
+        String[] searches = {NO_SEARCH_SETS};
+        if (searchResults != null && searchResults.size() > 0) {
+            SearchHistoryModel searchHistoryModel = new SearchHistoryModel(searchResults);
+            int n = searchHistoryModel.getSize();
+            searches = new String[n];
+            for (int i = 0; i < n; i++) {
+                searches[i] = searchHistoryModel.getElementAt(i).toString();
+            }
+        }
         cmbSearchSetAdd.setModel(new DefaultComboBoxModel(searches));
         /**
          * Make Combo text display short, and tool tip for full text
          */
         cmbSearchSetAdd.setPrototypeDisplayValue("Short");
-        cmbSearchSetAdd.setRenderer(new DefaultListCellRenderer() {
+        cmbSearchSetAdd.setRenderer(new LargeComboBoxRenderer(500));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbSearchSetAdd.setToolTipText(value.toString());
-                    return this;
-                }
+        cmbSearchSetAdd.setPreferredSize(new Dimension(500, 30));
+        cmbSearchSetAdd.setMaximumSize(new Dimension(500, 30));
 
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbSearchSetAdd.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
-        
         cmbSearchSetDelete.setModel(new DefaultComboBoxModel(searches));
         /**
          * Make Combo text display short, and tool tip for full text
          */
         cmbSearchSetDelete.setPrototypeDisplayValue("Short");
-        cmbSearchSetDelete.setRenderer(new DefaultListCellRenderer() {
+        cmbSearchSetDelete.setRenderer(new LargeComboBoxRenderer(500));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbSearchSetDelete.setToolTipText(value.toString());
-                    return this;
-                }
+        cmbSearchSetDelete.setPreferredSize(new Dimension(500, 30));
+        cmbSearchSetDelete.setMaximumSize(new Dimension(500, 30));
 
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbSearchSetDelete.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
-        
         cmbSearchSetReplace.setModel(new DefaultComboBoxModel(searches));
         /**
          * Make Combo text display short, and tool tip for full text
          */
         cmbSearchSetReplace.setPrototypeDisplayValue("Short");
-        cmbSearchSetReplace.setRenderer(new DefaultListCellRenderer() {
+        cmbSearchSetReplace.setRenderer(new LargeComboBoxRenderer(500));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbSearchSetReplace.setToolTipText(value.toString());
-                    return this;
-                }
+        cmbSearchSetReplace.setPreferredSize(new Dimension(500, 30));
+        cmbSearchSetReplace.setMaximumSize(new Dimension(500, 30));
 
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbSearchSetReplace.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
-   }
+    }
+    
     private void prepareMarkedRecordsHistory() {
-      List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
-      String[] markedSets = {NO_MARKED_SETS};
-      if ( markedRecords != null &&  !markedRecords.isEmpty()) {
+        List<MarkedRecords> markedRecords = db_.getMarkedRecordsList();
+        String[] markedSets = {NO_MARKED_SETS};
+        if (markedRecords != null && !markedRecords.isEmpty()) {
 
-         int n = markedRecords.size();
-         markedSets = new String[n];
-         for (int i = 0; i < n; i++) {
-            markedSets[i] = markedRecords.get(i).toString();
-         }
-      }
+            int n = markedRecords.size();
+            markedSets = new String[n];
+            for (int i = 0; i < n; i++) {
+                markedSets[i] = markedRecords.get(i).toString();
+            }
+        }
         cmbMarkedSetAdd.setModel(new DefaultComboBoxModel(markedSets));
+
         cmbMarkedSetAdd.setPrototypeDisplayValue("Short");
-        cmbMarkedSetAdd.setRenderer(new DefaultListCellRenderer() {
+        cmbMarkedSetAdd.setRenderer(new LargeComboBoxRenderer(500));
+        cmbMarkedSetAdd.setPreferredSize(new Dimension(500, 30));
+        cmbMarkedSetAdd.setMaximumSize(new Dimension(500, 30));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbMarkedSetAdd.setToolTipText(value.toString());
-                    return this;
-                }
-
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbMarkedSetAdd.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
-        
         cmbMarkedSetDelete.setModel(new DefaultComboBoxModel(markedSets));
+
         cmbMarkedSetDelete.setPrototypeDisplayValue("Short");
-        cmbMarkedSetDelete.setRenderer(new DefaultListCellRenderer() {
+        cmbMarkedSetDelete.setRenderer(new LargeComboBoxRenderer(500));
+        cmbMarkedSetDelete.setPreferredSize(new Dimension(500, 30));
+        cmbMarkedSetDelete.setMaximumSize(new Dimension(500, 30));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbMarkedSetDelete.setToolTipText(value.toString());
-                    return this;
-                }
-
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbMarkedSetDelete.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
-        
         cmbMarkedSetReplace.setModel(new DefaultComboBoxModel(markedSets));
+
         cmbMarkedSetReplace.setPrototypeDisplayValue("Short");
-        cmbMarkedSetReplace.setRenderer(new DefaultListCellRenderer() {
+        cmbMarkedSetReplace.setRenderer(new LargeComboBoxRenderer(500));
+        cmbMarkedSetReplace.setPreferredSize(new Dimension(500, 30));
+        cmbMarkedSetReplace.setMaximumSize(new Dimension(500, 30));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbMarkedSetReplace.setToolTipText(value.toString());
-                    return this;
-                }
-
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbMarkedSetReplace.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
-
-   }
+    }
     /**
      * Private Helper Methods to get TAB Panels Data
      */
