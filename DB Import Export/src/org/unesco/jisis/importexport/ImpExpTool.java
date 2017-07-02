@@ -2651,18 +2651,17 @@ public class ImpExpTool {
             String stylesheetUrl = "http://www.loc.gov/standards/mods/v3/MARC21slim2MODS3-4.xsl";
             Source stylesheet = new StreamSource(stylesheetUrl);
             Result result = null;
-            try {
-                result = new StreamResult(new FileOutputStream(exportFile));
-            } catch (FileNotFoundException ex) {
-                Exceptions.printStackTrace(ex);
-            }
+            Writer out = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(exportFile), "UTF-8"));
+            result = new StreamResult(out);
             final MyMarcXmlWriter writer = new MyMarcXmlWriter(result, stylesheet);
-            writer.setConverter(new AnselToUnicode());
+            //writer.setConverter(new AnselToUnicode());
             writer.setIndent(true);
             GuiGlobal.output("Starting MODS export");
             final Date start = new Date();
 
             Runnable exportRun = new Runnable() {
+                @Override
                 public void run() {
                     if (!EventQueue.isDispatchThread()) {
                         try {
@@ -2716,20 +2715,20 @@ public class ImpExpTool {
             final String stylesheetUrl = stylesheetUrlTmp;
 
             Source stylesheet = new StreamSource(stylesheetUrl);
+              Writer out = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(exportFile), "UTF-8"));
             Result result = null;
-            try {
-                result = new StreamResult(new FileOutputStream(exportFile));
-            } catch (FileNotFoundException ex) {
-                Exceptions.printStackTrace(ex);
-            }
+            result = new StreamResult(out);
+            
             final MyMarcXmlWriter writer = new MyMarcXmlWriter(result, stylesheet);
-            writer.setConverter(new AnselToUnicode());
+            //writer.setConverter(new AnselToUnicode());
 
             GuiGlobal.output("Starting DC export");
             final Date start = new Date();
 
             Runnable exportRun = new Runnable() {
 
+                @Override
                 public void run() {
                     if (!EventQueue.isDispatchThread()) {
                         try {

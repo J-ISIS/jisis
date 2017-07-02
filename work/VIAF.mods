@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><modsCollection xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3">
+<mods version="3.4">
+<name type="corporate">
+<namePart>鳥取県監査委員</namePart>
+</name>
+<typeOfResource/>
+<originInfo>
+<place>
+<placeTerm type="code" authority="marccountry">bbn</placeTerm>
+</place>
+<issuance/>
+</originInfo>
+<physicalDescription>
+<form authority="marcform">microfilm</form>
+</physicalDescription>
+<location>
+<url displayLabel="electronic resource" usage="primary display">http://viaf.org/viaf/24145424162486790308</url>
+</location>
+<location>
+<url displayLabel="electronic resource" note="Dataset description">http://viaf.org/viaf/data</url>
+</location>
+<relatedItem>
+<location>
+<url note="Dataset description">http://viaf.org/viaf/data</url>
+</location>
+</relatedItem>
+<recordInfo>
+<recordContentSource authority="marcorg">VIAF</recordContentSource>
+<recordCreationDate encoding="marc">160131</recordCreationDate>
+<recordIdentifier source="OCoLC">viaf24145424162486790308</recordIdentifier>
+<recordOrigin>Converted from MARCXML to MODS version 3.4 using MARC21slim2MODS3-4.xsl
+				(Revision 1.95 2014/12/19)</recordOrigin>
+</recordInfo>
+</mods>
+</modsCollection>

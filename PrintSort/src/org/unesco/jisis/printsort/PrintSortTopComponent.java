@@ -12,6 +12,7 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import java.awt.EventQueue;
 import java.awt.Rectangle;
@@ -56,6 +57,7 @@ import org.unesco.jisis.corelib.util.Util;
 import org.unesco.jisis.gui.DirectoryChooser;
 import org.unesco.jisis.gui.EditorDlgActionTableCellEditor;
 import org.unesco.jisis.gui.GuiUtils;
+import org.unesco.jisis.gui.LargeComboBoxRenderer;
 import org.unesco.jisis.jisiscore.client.ParsedSortKey;
 import org.unesco.jisis.jisiscore.client.SortDatabase;
 import org.unesco.jisis.jisiscore.common.ColumnData;
@@ -185,66 +187,26 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
           /**
          * Make Combo text display short, and tool tip for full text
          */
+        
         cmbSearch.setPrototypeDisplayValue("Short");
-        cmbSearch.setRenderer(new DefaultListCellRenderer() {
+        cmbSearch.setRenderer(new LargeComboBoxRenderer(500));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbSearch.setToolTipText(value.toString());
-                    return this;
-                }
+        cmbSearch.setPreferredSize(new Dimension(500, 30));
+        cmbSearch.setMaximumSize(new Dimension(500, 30));
 
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbSearch.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
+
+             
         cmbSearchSort.setModel(new DefaultComboBoxModel(searches));
           /**
          * Make Combo text display short, and tool tip for full text
          */
         cmbSearchSort.setPrototypeDisplayValue("Short");
-        cmbSearchSort.setRenderer(new DefaultListCellRenderer() {
+        cmbSearchSort.setRenderer(new LargeComboBoxRenderer(500));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbSearchSort.setToolTipText(value.toString());
-                    return this;
-                }
-
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbSearchSort.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
+        cmbSearchSort.setPreferredSize(new Dimension(500, 30));
+        cmbSearchSort.setMaximumSize(new Dimension(500, 30));
+        
+      
     }
 
     private void prepareMarkedRecordsHistory() {
@@ -262,67 +224,24 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
           /**
          * Make Combo text display short, and tool tip for full text
          */
-        cmbMarked.setPrototypeDisplayValue("Short");
-        cmbMarked.setRenderer(new DefaultListCellRenderer() {
+          cmbMarked.setPrototypeDisplayValue("Short");
+        cmbMarked.setRenderer(new LargeComboBoxRenderer(500));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbMarked.setToolTipText(value.toString());
-                    return this;
-                }
-
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbMarked.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
+        cmbMarked.setPreferredSize(new Dimension(500, 30));
+        cmbMarked.setMaximumSize(new Dimension(500, 30));
+        
         
         cmbMarkedSort.setModel(new DefaultComboBoxModel(markedSets));
         /**
          * Make Combo text display short, and tool tip for full text
          */
         cmbMarkedSort.setPrototypeDisplayValue("Short");
-        cmbMarkedSort.setRenderer(new DefaultListCellRenderer() {
+        cmbMarkedSort.setRenderer(new LargeComboBoxRenderer(500));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbMarkedSort.setToolTipText(value.toString());
-                    return this;
-                }
-
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbMarkedSort.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
+        cmbMarkedSort.setPreferredSize(new Dimension(500, 30));
+        cmbMarkedSort.setMaximumSize(new Dimension(500, 30));
+        
+       
     }
 
     private void setTableSortKeys() {
@@ -619,16 +538,14 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rdbMfnRange)
-                            .addComponent(rdbSearchResults))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(rdbMfns)
-                            .addComponent(rdbAllMfn)))
-                    .addComponent(rdbMarked))
+                    .addComponent(rdbMfnRange)
+                    .addComponent(rdbSearchResults))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rdbMarked)
+                    .addComponent(jLabel2)
+                    .addComponent(rdbMfns)
+                    .addComponent(rdbAllMfn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()

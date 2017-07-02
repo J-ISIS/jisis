@@ -1,12 +1,28 @@
 [PATR_outputFileName]
 PATR-test2.html
 PATR-test1.html
+[CDS_outputFileName]
+testsort2.txt
+testsort1.txt
+testsort.txt
+testsort.html.txt
+testsort.html
+test4.html
+test3.html
+test2.html
+test1.html
+[jeanclaude_txtOutputDir]
+K:\\J-ISIS 2015\\jisis\\work
+[test to delete_txtMfnListDelete]
+1
 [CDS_FreeTextSearch]
 V0:\'Africa\'\n
 [VIAF_FreeTextSearch]
 V0:\'BNF\'
 [shreiber_outputFileName]
 index.txt
+[jeanclaude_outputFileName]
+s1.html
 [jeanclaude_txtHeadingFormat]
 mhl,\'<hr /><p style=\"text-align:justify;color:Navy;font-weight : bold;margin-left:20px;margin-right:40px\"><strong>\'v1\'</strong></p>\'
 mhl,\'<hr /><p style=\"text-align:justify;color:Navy;font-weight : bold;margin-right:40px\"><strong>\'v1\'</strong></p>\'
@@ -18,6 +34,8 @@ mhl,\'<hr /><strong><p style=text-align:justify;olor:Navy;strong;margin-right:40
 1
 [CDS_txtMfnsSort]
 1
+[PATR_txtOutputDir]
+C:\\J-ISIS 2014\\jisis\\work
 [shreiber_txtHeadingFormat]
 if p( V10) then #v10   else   \'  ,\'  fi,   F(val(V20),5,0)
 if p( V10) then #v10   else   \'  ,\'  fi   F(V20,5,0)
@@ -48,6 +66,15 @@ _270:\"1966\"
 _270:1966
 [SciELO_FreeTextSearch]
 v0:\'Cristiano\'
+[shreiber_txtOutputDir]
+C:\\J-ISIS 2016\\jisis\\work
+[jeanclaude_FreeTextSearch]
+v0:\'Jean\'
+[CDS_txtMfns]
+10-11
+5-6
+3-4
+1,2
 [ASFAEX_expertSearch]
 _120:TW\\=EASTERN
 _120:TW\\=eastern
@@ -63,33 +90,13 @@ _120:EASTERN
 K:\\J-ISIS 2015\\jisis\\work
 C:\\J-ISIS 2014\\jisis\\work
 [CDS_expertSearch]
+_70:vol*
+_70:volk*
+70_:volk*
+_70.volk*
+_70.volk*\n
+_70:Volker*
+_70:Volker, Adriaan
 _24:activities
 _24:activitie
 _24:ACTIVITIES
-[CDS_outputFileName]
-testsort2.txt
-testsort1.txt
-testsort.txt
-testsort.html.txt
-testsort.html
-test4.html
-test3.html
-test2.html
-test1.html
-[jeanclaude_txtOutputDir]
-K:\\J-ISIS 2015\\jisis\\work
-[test to delete_txtMfnListDelete]
-1
-[jeanclaude_outputFileName]
-s1.html
-[PATR_txtOutputDir]
-C:\\J-ISIS 2014\\jisis\\work
-[shreiber_txtOutputDir]
-C:\\J-ISIS 2016\\jisis\\work
-[jeanclaude_FreeTextSearch]
-v0:\'Jean\'
-[CDS_txtMfns]
-10-11
-5-6
-3-4
-1,2
