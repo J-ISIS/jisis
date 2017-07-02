@@ -334,6 +334,9 @@
           <ResourceString bundle="org/unesco/jisis/wizards/marc/Bundle.properties" key="ExpMarcXmlVisualPanel.rdbMfnRange.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbMfnRangeActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rdbAllMfn">
       <Properties>
@@ -358,6 +361,9 @@
           <ResourceString bundle="org/unesco/jisis/wizards/marc/Bundle.properties" key="ExpMarcXmlVisualPanel.rdbMarked.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbMarkedActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rdbMfns">
       <Properties>
@@ -402,6 +408,9 @@
           <ResourceString bundle="org/unesco/jisis/wizards/marc/Bundle.properties" key="ExpMarcXmlVisualPanel.rdbSearchResult.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbSearchResultActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel15">
       <Properties>

@@ -1,17 +1,13 @@
 package org.unesco.jisis.wizards.marc;
 
-import java.awt.Component;
-import java.awt.Rectangle;
+import java.awt.Dimension;
 import java.io.File;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JFormattedTextField;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.text.MaskFormatter;
 import org.marc4j.Constants;
 import org.openide.util.NbBundle;
@@ -21,15 +17,14 @@ import org.unesco.jisis.corelib.client.ConnectionPool;
 import org.unesco.jisis.corelib.common.Global;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.gui.DirectoryChooser;
+import org.unesco.jisis.gui.LargeComboBoxRenderer;
 import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
-import org.unesco.jisis.jisisutils.proxy.HitSortResult;
 import org.unesco.jisis.jisisutils.proxy.MarkedRecords;
 import org.unesco.jisis.jisisutils.proxy.SearchResult;
 
-
 public final class ExpISO2709VisualPanel extends JPanel {
 
-   private ClientDatabaseProxy db_;
+    private ClientDatabaseProxy db_;
 
     /**
      * Creates new form expVisualPanel1
@@ -69,7 +64,10 @@ public final class ExpISO2709VisualPanel extends JPanel {
         prepareSearchHistory();
         prepareMarkedRecordsHistory();
         prepareHitSortHistory();
+        cmbMarked.setEnabled(false);
+        cmbSearch.setEnabled(false);
     }
+
     private void prepareSearchHistory() {
 
         List<SearchResult> searchResults = db_.getSearchResults();
@@ -87,37 +85,11 @@ public final class ExpISO2709VisualPanel extends JPanel {
             rdbSearchResult.setEnabled(false);
         }
         cmbSearch.setModel(new DefaultComboBoxModel(searches));
-        /**
-         * Make Combo text display short, and tool tip for full text 
-         */
         cmbSearch.setPrototypeDisplayValue("Short");
-        cmbSearch.setRenderer(new DefaultListCellRenderer() {
+        cmbSearch.setRenderer(new LargeComboBoxRenderer(500));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbSearch.setToolTipText(value.toString());
-                    return this;
-                }
-
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbSearch.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
+        cmbSearch.setPreferredSize(new Dimension(500, 30));
+        cmbSearch.setMaximumSize(new Dimension(500, 30));
 
     }
 
@@ -137,39 +109,17 @@ public final class ExpISO2709VisualPanel extends JPanel {
             rdbMarked.setEnabled(false);
         }
         cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
+
         cmbMarked.setPrototypeDisplayValue("Short");
-        cmbMarked.setRenderer(new DefaultListCellRenderer() {
+        cmbMarked.setRenderer(new LargeComboBoxRenderer(500));
 
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbMarked.setToolTipText(value.toString());
-                    return this;
-                }
-
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbMarked.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
+        cmbMarked.setPreferredSize(new Dimension(500, 30));
+        cmbMarked.setMaximumSize(new Dimension(500, 30));
 
     }
 
     private void prepareHitSortHistory() {
-       
+
         String dbHitSortFilePath = Global.getClientWorkPath() + File.separator
                 + db_.getDbName()
                 + Global.HIT_SORT_FILE_EXT;
@@ -180,13 +130,13 @@ public final class ExpISO2709VisualPanel extends JPanel {
                 + Global.HIT_SORT_HXF_FILE_EXT;
         File dbHitSortHxfFile_ = new File(dbHitSortHxfFilePath);
 
-         String[] hitSortNames = new String[1];
+        String[] hitSortNames = new String[1];
         if (!dbHitSortFile_.exists()) {
             hitSortNames[0] = "No HitSorts";
             // Disable Hit File radio button and combo box
-         cmbHitSortFile.setEnabled(false);
-         rdbHitSort.setEnabled(false);
-            
+            cmbHitSortFile.setEnabled(false);
+            rdbHitSort.setEnabled(false);
+
         } else {
             hitSortNames[0] = dbHitSortFilePath;
         }
@@ -205,18 +155,19 @@ public final class ExpISO2709VisualPanel extends JPanel {
 //         cmbHitSortFile.setEnabled(false);
 //         rdbHitSort.setEnabled(false);
 //      }
-      cmbHitSortFile.setModel(new DefaultComboBoxModel(hitSortNames));
+        cmbHitSortFile.setModel(new DefaultComboBoxModel(hitSortNames));
 
-   }
-   @Override
+    }
+
+    @Override
     public String getName() {
         return NbBundle.getMessage(ExpISO2709VisualPanel.class, "MSG_ExpISO2709VisualPanel");
     }
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -666,63 +617,82 @@ public final class ExpISO2709VisualPanel extends JPanel {
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
 
-       selectDirectory();
+        selectDirectory();
 
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     private void cmbEncodingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEncodingActionPerformed
-       // TODO add your handling code here:
+        // TODO add your handling code here:
 }//GEN-LAST:event_cmbEncodingActionPerformed
 
     private void btnResetDefaultTerminatorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetDefaultTerminatorsActionPerformed
-      resetDefaultTerminators();
+        resetDefaultTerminators();
 }//GEN-LAST:event_btnResetDefaultTerminatorsActionPerformed
 
     private void cmbReformattingFSTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbReformattingFSTActionPerformed
-       // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_cmbReformattingFSTActionPerformed
 
     private void rdbMfnsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbMfnsActionPerformed
-      txtMfns.setEnabled(true);
+        cmbMarked.setEnabled(false);
+        txtMfns.setEnabled(true);
 }//GEN-LAST:event_rdbMfnsActionPerformed
 
     private void rdbAllMfnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbAllMfnActionPerformed
-      txtMfns.setEnabled(false);
-      cmbMarked.setEnabled(false);
+        cmbMarked.setEnabled(false);
+        txtMfns.setEnabled(false);
 
 }//GEN-LAST:event_rdbAllMfnActionPerformed
 
     private void rdbSearchResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSearchResultActionPerformed
-       cmbSearch.setEnabled(true);
-       cmbHitSortFile.setEnabled(false);
-       rdbAllMfn.setEnabled(false);
-       rdbMfns.setEnabled(false);
-       txtMfns.setEnabled(false);
-       rdbMarked.setEnabled(false);
-       cmbMarked.setEnabled(false);
+        cmbSearch.setEnabled(true);
+        cmbMarked.setEnabled(false);
+        cmbHitSortFile.setEnabled(false);
+
+        // Deselect All/Mfns/Marked
+        rdbAllMfn.setSelected(false);
+        rdbMfns.setSelected(false);
+        rdbMarked.setSelected(false);
+        txtMfns.setEnabled(false);
+        rdbAllMfn.setEnabled(false);
+        rdbMfns.setEnabled(false);
+        rdbMarked.setEnabled(false);
 }//GEN-LAST:event_rdbSearchResultActionPerformed
 
     private void rdbHitSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbHitSortActionPerformed
-       cmbHitSortFile.setEnabled(true);
-       cmbSearch.setEnabled(false);
-       cmbMarked.setEnabled(false);
+        cmbHitSortFile.setEnabled(true);
+        cmbSearch.setEnabled(false);
+        cmbMarked.setEnabled(false);
 
-       rdbAllMfn.setEnabled(false);
-       rdbMfns.setEnabled(false);
-       txtMfns.setEnabled(false);
-       rdbMarked.setEnabled(false);
+        // Deselect All/Mfns/Marked
+        rdbAllMfn.setSelected(false);
+        rdbMfns.setSelected(false);
+        rdbMarked.setSelected(false);
+        txtMfns.setEnabled(false);
     }//GEN-LAST:event_rdbHitSortActionPerformed
 
     private void rdbMarkedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbMarkedActionPerformed
-       txtMfns.setEnabled(false);
-       cmbMarked.setEnabled(true);
+        cmbMarked.setEnabled(true);
+        cmbSearch.setEnabled(false);
+        cmbHitSortFile.setEnabled(false);
+
+        txtMfns.setEnabled(false);
 }//GEN-LAST:event_rdbMarkedActionPerformed
 
     private void rdbMfnRangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbMfnRangeActionPerformed
-       cmbSearch.setEnabled(false);
-       rdbAllMfn.setEnabled(true);
-       rdbMfns.setEnabled(true);
-       rdbMarked.setEnabled(true);
+
+        rdbAllMfn.setEnabled(true);
+        rdbMfns.setEnabled(true);
+        if (!cmbMarked.getItemAt(0).equals("No Marked Sets")) {
+            rdbMarked.setEnabled(true);
+        }
+        rdbAllMfn.setSelected(true);
+        rdbMfns.setSelected(false);
+        rdbMarked.setSelected(false);
+        txtMfns.setEnabled(false);
+
+        cmbSearch.setEnabled(false);
+        cmbHitSortFile.setEnabled(false);
 }//GEN-LAST:event_rdbMfnRangeActionPerformed
 
 
@@ -775,21 +745,22 @@ public final class ExpISO2709VisualPanel extends JPanel {
         if (!fileName.toLowerCase().endsWith(".iso")) {
             fileName += ".iso";
         }
-        String fullFileName = Global.prefs_.get("IMPEXP_OUTPUT_DIR", "") 
-                                         +File.separator +fileName;
+        String fullFileName = Global.prefs_.get("IMPEXP_OUTPUT_DIR", "")
+                + File.separator + fileName;
 
         return fullFileName;
     }
+
     private String selectDirectory() {
 
-       //prefs = Preferences.userNodeForPackage(this.getClass());
-       String lastDir = Global.getClientWorkPath();
-       DirectoryChooser dc = new DirectoryChooser(new File(lastDir));
-       dc.showOpenDialog(this);
+        //prefs = Preferences.userNodeForPackage(this.getClass());
+        String lastDir = Global.getClientWorkPath();
+        DirectoryChooser dc = new DirectoryChooser(new File(lastDir));
+        dc.showOpenDialog(this);
         File file;
-       if ((file=dc.getSelectedFile())!= null) {
-           Global.prefs_.put("IMPEXP_OUTPUT_DIR", file.getAbsolutePath());
-           txtExpDirectory.setText(file.getAbsolutePath());
+        if ((file = dc.getSelectedFile()) != null) {
+            Global.prefs_.put("IMPEXP_OUTPUT_DIR", file.getAbsolutePath());
+            txtExpDirectory.setText(file.getAbsolutePath());
             return file.getAbsolutePath();
         }
         return "";
@@ -797,120 +768,119 @@ public final class ExpISO2709VisualPanel extends JPanel {
     }
 
     public int getOutputLineLength() {
-      Number num = (Number) txtOutputLineLength.getValue();
-      return (num == null) ? -1 : num.intValue();
-   }
+        Number num = (Number) txtOutputLineLength.getValue();
+        return (num == null) ? -1 : num.intValue();
+    }
 
-   public int getSearchHistoryIndex() {
-      int index = -1;
-      if (rdbSearchResult.isSelected()) {
-          index = cmbSearch.getSelectedIndex();
-      }
-      return index;
-   }
+    public int getSearchHistoryIndex() {
+        int index = -1;
+        if (rdbSearchResult.isSelected()) {
+            index = cmbSearch.getSelectedIndex();
+        }
+        return index;
+    }
 
-   public int getMarkedRecordsIndex() {
+    public int getMarkedRecordsIndex() {
         int index = -1;
         if (rdbMarked.isSelected()) {
             index = cmbMarked.getSelectedIndex();
         }
-       
-      return index;
-   }
 
-   public String getReformattingFST() {
-      int index = cmbReformattingFST.getSelectedIndex();
-      return (String) ((index == -1) ? "<none>" : cmbReformattingFST.getSelectedItem());
-   }
+        return index;
+    }
 
-   public String getEncoding() {
-       String encoding = (String) cmbEncoding.getSelectedItem();
-      if (encoding.startsWith("CP850")) {
-         encoding = "IBM850";
-      } else if (encoding.startsWith("CP864")) {
-         encoding = "IBM864";
-      } else if (encoding.startsWith("CP1256")) {
-         encoding = " windows-1256";
-      } else if (encoding.startsWith("MARC-8")) {
-         encoding = "MARC-8";
-      }else if (encoding.startsWith("ISO-5426")) {
-         encoding = "ISO5426";
-      }else if (encoding.startsWith("ISO-6937")) {
-         encoding = "ISO6937";
-      }
-      return encoding;
-     
-   }
+    public String getReformattingFST() {
+        int index = cmbReformattingFST.getSelectedIndex();
+        return (String) ((index == -1) ? "<none>" : cmbReformattingFST.getSelectedItem());
+    }
 
-   public String geHitSortFile() {
-      int index = cmbHitSortFile.getSelectedIndex();
-      return (String) ((index == -1) ? "" : cmbHitSortFile.getSelectedItem());
-   }
+    public String getEncoding() {
+        String encoding = (String) cmbEncoding.getSelectedItem();
+        if (encoding.startsWith("CP850")) {
+            encoding = "IBM850";
+        } else if (encoding.startsWith("CP864")) {
+            encoding = "IBM864";
+        } else if (encoding.startsWith("CP1256")) {
+            encoding = " windows-1256";
+        } else if (encoding.startsWith("MARC-8")) {
+            encoding = "MARC-8";
+        } else if (encoding.startsWith("ISO-5426")) {
+            encoding = "ISO5426";
+        } else if (encoding.startsWith("ISO-6937")) {
+            encoding = "ISO6937";
+        }
+        return encoding;
 
-   public int getRenumberFromMFN() {
-      Number num = (Number) txtRenumberFromMFN.getValue();
-      return (num == null) ? -1 : num.intValue();
-   }
+    }
 
-   public int getOutputTagMFN() {
-      Number num = (Number) txtOutputTagMFN.getValue();
-      return (num == null) ? -1 : num.intValue();
-   }
+    public String geHitSortFile() {
+        int index = cmbHitSortFile.getSelectedIndex();
+        return (String) ((index == -1) ? "" : cmbHitSortFile.getSelectedItem());
+    }
 
-   public int getFieldTerminator() {
-      int FT = Integer.parseInt(txtFieldTerminator.getText(), 16);
-      return (FT == Constants.FT) ? -1 : FT;
-   }
+    public int getRenumberFromMFN() {
+        Number num = (Number) txtRenumberFromMFN.getValue();
+        return (num == null) ? -1 : num.intValue();
+    }
 
-   public int getRecordTerminator() {
-      int RT = Integer.parseInt(txtRecordTerminator.getText(), 16);
-      return (RT == Constants.RT) ? -1 : RT;
-   }
+    public int getOutputTagMFN() {
+        Number num = (Number) txtOutputTagMFN.getValue();
+        return (num == null) ? -1 : num.intValue();
+    }
 
-   public int getSubfieldDelimiter() {
-      int subfieldDelimiter = (int) ('^'); // Default ISIS caret circomflex
-      String s = (String) cmbSubfieldDelimiter.getSelectedItem();
-      try {
-         subfieldDelimiter = Integer.parseInt(s.substring(0, 3));
-      } catch (NumberFormatException ex) {
-         // Do nothing
-         System.out.println("Error converting Input subfield delimiter:" + s);
-      }
+    public int getFieldTerminator() {
+        int FT = Integer.parseInt(txtFieldTerminator.getText(), 16);
+        return (FT == Constants.FT) ? -1 : FT;
+    }
 
-      return subfieldDelimiter;
-   }
+    public int getRecordTerminator() {
+        int RT = Integer.parseInt(txtRecordTerminator.getText(), 16);
+        return (RT == Constants.RT) ? -1 : RT;
+    }
 
-   public int getMfnsRangeOption() {
-      if (rdbMfnRange.isSelected() && rdbAllMfn.isSelected()) {
-           return Global.MFNS_OPTION_ALL;
-       } else if (rdbMfnRange.isSelected() && rdbMfns.isSelected()) {
-           return Global.MFNS_OPTION_RANGE;
-       } else if (rdbMfnRange.isSelected() && rdbMarked.isSelected()) {
-           return Global.MFNS_OPTION_MARKED;
-       } else if (rdbSearchResult.isSelected()) {
-           return Global.MFNS_OPTION_SEARCH;
-       } else if (rdbHitSort.isSelected()) {
-           return Global.MFNS_OPTION_HITSORT;
-       } else {
-           return Global.MFNS_OPTION_ALL;
-       }
-   }
+    public int getSubfieldDelimiter() {
+        int subfieldDelimiter = (int) ('^'); // Default ISIS caret circomflex
+        String s = (String) cmbSubfieldDelimiter.getSelectedItem();
+        try {
+            subfieldDelimiter = Integer.parseInt(s.substring(0, 3));
+        } catch (NumberFormatException ex) {
+            // Do nothing
+            System.out.println("Error converting Input subfield delimiter:" + s);
+        }
 
-   public String getMfnRanges() {
-      String s = txtMfns.getText();
-      return s;
-   }
+        return subfieldDelimiter;
+    }
 
-   public boolean isSearchResult() {
-      return rdbSearchResult.isSelected();
-   }
+    public int getMfnsRangeOption() {
+        if (rdbMfnRange.isSelected() && rdbAllMfn.isSelected()) {
+            return Global.MFNS_OPTION_ALL;
+        } else if (rdbMfnRange.isSelected() && rdbMfns.isSelected()) {
+            return Global.MFNS_OPTION_RANGE;
+        } else if (rdbMfnRange.isSelected() && rdbMarked.isSelected()) {
+            return Global.MFNS_OPTION_MARKED;
+        } else if (rdbSearchResult.isSelected()) {
+            return Global.MFNS_OPTION_SEARCH;
+        } else if (rdbHitSort.isSelected()) {
+            return Global.MFNS_OPTION_HITSORT;
+        } else {
+            return Global.MFNS_OPTION_ALL;
+        }
+    }
 
-   private void resetDefaultTerminators() {
-      txtFieldTerminator.setText(Integer.toHexString(Constants.FT));
-      txtRecordTerminator.setText(Integer.toHexString(Constants.RT));
-      cmbSubfieldDelimiter.setSelectedItem("031 1F   US    (Unit Separator)");
+    public String getMfnRanges() {
+        String s = txtMfns.getText();
+        return s;
+    }
 
-   }
+    public boolean isSearchResult() {
+        return rdbSearchResult.isSelected();
+    }
+
+    private void resetDefaultTerminators() {
+        txtFieldTerminator.setText(Integer.toHexString(Constants.FT));
+        txtRecordTerminator.setText(Integer.toHexString(Constants.RT));
+        cmbSubfieldDelimiter.setSelectedItem("031 1F   US    (Unit Separator)");
+
+    }
 
 }
-

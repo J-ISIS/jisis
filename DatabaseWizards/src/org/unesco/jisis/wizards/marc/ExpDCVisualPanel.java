@@ -4,21 +4,18 @@
  */
 package org.unesco.jisis.wizards.marc;
 
-import java.awt.Component;
-import java.awt.Rectangle;
+import java.awt.Dimension;
 import java.io.File;
 import java.text.NumberFormat;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JList;
-import javax.swing.SwingUtilities;
 import org.openide.util.NbBundle;
 import org.unesco.jisis.corelib.client.ConnectionInfo;
 import org.unesco.jisis.corelib.client.ConnectionPool;
 import org.unesco.jisis.corelib.common.Global;
 import org.unesco.jisis.corelib.common.IDatabase;
 import org.unesco.jisis.gui.DirectoryChooser;
+import org.unesco.jisis.gui.LargeComboBoxRenderer;
 import org.unesco.jisis.jisisutils.proxy.ClientDatabaseProxy;
 import org.unesco.jisis.jisisutils.proxy.MarkedRecords;
 import org.unesco.jisis.jisisutils.proxy.SearchResult;
@@ -59,16 +56,19 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
       txtOutputDir.setText(lastDir);
      
        cmbSearch.setEnabled(false);
-       rdbAllMfn.setEnabled(true);
-       rdbMfns.setEnabled(true);
-       rdbMarked.setEnabled(true);
-       prepareSearchHistory();
-       prepareMarkedRecordsHistory();
-       prepareHitSortHistory();
-       rdbOAI.setSelected(true);
-       rdbRDF.setSelected(false);
-       rdbSRW.setSelected(false);
-   }
+        cmbMarked.setEnabled(false);
+        rdbAllMfn.setEnabled(true);
+        rdbMfns.setEnabled(true);
+        rdbMarked.setEnabled(true);
+        prepareSearchHistory();
+        prepareMarkedRecordsHistory();
+        prepareHitSortHistory();
+        rdbOAI.setSelected(true);
+        rdbRDF.setSelected(false);
+        rdbSRW.setSelected(false);
+        cmbMarked.setEnabled(false);
+        cmbSearch.setEnabled(false);
+    }
     private void prepareSearchHistory() {
          List<SearchResult> searchResults = db_.getSearchResults();
       String[] searches = {"No Search"};
@@ -90,33 +90,11 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
          * Make Combo text display short, and tool tip for full text
          */
         cmbSearch.setPrototypeDisplayValue("Short");
-        cmbSearch.setRenderer(new DefaultListCellRenderer() {
-
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbSearch.setToolTipText(value.toString());
-                    return this;
-                }
-
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbSearch.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
+        cmbSearch.setRenderer(new LargeComboBoxRenderer(500));
+     
+	cmbSearch.setPreferredSize(new Dimension(500, 30));
+	cmbSearch.setMaximumSize(new Dimension(500, 30));
+        
     }
 
     private void prepareHitSortHistory() {
@@ -165,33 +143,12 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
         
          cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
         cmbMarked.setPrototypeDisplayValue("Short");
-        cmbMarked.setRenderer(new DefaultListCellRenderer() {
-
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value,
-                    int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index,
-                        isSelected, cellHasFocus);
-                if (index == -1) {
-                    cmbMarked.setToolTipText(value.toString());
-                    return this;
-                }
-
-                setToolTipText(value.toString());
-                Rectangle textRect
-                        = new Rectangle(cmbMarked.getSize().width,
-                                getPreferredSize().height);
-                String shortText = SwingUtilities.layoutCompoundLabel(this,
-                        getFontMetrics(getFont()),
-                        value.toString(), null,
-                        getVerticalAlignment(), getHorizontalAlignment(),
-                        getHorizontalTextPosition(), getVerticalTextPosition(),
-                        textRect, new Rectangle(), textRect,
-                        getIconTextGap());
-                setText(shortText);
-                return this;
-            }
-        });
+        
+         cmbMarked.setRenderer(new LargeComboBoxRenderer(500));
+     
+	cmbMarked.setPreferredSize(new Dimension(500, 30));
+	cmbMarked.setMaximumSize(new Dimension(500, 30));
+       
 
     }
 
@@ -296,6 +253,11 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
         rdbMfnRange.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         rdbMfnRange.setSelected(true);
         rdbMfnRange.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.rdbMfnRange.text")); // NOI18N
+        rdbMfnRange.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbMfnRangeActionPerformed(evt);
+            }
+        });
 
         buttonGroup2.add(rdbAllMfn);
         rdbAllMfn.setSelected(true);
@@ -308,6 +270,11 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
 
         buttonGroup2.add(rdbMarked);
         rdbMarked.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.rdbMarked.text")); // NOI18N
+        rdbMarked.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbMarkedActionPerformed(evt);
+            }
+        });
 
         buttonGroup2.add(rdbMfns);
         rdbMfns.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.rdbMfns.text")); // NOI18N
@@ -330,6 +297,11 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
         buttonGroup1.add(rdbSearchResult);
         rdbSearchResult.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         rdbSearchResult.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.rdbSearchResult.text")); // NOI18N
+        rdbSearchResult.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbSearchResultActionPerformed(evt);
+            }
+        });
 
         jLabel15.setText(org.openide.util.NbBundle.getMessage(ExpDCVisualPanel.class, "ExpDCVisualPanel.jLabel15.text")); // NOI18N
 
@@ -549,11 +521,13 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
    }//GEN-LAST:event_cmbEncodingActionPerformed
 
    private void rdbAllMfnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbAllMfnActionPerformed
-      txtMfns.setEnabled(false);
+        cmbMarked.setEnabled(false);
+        txtMfns.setEnabled(false);
    }//GEN-LAST:event_rdbAllMfnActionPerformed
 
    private void rdbMfnsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbMfnsActionPerformed
-      txtMfns.setEnabled(true);
+       cmbMarked.setEnabled(false);
+        txtMfns.setEnabled(true);
    }//GEN-LAST:event_rdbMfnsActionPerformed
 
    private void txtMfnsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMfnsActionPerformed
@@ -579,15 +553,58 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
    }//GEN-LAST:event_rdbOAIActionPerformed
 
     private void rdbHitSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbHitSortActionPerformed
-        cmbHitSortFile.setEnabled(true);
+        
+         cmbHitSortFile.setEnabled(true);
         cmbSearch.setEnabled(false);
         cmbMarked.setEnabled(false);
+        
+          // Deselect All/Mfns/Marked
+        rdbAllMfn.setSelected(false);
+        rdbMfns.setSelected(false);
+        rdbMarked.setSelected(false);
+        txtMfns.setEnabled(false);
+        
+       
+    }//GEN-LAST:event_rdbHitSortActionPerformed
 
+    private void rdbSearchResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSearchResultActionPerformed
+       cmbSearch.setEnabled(true);
+        cmbMarked.setEnabled(false);
+        cmbHitSortFile.setEnabled(false);
+         
+        // Deselect All/Mfns/Marked
+        rdbAllMfn.setSelected(false);
+        rdbMfns.setSelected(false);
+        rdbMarked.setSelected(false);
+        txtMfns.setEnabled(false);
         rdbAllMfn.setEnabled(false);
         rdbMfns.setEnabled(false);
-        txtMfns.setEnabled(false);
         rdbMarked.setEnabled(false);
-    }//GEN-LAST:event_rdbHitSortActionPerformed
+    }//GEN-LAST:event_rdbSearchResultActionPerformed
+
+    private void rdbMarkedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbMarkedActionPerformed
+        cmbMarked.setEnabled(true);
+        cmbSearch.setEnabled(false);
+        cmbHitSortFile.setEnabled(false);
+      
+        txtMfns.setEnabled(false);
+    }//GEN-LAST:event_rdbMarkedActionPerformed
+
+    private void rdbMfnRangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbMfnRangeActionPerformed
+         // Select default All and deselect ranges and marked
+        rdbAllMfn.setEnabled(true);
+        rdbMfns.setEnabled(true);
+        if (!cmbMarked.getItemAt(0).equals("No Marked Sets")) {
+            rdbMarked.setEnabled(true);
+        }
+        rdbAllMfn.setSelected(true);
+        rdbMfns.setSelected(false);
+        rdbMarked.setSelected(false);
+        txtMfns.setEnabled(false);
+        
+        cmbSearch.setEnabled(false);
+        cmbHitSortFile.setEnabled(false);
+    }//GEN-LAST:event_rdbMfnRangeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
@@ -711,13 +728,20 @@ public class ExpDCVisualPanel extends javax.swing.JPanel {
    }
 
    public int getSearchHistoryIndex() {
-      int index = cmbSearch.getSelectedIndex();
+       
+     int index = -1;
+      if (rdbSearchResult.isSelected()) {
+          index = cmbSearch.getSelectedIndex();
+      }
       return index;
    }
 
    public int getMarkedRecordsIndex() {
-      int index = cmbMarked.getSelectedIndex();
-      return index;
+       int index = -1;
+        if (rdbMarked.isSelected()) {
+            index = cmbMarked.getSelectedIndex();
+        }
+         return index;
    }
     
 }
