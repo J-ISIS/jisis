@@ -272,36 +272,38 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
    }
 
    private void setGuidedSearch(boolean show) {
-      if (show) {
-         if (isGuidedSearch_ == null || isGuidedSearch_ == false) {
-            termsPanel.removeAll();
-            queryPanels_.clear();
-            addTermPanel();
-            enterQueryLabel.setVisible(false);
-            matchAllRadio.setVisible(true);
-            matchAnyRadio.setVisible(true);
-         }
-      } else {
-         if (this.isGuidedSearch_ == null || this.isGuidedSearch_ == true) {
-            queryPanels_.clear();
-            termsPanel.removeAll();
-         }
+        if (show) {
+            if (isGuidedSearch_ == null || isGuidedSearch_ == false) {
+                termsPanel.removeAll();
+                queryPanels_.clear();
+                addTermPanel();
+                enterQueryLabel.setVisible(false);
+                matchAllRadio.setVisible(true);
+                matchAnyRadio.setVisible(true);
+                chkbDisableSuggestions.setVisible(true);
+            }
+        } else {
+            if (this.isGuidedSearch_ == null || this.isGuidedSearch_ == true) {
+                queryPanels_.clear();
+                termsPanel.removeAll();
+            }
 
          HistoryTextArea  textarea = new HistoryTextArea(db_.getDbName()+"_expertSearch");
-         javax.swing.JScrollPane scrollpane = new javax.swing.JScrollPane();
-         scrollpane.setViewportView(textarea);
-         termsPanel.add(scrollpane);
-         queryPanels_.add(new JComponent[]{textarea});
+            javax.swing.JScrollPane scrollpane = new javax.swing.JScrollPane();
+            scrollpane.setViewportView(textarea);
+            termsPanel.add(scrollpane);
+            queryPanels_.add(new JComponent[]{textarea});
+            textarea.requestFocus();
+            enterQueryLabel.setVisible(true);
+            matchAllRadio.setVisible(false);
+            matchAnyRadio.setVisible(false);
+            chkbDisableSuggestions.setVisible(false);
+        }
 
-         enterQueryLabel.setVisible(true);
-         matchAllRadio.setVisible(false);
-         matchAnyRadio.setVisible(false);
-      }
-
-      termsScrollPane.validate();
-      termsScrollPane.paint(this.termsScrollPane.getGraphics());
-      isGuidedSearch_ = show;
-   }
+        termsScrollPane.validate();
+        termsScrollPane.paint(this.termsScrollPane.getGraphics());
+        isGuidedSearch_ = show;
+    }
 
     private String[] buildAllIndexFieldNames() {
         HashSet<Integer> tags = new HashSet<>();
@@ -495,21 +497,36 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
       this.termsScrollPane.validate();
 
       this.termsScrollPane.scrollRectToVisible(this.termsPanel.getVisibleRect());
+     
+      txtQuery.requestFocus();
+      
    }
 
    private void removeTermPanel(int index) {
-      if (this.queryPanels_.size() == 1) {
-         return;
-      }
+       if (this.queryPanels_.size() == 1) {
+
+           JComponent[] fields = queryPanels_.get(0);
+           JTextField txtQuery = (JTextField) fields[3];
+           txtQuery.requestFocus();
+           return;
+       }
 
       this.termsPanel.remove(this.queryPanels_.get(index)[0]);
       this.termsScrollPane.revalidate();
       this.termsScrollPane.update(this.termsScrollPane.getGraphics());
 
-      this.queryPanels_.remove(index);
-      if (this.queryPanels_.size() == 1) {
-         this.queryPanels_.get(0)[5].setEnabled(false);
-      }
+       this.queryPanels_.remove(index);
+       if (this.queryPanels_.size() == 1) {
+           this.queryPanels_.get(0)[5].setEnabled(false);
+           Component[] fields = queryPanels_.get(0);
+           JTextField txtQuery = (JTextField) fields[3];
+           txtQuery.requestFocus();
+       } else {
+           assert (index-1 > 0 && index-1 < queryPanels_.size());
+           Component[] fields = queryPanels_.get(index-1);
+           JTextField txtQuery = (JTextField) fields[3];
+           txtQuery.requestFocus();
+       }
    }
 
    private void plusClicked(java.awt.event.ActionEvent evt) {
@@ -520,7 +537,7 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
             return;
          }
          index += 1;
-      }
+      }     
    }
 
    private void minusClicked(java.awt.event.ActionEvent evt) {
@@ -535,7 +552,7 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
    }
 
    private void queryFieldEnter(java.awt.event.ActionEvent evt) {
-      System.out.println("Entered.");
+      //System.out.println("Entered.");
       if (this.suggestionBox.isShowing()) {
          this.suggestionBox.setVisible(false);
       }
@@ -1008,7 +1025,7 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
         matchAnyRadio = new javax.swing.JRadioButton();
         btnDictionaryOptions = new javax.swing.JButton();
         chkbDisableSuggestions = new javax.swing.JCheckBox();
-        guidedBox = new javax.swing.JCheckBox();
+        chkGuidedSearch = new javax.swing.JCheckBox();
         termsScrollPane = new javax.swing.JScrollPane();
         termsPanel = new javax.swing.JPanel();
         buttonsPanel = new javax.swing.JPanel();
@@ -1229,14 +1246,14 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
         gridBagConstraints.weightx = 1.0;
         optionsPanel.add(jPanel2, gridBagConstraints);
 
-        guidedBox.setSelected(true);
-        guidedBox.setText(org.openide.util.NbBundle.getMessage(SearchTopComponent.class, "guided-search")); // NOI18N
-        guidedBox.addActionListener(new java.awt.event.ActionListener() {
+        chkGuidedSearch.setSelected(true);
+        chkGuidedSearch.setText(org.openide.util.NbBundle.getMessage(SearchTopComponent.class, "guided-search")); // NOI18N
+        chkGuidedSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                guidedBoxActionPerformed(evt);
+                chkGuidedSearchActionPerformed(evt);
             }
         });
-        optionsPanel.add(guidedBox, new java.awt.GridBagConstraints());
+        optionsPanel.add(chkGuidedSearch, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -1314,9 +1331,9 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-    private void guidedBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guidedBoxActionPerformed
-       this.setGuidedSearch(this.guidedBox.isSelected());
-}//GEN-LAST:event_guidedBoxActionPerformed
+    private void chkGuidedSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkGuidedSearchActionPerformed
+       this.setGuidedSearch(this.chkGuidedSearch.isSelected());
+}//GEN-LAST:event_chkGuidedSearchActionPerformed
 
     /*------------------------------------
      * Search Action
@@ -1587,7 +1604,14 @@ public class SearchTopComponent extends TopComponent implements ListSelectionLis
 }//GEN-LAST:event_cmbPftSelectActionPerformed
    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {
       //this.populateFields();
-      this.setGuidedSearch(this.isGuidedSearch_);
+      /**
+       * Simulate jump from expert to guided
+       */
+      boolean isGuidedSearch = isGuidedSearch_;
+       if (isGuidedSearch_) {
+           isGuidedSearch_ = false;
+       }
+      this.setGuidedSearch(isGuidedSearch);
    }
    
    private long[] getResults() {
@@ -1711,13 +1735,13 @@ private void btnDictionaryOptionsActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JButton btnPgUp;
     private javax.swing.JButton btnSearch;
     private javax.swing.JPanel buttonsPanel;
+    private javax.swing.JCheckBox chkGuidedSearch;
     private javax.swing.JCheckBox chkbDisableSuggestions;
     private javax.swing.JCheckBox chkbSortByMfn;
     private javax.swing.JComboBox cmbPftSelect;
     private javax.swing.JLabel enterQueryLabel;
     private javax.swing.JLabel formatLabel;
     private javax.swing.JPanel formatPanel;
-    private javax.swing.JCheckBox guidedBox;
     private javax.swing.JSplitPane horizontalSplitPane;
     private javax.swing.JPanel indexPanel;
     private javax.swing.JPanel inputPanel;
