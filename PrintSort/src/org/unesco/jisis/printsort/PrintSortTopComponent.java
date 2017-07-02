@@ -221,16 +221,15 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
             }
         }
         cmbMarked.setModel(new DefaultComboBoxModel(markedSets));
-          /**
+        /**
          * Make Combo text display short, and tool tip for full text
          */
-          cmbMarked.setPrototypeDisplayValue("Short");
+        cmbMarked.setPrototypeDisplayValue("Short");
         cmbMarked.setRenderer(new LargeComboBoxRenderer(500));
 
         cmbMarked.setPreferredSize(new Dimension(500, 30));
         cmbMarked.setMaximumSize(new Dimension(500, 30));
-        
-        
+
         cmbMarkedSort.setModel(new DefaultComboBoxModel(markedSets));
         /**
          * Make Combo text display short, and tool tip for full text
@@ -240,8 +239,7 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
 
         cmbMarkedSort.setPreferredSize(new Dimension(500, 30));
         cmbMarkedSort.setMaximumSize(new Dimension(500, 30));
-        
-       
+
     }
 
     private void setTableSortKeys() {
