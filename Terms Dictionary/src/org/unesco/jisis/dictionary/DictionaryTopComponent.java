@@ -122,6 +122,7 @@ public class DictionaryTopComponent extends TopComponent implements Observer {
             model_ = new PagingModel(new TermsTableDataSource(db, mainWin));
 
             initComponents();
+            txtIndexName.setColumns(30);
             
              // Use our own custom scrollpane.
              scrollPane_ = PagingModel.createPagingScrollPaneForTable(termsTable_, scrollPane_);
