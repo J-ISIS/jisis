@@ -147,74 +147,74 @@ public class Z3950ClientPanel extends javax.swing.JPanel implements ItemListener
             export(selRecords, EXPORT_ISO2709);
          }
       };
-      iso2709MenuItem.addActionListener(exportIso2709Listener);
-      menuExport.add(iso2709MenuItem);
-      JMenuItem xmlMenuItem = new JMenuItem("XML");
+       iso2709MenuItem.addActionListener(exportIso2709Listener);
+       menuExport.add(iso2709MenuItem);
+       JMenuItem xmlMenuItem = new JMenuItem("XML");
        ActionListener exportXmlListener = new ActionListener() {
 
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            List<Integer> selRecords = getSelectedRecords();
-            if (selRecords.size() <= 0) {
-               return;
-            }
-            export(selRecords, EXPORT_XML);
-         }
-      };
-      xmlMenuItem.addActionListener(exportXmlListener);
-      menuExport.add(xmlMenuItem);
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               List<Integer> selRecords = getSelectedRecords();
+               if (selRecords.size() <= 0) {
+                   return;
+               }
+               export(selRecords, EXPORT_XML);
+           }
+       };
+       xmlMenuItem.addActionListener(exportXmlListener);
+       menuExport.add(xmlMenuItem);
 
-      JMenuItem marcxmlMenuItem = new JMenuItem("MarcXML");
+       JMenuItem marcxmlMenuItem = new JMenuItem("MarcXML");
        ActionListener exportMarcxmlListener = new ActionListener() {
 
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            List<Integer> selRecords = getSelectedRecords();
-            if (selRecords.size() <= 0) {
-               return;
-            }
-            export(selRecords, EXPORT_MARCXML);
-         }
-      };
-      marcxmlMenuItem.addActionListener(exportMarcxmlListener);
-      menuExport.add(marcxmlMenuItem);
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               List<Integer> selRecords = getSelectedRecords();
+               if (selRecords.size() <= 0) {
+                   return;
+               }
+               export(selRecords, EXPORT_MARCXML);
+           }
+       };
+       marcxmlMenuItem.addActionListener(exportMarcxmlListener);
+       menuExport.add(marcxmlMenuItem);
 
-      JMenuItem textMenuItem = new JMenuItem("TEXT");
+       JMenuItem textMenuItem = new JMenuItem("TEXT");
        ActionListener exportTextListener = new ActionListener() {
 
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            List<Integer> selRecords = getSelectedRecords();
-            if (selRecords.size() <= 0) {
-               return;
-            }
-            export(selRecords, EXPORT_TEXT);
-         }
-      };
-      textMenuItem.addActionListener(exportTextListener);
-      menuExport.add(textMenuItem);
-      JMenuItem dbMenuItem = new JMenuItem("Database");
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               List<Integer> selRecords = getSelectedRecords();
+               if (selRecords.size() <= 0) {
+                   return;
+               }
+               export(selRecords, EXPORT_TEXT);
+           }
+       };
+       textMenuItem.addActionListener(exportTextListener);
+       menuExport.add(textMenuItem);
+       JMenuItem dbMenuItem = new JMenuItem("Database");
        ActionListener exportDatabaseListener = new ActionListener() {
 
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            List<Integer> selRecords = getSelectedRecords();
-            if (selRecords.size() <= 0) {
-               return;
-            }
-            export(selRecords, EXPORT_DATABASE);
-         }
-      };
-      dbMenuItem.addActionListener(exportDatabaseListener);
-      menuExport.add(dbMenuItem);
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               List<Integer> selRecords = getSelectedRecords();
+               if (selRecords.size() <= 0) {
+                   return;
+               }
+               export(selRecords, EXPORT_DATABASE);
+           }
+       };
+       dbMenuItem.addActionListener(exportDatabaseListener);
+       menuExport.add(dbMenuItem);
 
-      menuBar.add(menuExport);
-      controlPanel.add(Box.createRigidArea(new Dimension(150, 0)));
+       menuBar.add(menuExport);
+       controlPanel.add(Box.createRigidArea(new Dimension(150, 0)));
 
-      menuBar.setAlignmentX(Component.CENTER_ALIGNMENT);
-      // To be at the same level than the toolbar
-      menuBar.setAlignmentY(0.47826087f);
-      controlPanel.add(menuBar, Box.CENTER_ALIGNMENT);
+       menuBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+       // To be at the same level than the toolbar
+       menuBar.setAlignmentY(0.47826087f);
+       controlPanel.add(menuBar, Box.CENTER_ALIGNMENT);
 
       xmlUtility = XMLUtility.getInstance();
       utilities = Utilities.getInstance();
@@ -236,12 +236,12 @@ public class Z3950ClientPanel extends javax.swing.JPanel implements ItemListener
       progress.setString("");
       progress.setMinimum(min);
       progress.setMaximum(max);
-      timer = new javax.swing.Timer(100, new java.awt.event.ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
+        timer = new javax.swing.Timer(100, new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-            progress.setIndeterminate(true);
-            progress.setString("Searching....");
+                progress.setIndeterminate(true);
+                progress.setString("Searching....");
 //                if(col%2==0) {
 //                    progress.setForeground(Color.GRAY);
 //                    progress.setValue(100);
@@ -250,10 +250,10 @@ public class Z3950ClientPanel extends javax.swing.JPanel implements ItemListener
 //                    progress.setValue(100);
 //                }
 //                col++;
-         }
-      });
+            }
+        });
 
-   }
+    }
    private List<Integer> getSelectedRecords() {
       List<Integer> selRecords = new ArrayList<Integer>();
       for (int i=0; i<resultTable.getRowCount(); i++) {

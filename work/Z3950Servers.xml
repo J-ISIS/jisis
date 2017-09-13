@@ -7,9 +7,9 @@
     <Zurl>
       <BaseURL>z3950.bnf.fr</BaseURL>
       <Port>2211</Port>
-      <DataBase>TOUT</DataBase>
+      <DataBase>TOUT-UTF8</DataBase>
       <RecordType>unimarc</RecordType>
-      <Encoding>ISO-5426 (UNIMARC)</Encoding>
+      <Encoding>UTF-8 (UNICODE)</Encoding>
       <ElementSetName>F</ElementSetName>
       <UserName>Z3950</UserName>
       <Password>Z3950_BNF</Password>
@@ -41,11 +41,12 @@
     <Category>indexdata</Category>
     <Type>Z3950</Type>
     <Zurl>
-      <BaseURL>indexdata.dk</BaseURL>
+      <BaseURL>opencontent.indexdata.com</BaseURL>
       <Port>210</Port>
-      <DataBase>gils</DataBase>
-      <RecordType>unimarc</RecordType>
-      <ElementSetName>F</ElementSetName>
+      <DataBase>gutenberg</DataBase>
+      <RecordType>marc21</RecordType>
+      <Encoding>MARC-8 (MARC21)</Encoding>
+      <ElementSetName>f</ElementSetName>
       <UserName />
       <Password />
     </Zurl>
@@ -72,7 +73,7 @@
     <Active>YES</Active>
   </ZServer>
   <ZServer>
-    <Name>BNF UTF-8</Name>
+    <Name>BNFUTF8</Name>
     <Category>bnf</Category>
     <Type>Z3950</Type>
     <Zurl>
@@ -84,6 +85,42 @@
       <ElementSetName>F</ElementSetName>
       <UserName>Z3950</UserName>
       <Password>Z3950_BNF</Password>
+    </Zurl>
+    <Location>France</Location>
+    <Syntax>XML</Syntax>
+    <Active>YES</Active>
+  </ZServer>
+  <ZServer>
+    <Name>ANBD TEST</Name>
+    <Category>ANBD</Category>
+    <Type>Z3950</Type>
+    <Zurl>
+      <BaseURL>z3950-test.librariesaustralia.nla.gov.au</BaseURL>
+      <Port>210</Port>
+      <DataBase>BibTraining</DataBase>
+      <RecordType>marc21</RecordType>
+      <Encoding>UTF-8 (UNICODE)</Encoding>
+      <ElementSetName>F</ElementSetName>
+      <UserName>ANLEZ</UserName>
+      <Password>z39.50</Password>
+    </Zurl>
+    <Location>Australia</Location>
+    <Syntax>XML</Syntax>
+    <Active>YES</Active>
+  </ZServer>
+  <ZServer>
+    <Name>sudoc</Name>
+    <Category>sudoc</Category>
+    <Type>Z3950</Type>
+    <Zurl>
+      <BaseURL>carmin.sudoc.abes.fr</BaseURL>
+      <Port>10646</Port>
+      <DataBase>abes-z39-public</DataBase>
+      <RecordType>unimarc</RecordType>
+      <Encoding>UTF-8 (UNICODE)</Encoding>
+      <ElementSetName>F</ElementSetName>
+      <UserName />
+      <Password />
     </Zurl>
     <Location>France</Location>
     <Syntax>XML</Syntax>

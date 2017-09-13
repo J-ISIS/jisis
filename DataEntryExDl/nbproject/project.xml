@@ -155,10 +155,6 @@
             <public-packages>
                 <package>org.unesco.jisis.dataentryexdl</package>
             </public-packages>
-            <class-path-extension>
-                <runtime-relative-path>ext/commons-io-2.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/commons-io-2.1.jar</binary-origin>
-            </class-path-extension>
         </data>
     </configuration>
 </project>
