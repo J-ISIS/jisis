@@ -23,6 +23,8 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
@@ -45,7 +47,13 @@ import org.unesco.jisis.corelib.exceptions.DbException;
 import org.unesco.jisis.corelib.picklist.PickListData;
 import org.unesco.jisis.corelib.picklist.ValidationData;
 import org.unesco.jisis.corelib.record.*;
-import org.unesco.jisis.gui.*;
+import org.unesco.jisis.gui.DataEntryDlgTableCellEditor;
+import org.unesco.jisis.gui.EditorDlgActionTableCellEditor;
+import org.unesco.jisis.gui.GuiUtils;
+import org.unesco.jisis.gui.JTableButtonEditor;
+import org.unesco.jisis.gui.JTableButtonRenderer;
+import org.unesco.jisis.gui.TableCellListener;
+
 import org.unesco.jisis.jisisutils.gui.JTableScrolling;
 import org.unesco.jisis.jisisutils.gui.OutlineUtil;
 
@@ -53,7 +61,7 @@ import org.unesco.jisis.jisisutils.gui.OutlineUtil;
  *
  * @author jcd
  */
-public class DataEntryPanel extends javax.swing.JPanel implements CellEditorListener {
+public class DataEntryPanel extends javax.swing.JPanel implements CellEditorListener, TableModelListener {
 
     static final int ACTION_NEW = 0;
     static final int ACTION_OPEN = 1;
@@ -114,12 +122,12 @@ public class DataEntryPanel extends javax.swing.JPanel implements CellEditorList
         // Set the Outline TreeTable
         treeModel_ = DataEntryTreeModel.makeTreeModelForEmptyRecord(db, wks,
             pickListDataList_, validationDataList_);
-        rowModel_ = new DataEntryRowModel();
+        rowModel_ = new DataEntryRowModel(this);
 
         outlineModel_ = DefaultOutlineModel.createOutlineModel(treeModel_, rowModel_);
 
         outline_ = new Outline() {
-
+            
             @Override
             public boolean getScrollableTracksViewportHeight() {
                 if (getParent() instanceof JViewport) {
@@ -242,7 +250,9 @@ public class DataEntryPanel extends javax.swing.JPanel implements CellEditorList
             }
 
         });
-
+        
+         outlineModel_.addTableModelListener(this);
+        
         changeKeyProcessing();
     }
 
@@ -415,6 +425,7 @@ public class DataEntryPanel extends javax.swing.JPanel implements CellEditorList
 
     /**
      * Listens for cells that has been edited. When a cell has been edited, this function will run.
+     * @param e
      */
     @Override
     public void editingStopped(ChangeEvent e) {
@@ -572,7 +583,7 @@ public class DataEntryPanel extends javax.swing.JPanel implements CellEditorList
                 TreePath[] treeExpansion = OutlineUtil.saveExpansionState(outline_);
                 DataEntryNode root = (DataEntryNode) treeModel_.getRoot();
                 int index = treeModel_.getIndexOfChild(root, selNode);
-            // If it remains only 1 occurrence, we cannot delete this
+                // If it remains only 1 occurrence, we cannot delete this
                 // occurrence. We can only clear the data
                 int tag = Integer.valueOf((String) data.get("tag"));
                 int nOccurrences = getFieldOccurrenceCount(tag);
@@ -590,6 +601,7 @@ public class DataEntryPanel extends javax.swing.JPanel implements CellEditorList
                     outline_.setRowSelectionInterval(index, index);
                     OutlineUtil.loadExpansionState(outline_, treeExpansion);
                 }
+                 topComponent_.setRecordChangedFlag(true);
             }
         };
 
@@ -618,6 +630,7 @@ public class DataEntryPanel extends javax.swing.JPanel implements CellEditorList
 
                 treeModel_.fireStructureChanged();
                 OutlineUtil.loadExpansionState(outline_, treeExpansion);
+                topComponent_.setRecordChangedFlag(true);
 
             }
         };
@@ -662,6 +675,7 @@ public class DataEntryPanel extends javax.swing.JPanel implements CellEditorList
                 // Because of the root line we have +3
                 outline_.setRowSelectionInterval(fieldIndex + index + 3, fieldIndex + index + 3);
                 OutlineUtil.loadExpansionState(outline_, treeExpansion);
+                 topComponent_.setRecordChangedFlag(true);
 
             }
         };
@@ -728,6 +742,7 @@ public class DataEntryPanel extends javax.swing.JPanel implements CellEditorList
                 System.out.println("rowCount=" + outline_.getRowCount() + " index=" + index + " fieldIndex=" + fieldIndex + " offset=" + offset);
                 outline_.setRowSelectionInterval(fieldIndex + index + offset, fieldIndex + index + offset);
                 OutlineUtil.loadExpansionState(outline_, treeExpansion);
+                 topComponent_.setRecordChangedFlag(true);
 
             }
         };
@@ -825,6 +840,22 @@ public class DataEntryPanel extends javax.swing.JPanel implements CellEditorList
 
         return prevRow;
 
+    }
+
+    @Override
+    public void tableChanged(TableModelEvent tme) {
+        switch (tme.getType()) {
+               case TableModelEvent.DELETE:
+               case TableModelEvent.INSERT:
+               case TableModelEvent.UPDATE:
+                  topComponent_.setRecordChangedFlag(true);
+               default:
+
+            }
+    }
+
+    void tableDataChanged() {
+        topComponent_.setRecordChangedFlag(true);
     }
 
     private class ExpandedField {
@@ -951,6 +982,7 @@ public class DataEntryPanel extends javax.swing.JPanel implements CellEditorList
         TableColumnModel tcm = outline_.getColumnModel();
         ICellHighlight cmp = new ICellHighlight() {
 
+            @Override
             public boolean shouldHighlight(JTable tbl, Object value,
                 int row, int column) {
                 if (row > 0) {

@@ -7,6 +7,7 @@ package org.unesco.jisis.dataentryex;
 import java.util.Hashtable;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import org.netbeans.swing.outline.Outline;
 import org.netbeans.swing.outline.RowModel;
 import org.unesco.jisis.corelib.common.Global;
 import org.unesco.jisis.corelib.picklist.PickListData;
@@ -18,7 +19,16 @@ import org.unesco.jisis.gui.DataWithIcon;
  */
 public class DataEntryRowModel implements RowModel
 {
+    
+    
+   private final DataEntryPanel dataEntryPanel_;
+  
 
+   public DataEntryRowModel(DataEntryPanel dataEntryPanel) {
+      dataEntryPanel_ = dataEntryPanel;
+   }
+
+   @Override
    public Class getColumnClass(int column) {
       switch (column) {
          case 0:
@@ -43,10 +53,12 @@ public class DataEntryRowModel implements RowModel
       return null;
    }
 
+   @Override
    public int getColumnCount() {
       return 5;
    }
 
+   @Override
    public String getColumnName(int column) {
       switch (column) {
          case 0:            
@@ -233,6 +245,7 @@ public class DataEntryRowModel implements RowModel
                map.put("data", value);
 
             }
+            dataEntryPanel_.tableDataChanged();
             return;
             
           case 4:   // Picklist

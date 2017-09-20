@@ -897,6 +897,7 @@ final class OutlineTopComponent extends TopComponent implements Observer {
       }
       currRec_.clear();
       setRecord(currRec_);
+      med.recordChanged();
 }//GEN-LAST:event_btnClearActionPerformed
 
    private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed

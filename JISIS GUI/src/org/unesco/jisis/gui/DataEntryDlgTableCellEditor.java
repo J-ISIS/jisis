@@ -17,6 +17,7 @@ public class DataEntryDlgTableCellEditor extends AbstractActionTableCellEditor {
         super(editor);
     }
 
+    @Override
     protected void editCell(JTable table, int row, int column){
 
        // Get the cell initial data value

@@ -143,6 +143,7 @@ static final public String   columnNames[] = {
             break;
          case 3:
             row.setContent(obj);
+            this.fireTableDataChanged();
            
       }
    }
