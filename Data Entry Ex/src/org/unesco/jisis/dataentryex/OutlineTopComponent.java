@@ -74,8 +74,6 @@ final class OutlineTopComponent extends TopComponent implements Observer {
            try {
                fdt_ = db_.getFieldDefinitionTable();
 
-             
-
            } catch (DbException ex) {
                Exceptions.printStackTrace(ex);
            }
@@ -125,6 +123,7 @@ final class OutlineTopComponent extends TopComponent implements Observer {
            }
            /* Register this TopComponent as attached to this DB */
            db_.addWindow(this);
+           db_.addObserver((Observer) this);
            initComponents();
            setName(NbBundle.getMessage(OutlineTopComponent.class, "CTL_OutlineTopComponent"));
            setToolTipText(NbBundle.getMessage(OutlineTopComponent.class, "HINT_OutlineTopComponent"));
@@ -170,7 +169,8 @@ final class OutlineTopComponent extends TopComponent implements Observer {
       btnRTL.setMnemonic(KeyEvent.VK_T);
       btnReload.setMnemonic(KeyEvent.VK_O);
 
-      btnShowHide.setMnemonic(KeyEvent.VK_H);
+      tbtnShow.setMnemonic(KeyEvent.VK_W);
+      tbtnHide.setMnemonic(KeyEvent.VK_I);
       btnVAL.setMnemonic(KeyEvent.VK_V);
       
       
@@ -240,6 +240,7 @@ final class OutlineTopComponent extends TopComponent implements Observer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         mainPanel = new javax.swing.JPanel();
         navigationPanel = new javax.swing.JPanel();
         lblRecordChanged = new javax.swing.JLabel();
@@ -264,7 +265,8 @@ final class OutlineTopComponent extends TopComponent implements Observer {
         btnClear = new javax.swing.JButton();
         btnCopy = new javax.swing.JButton();
         btnPaste = new javax.swing.JButton();
-        btnShowHide = new javax.swing.JButton();
+        tbtnShow = new javax.swing.JToggleButton();
+        tbtnHide = new javax.swing.JToggleButton();
         jPanel1 = new javax.swing.JPanel();
         btnRTL = new javax.swing.JButton();
         btnVAL = new javax.swing.JButton();
@@ -272,6 +274,8 @@ final class OutlineTopComponent extends TopComponent implements Observer {
         recordPanel = new javax.swing.JPanel();
 
         setLayout(new java.awt.BorderLayout());
+
+        navigationPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         org.openide.awt.Mnemonics.setLocalizedText(lblRecordChanged, org.openide.util.NbBundle.getMessage(OutlineTopComponent.class, "OutlineTopComponent.lblRecordChanged.text")); // NOI18N
 
@@ -543,15 +547,23 @@ final class OutlineTopComponent extends TopComponent implements Observer {
             }
         });
 
-        btnShowHide.setMnemonic('H');
-        org.openide.awt.Mnemonics.setLocalizedText(btnShowHide, org.openide.util.NbBundle.getMessage(OutlineTopComponent.class, "OutlineTopComponent.btnShowHide.text")); // NOI18N
-        btnShowHide.setToolTipText(org.openide.util.NbBundle.getMessage(OutlineTopComponent.class, "OutlineTopComponent.btnShowHide.toolTipText")); // NOI18N
-        btnShowHide.setFocusable(false);
-        btnShowHide.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnShowHide.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnShowHide.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(tbtnShow);
+        tbtnShow.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(tbtnShow, org.openide.util.NbBundle.getMessage(OutlineTopComponent.class, "OutlineTopComponent.tbtnShow.text")); // NOI18N
+        tbtnShow.setToolTipText(org.openide.util.NbBundle.getMessage(OutlineTopComponent.class, "OutlineTopComponent.tbtnShow.toolTipText")); // NOI18N
+        tbtnShow.setBorder(null);
+        tbtnShow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnShowHideActionPerformed(evt);
+                tbtnShowActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(tbtnHide);
+        org.openide.awt.Mnemonics.setLocalizedText(tbtnHide, org.openide.util.NbBundle.getMessage(OutlineTopComponent.class, "OutlineTopComponent.tbtnHide.text")); // NOI18N
+        tbtnHide.setToolTipText(org.openide.util.NbBundle.getMessage(OutlineTopComponent.class, "OutlineTopComponent.tbtnHide.toolTipText")); // NOI18N
+        tbtnHide.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbtnHideActionPerformed(evt);
             }
         });
 
@@ -570,22 +582,28 @@ final class OutlineTopComponent extends TopComponent implements Observer {
                 .addComponent(btnCopy)
                 .addGap(6, 6, 6)
                 .addComponent(btnPaste)
-                .addGap(6, 6, 6)
-                .addComponent(btnShowHide)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tbtnShow, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tbtnHide, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         optionsPanelLayout.setVerticalGroup(
             optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(optionsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnReload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCreateCopy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCopy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPaste, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnShowHide, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(optionsPanelLayout.createSequentialGroup()
+                        .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnReload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnCreateCopy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnCopy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnPaste, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tbtnHide))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(tbtnShow, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -657,7 +675,7 @@ final class OutlineTopComponent extends TopComponent implements Observer {
                 .addGroup(navigationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(optionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(browsePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(141, Short.MAX_VALUE))
         );
         navigationPanelLayout.setVerticalGroup(
             navigationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -681,6 +699,7 @@ final class OutlineTopComponent extends TopComponent implements Observer {
                 .addGap(76, 76, 76))
         );
 
+        recordPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         recordPanel.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -698,9 +717,9 @@ final class OutlineTopComponent extends TopComponent implements Observer {
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(navigationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(recordPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                .addComponent(navigationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(recordPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -916,14 +935,6 @@ final class OutlineTopComponent extends TopComponent implements Observer {
            setRecordChangedFlag(true);
        } 
 }//GEN-LAST:event_btnPasteActionPerformed
-
-   private void btnShowHideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowHideActionPerformed
-      showEmptyFields_ = !showEmptyFields_;
-       if (currRec_ == null) {
-         currRec_ = dataEntryPanel.getRecord();
-      }
-      setRecord(currRec_);
-}//GEN-LAST:event_btnShowHideActionPerformed
  private boolean applyValidationRules() {
       boolean validationOK = true;
       if (validationDataList_ != null) {
@@ -985,6 +996,18 @@ final class OutlineTopComponent extends TopComponent implements Observer {
         dialog.pack();
         dialog.setVisible(true);
     }//GEN-LAST:event_btnMarc21FixedFieldEditorActionPerformed
+
+    private void tbtnShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnShowActionPerformed
+
+        showEmptyFields_ = true;
+        setRecord(currRec_);
+    }//GEN-LAST:event_tbtnShowActionPerformed
+
+    private void tbtnHideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtnHideActionPerformed
+        // TODO add your handling code here:
+        showEmptyFields_ = false;
+        setRecord(currRec_);
+    }//GEN-LAST:event_tbtnHideActionPerformed
 
    private void newRecord() {
 
@@ -1110,8 +1133,8 @@ final class OutlineTopComponent extends TopComponent implements Observer {
     private javax.swing.JButton btnRTL;
     private javax.swing.JButton btnReload;
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton btnShowHide;
     private javax.swing.JButton btnVAL;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cmbWKS;
     private javax.swing.JPanel crudPanel;
     private javax.swing.JPanel jPanel1;
@@ -1123,6 +1146,8 @@ final class OutlineTopComponent extends TopComponent implements Observer {
     private javax.swing.JPanel navigationPanel;
     private javax.swing.JPanel optionsPanel;
     private javax.swing.JPanel recordPanel;
+    private javax.swing.JToggleButton tbtnHide;
+    private javax.swing.JToggleButton tbtnShow;
     private javax.swing.JTextField txtMFN;
     private javax.swing.JPanel wksPanel;
     // End of variables declaration//GEN-END:variables
@@ -1173,6 +1198,50 @@ final class OutlineTopComponent extends TopComponent implements Observer {
    public void componentOpened() {
       // TODO add custom code on component opening
    }
+   
+    @Override
+    protected void componentShowing() {
+        System.out.println("componentShowing");
+        long mfn = db_.getCurrentRecordMfn();
+        super.componentShowing();
+        
+        if (currRec_ == null) {
+            try {
+                IRecord record = db_.getRecordCursor(mfn);
+                /**
+                 * Note: setRecord will take care of unlocking the current
+                 * record before displaying the new one. And will set currRec_
+                 */
+                setRecord(record);
+            } catch (DbException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        } else if (mfn > 0 && mfn != currRec_.getMfn()) {
+
+            try {
+                IRecord record = db_.getRecordCursor(mfn);
+                /**
+                 * Note: setRecord will take care of unlocking the current
+                 * record before displaying the new one. And will set currRec_
+                 */
+                setRecord(record);
+            } catch (DbException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
+
+        
+
+    }
+
+   @Override
+    protected void componentHidden() {
+        if (!canCloseDataEntryEx()) {
+            return;
+        }
+
+        super.componentHidden();
+    }
 
     /**
     * Returns:
@@ -1206,17 +1275,20 @@ final class OutlineTopComponent extends TopComponent implements Observer {
       return PREFERRED_ID;
    }
 
+   @Override
    public void update(Observable o, Object arg) {
        if (db_.databaseHasChanged()) {
          try {
 
+              long mfn = db_.getCurrentRecordMfn();
             // Be sure to be on the record displayed, because another window
             // may have change the record cursor
             currentMfn_ = currRec_.getMfn();
             if (currentMfn_ > 0) {
-               IRecord record = db_.getRecordCursor(currentMfn_);
+                currRec_ = db_.getRecordCursor(mfn);
             }
          //displayRecord(db_.getCurrent());
+         setRecord(currRec_);
          } catch (DbException ex) {
             Exceptions.printStackTrace(ex);
          }
