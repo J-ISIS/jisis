@@ -9,6 +9,10 @@ import javax.swing.RepaintManager;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.WizardDescriptor;
+import org.openide.awt.ActionID;
+import org.openide.awt.ActionReference;
+import org.openide.awt.ActionReferences;
+import org.openide.awt.ActionRegistration;
 import org.openide.awt.StatusDisplayer;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
@@ -25,6 +29,13 @@ import org.unesco.jisis.jisisutils.proxy.DirectConnectOpen;
 
 // An example action demonstrating how the wizard could be called from within
 // your code. You can copy-paste the code below wherever you need.
+@ActionID(id = "org.unesco.jisis.wizards.dbopen.DbOpenWizardAction", category = "Database")
+@ActionRegistration(displayName = "#CTL_DbOpenWizardAction", lazy = false)
+@ActionReferences(value = {
+    @ActionReference(path = "Shortcuts", name = "D-O")
+    , @ActionReference(path = "Menu/Database", position = 200)
+    , @ActionReference(path = "Toolbars/JisisToolbar")})
+
 public final class DbOpenWizardAction extends CallableSystemAction {
     
     private WizardDescriptor.Panel<org.openide.WizardDescriptor>[] panels_;

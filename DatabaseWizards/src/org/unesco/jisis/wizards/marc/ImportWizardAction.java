@@ -14,6 +14,9 @@ import java.util.Map;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.WizardDescriptor;
+import org.openide.awt.ActionID;
+import org.openide.awt.ActionReference;
+import org.openide.awt.ActionRegistration;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
@@ -32,12 +35,17 @@ import org.unesco.jisis.jisisutils.proxy.MRUDatabasesOptions;
 
 //An example action demonstrating how the wizard could be called from within
 //your code. You can copy-paste the code below wherever you need.
+@ActionID(id = "org.unesco.jisis.wizards.marc.ImportWizardAction", category = "Database")
+@ActionRegistration(displayName = "#MSG_ImportWizardTitle", lazy = false)
+@ActionReference(path = "Menu/Database", position = 400)
+
 public final class ImportWizardAction extends CallableSystemAction {
    private IConnection conn_;
    private IDatabase db_;
    
    protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ImportWizardAction.class);
 
+   @Override
    public void performAction() {
       
       if (!ConnectionPool.ensureDefaultConnection()) {
@@ -124,70 +132,66 @@ public final class ImportWizardAction extends CallableSystemAction {
          String dbName = wd.getProperty("dbName").toString();
          int databaseOption = (Integer) wd.getProperty("databaseOption");
 
-         if (databaseOption == ImportNewVisualPanel2.IMPORT_CREATE_DB) {
-            // We want to create a new DB, check that if the DB exists,
-            // We want really to erase the previous content
-            if (!promptOkToDestroyDB(dbHome, dbName)) {
-               return;
-            }
-            // Be sure a DB with same name is not opened
-            closeDatabase(dbHome, dbName);
-            
-
-            int createDbOption = (Integer) wd.getProperty("createDbOption");
-            if (createDbOption == ImportNewVisualPanel32.CREATE_DB_FROM_FDT) {
-               // Create an Empty DB with structure from old FDT & FST
-               String fdtFile = wd.getProperty("fdtFile").toString();
-               String fstFile = wd.getProperty("fstFile").toString();
-               String encoding = wd.getProperty("encoding").toString();
-               CreateDbParams dbp = ImpExpTool.createNewDbParm(dbHome, dbName,
-                       fdtFile, fstFile, encoding);
-
-               db_ = new ClientDatabaseProxy(conn_);
-
-               ImpExpTool.createNewDb(db_, dbp);
-            } else {
-               // Create an Empty DB without structure
-               db_ = new ClientDatabaseProxy(conn_);
-               ImpExpTool.createEmptyDB(db_, dbHome, dbName);
-            }
-            
-            /**
-             * 
-             */
-
-            // Open the Database
-
-            try {
-               
-               db_.getDatabase(dbHome, dbName, Global.DATABASE_BULK_WRITE);
-               
-            } catch (DbException ex) {
-               LOGGER.error("dbHome="+dbHome+" dbName="+dbName,ex);
-               throw new org.openide.util.NotImplementedException(ex.getMessage());
-            }
-           
-           
-         } else if (databaseOption == ImportNewVisualPanel2.IMPORT_IN_EXISTING_DB) {
-            // Close database if already opened
-            closeDatabase(dbHome, dbName);
-
-            db_ = new ClientDatabaseProxy(conn_);
-            try {
-               db_.getDatabase(dbHome, dbName, Global.DATABASE_BULK_WRITE);
-            } catch (DbException ex) {
-               Exceptions.printStackTrace(ex);
-            }
-
-            /*
-             *  The instruction below is not correct as the DB is loaded in a
-             * thread, this instruction is executed before the end of the
-             * thread!
-             */
-            // targetDB.resetDatabaseInfo();
-         } else {
-            // Do nothing
-         }
+          switch (databaseOption) {
+              case ImportNewVisualPanel2.IMPORT_CREATE_DB:
+                  // We want to create a new DB, check that if the DB exists,
+                  // We want really to erase the previous content
+                  if (!promptOkToDestroyDB(dbHome, dbName)) {
+                      return;
+                  }     // Be sure a DB with same name is not opened
+                  closeDatabase(dbHome, dbName);
+                  int createDbOption = (Integer) wd.getProperty("createDbOption");
+                  if (createDbOption == ImportNewVisualPanel32.CREATE_DB_FROM_FDT) {
+                      // Create an Empty DB with structure from old FDT & FST
+                      String fdtFile = wd.getProperty("fdtFile").toString();
+                      String fstFile = wd.getProperty("fstFile").toString();
+                      String encoding = wd.getProperty("encoding").toString();
+                      CreateDbParams dbp = ImpExpTool.createNewDbParm(dbHome, dbName,
+                              fdtFile, fstFile, encoding);
+                      
+                      db_ = new ClientDatabaseProxy(conn_);
+                      
+                      ImpExpTool.createNewDb(db_, dbp);
+                  } else {
+                      // Create an Empty DB without structure
+                      db_ = new ClientDatabaseProxy(conn_);
+                      ImpExpTool.createEmptyDB(db_, dbHome, dbName);
+                  }     /**
+                   *
+                   */
+                  
+                  // Open the Database
+                  
+                  try {
+                      
+                      db_.getDatabase(dbHome, dbName, Global.DATABASE_BULK_WRITE);
+                      
+                  } catch (DbException ex) {
+                      LOGGER.error("dbHome="+dbHome+" dbName="+dbName,ex);
+                      throw new org.openide.util.NotImplementedException(ex.getMessage());
+                  }     break;
+              case ImportNewVisualPanel2.IMPORT_IN_EXISTING_DB:
+                  // Close database if already opened
+                  closeDatabase(dbHome, dbName);
+                  db_ = new ClientDatabaseProxy(conn_);
+                  try {
+                      db_.getDatabase(dbHome, dbName, Global.DATABASE_BULK_WRITE);
+                  } catch (DbException ex) {
+                      Exceptions.printStackTrace(ex);
+                  }
+                  
+                  /*
+                  *  The instruction below is not correct as the DB is loaded in a
+                  * thread, this instruction is executed before the end of the
+                  * thread!
+                  */
+                  // targetDB.resetDatabaseInfo();
+                  break;
+          
+              default:
+                  // Do nothing
+                  break;
+          }
          ConnectionInfo connectionInfo = ConnectionPool.getDefaultConnectionInfo();
          connectionInfo.addDatabase(db_);
 
@@ -235,6 +239,7 @@ public final class ImportWizardAction extends CallableSystemAction {
 
    }
 
+   @Override
    public String getName() {
       return NbBundle.getMessage(ImportWizardAction.class, "MSG_ImportWizardTitle");
    }
@@ -244,6 +249,7 @@ public final class ImportWizardAction extends CallableSystemAction {
       return null;
    }
 
+   @Override
    public HelpCtx getHelpCtx() {
       return HelpCtx.DEFAULT_HELP;
    }

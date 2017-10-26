@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
 <filesystem>
-    <attr name="Menu\Database\org-unesco-jisis-wizards-connopen-connOpenWizardAction.shadow\position" intvalue="100"/>
-    <attr name="Actions\Database\org-unesco-jisis-wizards-connopen-connOpenWizardAction.instance\position" intvalue="200"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-connopen-ConnectionOpenWizardAction.shadow\position" intvalue="100"/>
+    <attr name="Actions\Database\org-unesco-jisis-wizards-connopen-ConnectionOpenWizardAction.instance\position" intvalue="200"/>
     <attr name="Actions\Database\org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.instance\position" intvalue="300"/>
     <attr name="Actions\Database\org-unesco-jisis-wizards-dbcreate-DbCreateAction.instance\position" intvalue="400"/>
     <attr name="Actions\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction.instance\position" intvalue="450"/>

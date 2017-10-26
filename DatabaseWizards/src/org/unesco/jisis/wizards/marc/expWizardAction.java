@@ -8,6 +8,9 @@ import org.openide.util.Exceptions;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.WizardDescriptor;
+import org.openide.awt.ActionID;
+import org.openide.awt.ActionReference;
+import org.openide.awt.ActionRegistration;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.CallableSystemAction;
@@ -20,6 +23,9 @@ import org.unesco.jisis.gui.Util;
 
 // An example action demonstrating how the wizard could be called from within
 // your code. You can copy-paste the code below wherever you need.
+@ActionID(id = "org.unesco.jisis.wizards.marc.expWizardAction", category = "Database")
+@ActionRegistration(displayName = "#Export_Wizard_Title", lazy = false)
+@ActionReference(path = "Menu/Database", position = 500)
 public final class expWizardAction extends CallableSystemAction {
 
   
@@ -39,6 +45,7 @@ public final class expWizardAction extends CallableSystemAction {
 
     }
 
+   @Override
    public void performAction() {
 
       WizardDescriptor.Iterator<WizardDescriptor>  iterator = new ExpSelectWizardIterator();
@@ -127,18 +134,22 @@ public final class expWizardAction extends CallableSystemAction {
    }
 
 
+   @Override
    public String getName() {
       return NbBundle.getMessage(expWizardAction.class, "MSG_expWizardTitle");
    }
 
+   @Override
    public String iconResource() {
       return null;
    }
 
+   @Override
    public HelpCtx getHelpCtx() {
       return HelpCtx.DEFAULT_HELP;
    }
 
+   @Override
    protected boolean asynchronous() {
       return false;
    }

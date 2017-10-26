@@ -9,6 +9,10 @@ import javax.swing.JComponent;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.WizardDescriptor;
+import org.openide.awt.ActionID;
+import org.openide.awt.ActionReference;
+import org.openide.awt.ActionReferences;
+import org.openide.awt.ActionRegistration;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.CallableSystemAction;
@@ -27,6 +31,12 @@ import org.unesco.jisis.jisiscore.common.FSTModelEx;
 import org.unesco.jisis.jisiscore.common.WKSModelEx;
 
 //An example action demonstrating how the wizard could be called from within
+@ActionID(id = "org.unesco.jisis.wizards.dbcreate.DbCreateAction", category = "Database")
+@ActionRegistration(displayName = "#CTL_DbCreateWizardAction", lazy = false)
+@ActionReferences(value = {
+    @ActionReference(path = "Shortcuts", name = "D-N")
+    , @ActionReference(path = "Menu/Database", name = "org-unesco-jisis-wizards-dbcreate-wizards-dbcreateAction", position = 300)
+    , @ActionReference(path = "Toolbars/JisisToolbar", name = "org-unesco-jisis-wizards-dbcreate-WizardAction")})
 public final class DbCreateAction extends CallableSystemAction {
    private WizardDescriptor.Panel<WizardDescriptor>[] panels;
 

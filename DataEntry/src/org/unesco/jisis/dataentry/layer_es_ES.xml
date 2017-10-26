@@ -14,7 +14,7 @@
     <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseAllDatabasesAction.shadow\position" intvalue="1700"/>
     <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseDatabaseAction-separatorBefore.instance\position" intvalue="1600"/>
     <attr name="Menu\Database\org-unesco-jisis-windows-databases-CloseDatabaseAction.shadow\position" intvalue="1500"/>
-    <attr name="Menu\Database\org-unesco-jisis-wizards-connopen-connOpenWizardAction.shadow\position" intvalue="100"/>
+    <attr name="Menu\Database\org-unesco-jisis-wizards-connopen-ConnectionOpenWizardAction.shadow\position" intvalue="100"/>
     <attr name="Menu\Database\org-unesco-jisis-wizards-dbbackup-DbBackupAction.shadow\position" intvalue="1300"/>
     <attr name="Menu\Database\org-unesco-jisis-wizards-dbcreate-wizards-dbcreateAction.shadow\position" intvalue="400"/>
     <attr name="Menu\Database\org-unesco-jisis-wizards-dbopen-DbOpenWizardAction.shadow\position" intvalue="300"/>

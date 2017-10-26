@@ -8,8 +8,12 @@ import javax.swing.JComponent;
 
 import org.openide.DialogDisplayer;
 import org.openide.WizardDescriptor;
+import org.openide.awt.ActionID;
+import org.openide.awt.ActionReference;
+import org.openide.awt.ActionRegistration;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
+import org.openide.util.NbBundle.Messages;
 import org.openide.util.actions.CallableSystemAction;
 import org.slf4j.LoggerFactory;
 import org.unesco.jisis.corelib.client.ConnectionInfo;
@@ -25,6 +29,11 @@ import org.unesco.jisis.windows.databases.DbTopComponent;
 
 // An example action demonstrating how the wizard could be called from within
 // your code. You can copy-paste the code below wherever you need.
+
+@ActionID(id = "org.unesco.jisis.wizards.connopen.ConnectionOpenWizardAction", category = "Database")
+@ActionRegistration(displayName = "#CTL_ConnectionOpenWizardAction", lazy = false)
+@ActionReference(path = "Menu/Database", position = 100)
+@Messages("CTL_ConnectionOpenWizardAction=Connection to the Server")
 public final class ConnectionOpenWizardAction extends CallableSystemAction {
 
    private WizardDescriptor.Panel<org.openide.WizardDescriptor>[] panels;
