@@ -1400,7 +1400,7 @@ public final class GlobalOperationsTopComponent extends TopComponent implements 
 
                         db_.updateRecordEx(record);
 
-                        progress.setDisplayName("Global Add MFN:" + Long.toString(record.getMfn()));
+                        progress.setDisplayName("Global Delete MFN:" + Long.toString(record.getMfn()));
                     } catch (Exception ex) {
                         LOGGER.error("Error when executing Global Delete for MFN: [{}] cursor=[{}]", new Object[]{mfn, cursor}, ex);
                         GuiGlobal.output("Error when executing Global Delete for MFN:" + mfn + " cursor=" + cursor + "\n "
@@ -1426,7 +1426,7 @@ public final class GlobalOperationsTopComponent extends TopComponent implements 
                         record = RecordOperations.deleteFromRecord(record, parameters);
                         mfn = record.getMfn();
                         db_.updateRecordEx(record);
-                        progress.setDisplayName("Global Add MFN:" + Long.toString(record.getMfn()));
+                        progress.setDisplayName("Global Delete MFN:" + Long.toString(record.getMfn()));
                     } catch (Exception ex) {
                         LOGGER.error("Error when executing Global Delete for MFN: [{}] cursor=[{}]", new Object[]{mfn, cursor}, ex);
                         GuiGlobal.output("Error when executing Global Delete for MFN:" + mfn + " cursor=" + cursor + "\n "
@@ -1516,7 +1516,7 @@ public final class GlobalOperationsTopComponent extends TopComponent implements 
                             replaceWith, caseSensitive, wholeWordOnly, promptOnReplace);
 
                         db_.updateRecordEx(record);
-                        progress.setDisplayName("Global Add MFN:" + Long.toString(record.getMfn()));
+                        progress.setDisplayName("Global Replace MFN:" + Long.toString(record.getMfn()));
                     } catch (Exception ex) {
                         LOGGER.error("Error when executing Global Replace for MFN: [{}] cursor=[{}]", new Object[]{mfn, cursor}, ex);
                         GuiGlobal.output("Error when executing Global Replace for MFN:" + mfn + " cursor=" + cursor + "\n "
@@ -1542,7 +1542,7 @@ public final class GlobalOperationsTopComponent extends TopComponent implements 
                        
                         mfn = record.getMfn();
                         db_.updateRecordEx(record);
-                        progress.setDisplayName("Global Add MFN:" + Long.toString(record.getMfn()));
+                        progress.setDisplayName("Global Replace MFN:" + Long.toString(record.getMfn()));
                     } catch (Exception ex) {
                         LOGGER.error("Error when executing Global Replace for MFN: [{}] cursor=[{}]", new Object[]{mfn, cursor}, ex);
                         GuiGlobal.output("Error when executing Global Replace for MFN:" + mfn + " cursor=" + cursor + "\n "
