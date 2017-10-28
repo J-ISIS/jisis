@@ -2189,7 +2189,7 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
 
    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
 
-       selectDirectory();
+       outputDirectory = selectDirectory();
    }//GEN-LAST:event_btnBrowseActionPerformed
 
    private void btnLastSettingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastSettingActionPerformed
