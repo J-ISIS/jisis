@@ -24,6 +24,7 @@ public abstract class AbstractTreeModel implements TreeModel {
       listeners = new EventListenerList();
    }
 
+   @Override
    public int getIndexOfChild(Object parent, Object child) {
       for (int count = getChildCount(parent), i = 0; i < count; i++) {
          if (getChild(parent, i).equals(child)) {
@@ -67,12 +68,14 @@ public abstract class AbstractTreeModel implements TreeModel {
       fireTreeStructureChanged(new TreePath(getRoot()));
    }
 
-   /** Call when a node has changed its leaf state. */
+   /** Call when a node has changed its leaf state.
+     * @param path */
    protected void firePathLeafStateChanged(TreePath path) {
       fireTreeStructureChanged(path);
    }
 
-   /** Call when the tree structure below the path has completely changed. */
+   /** Call when the tree structure below the path has completely changed.
+     * @param parentPath */
    protected void fireTreeStructureChanged(TreePath parentPath) {
       Object[] pairs = listeners.getListenerList();
 
@@ -91,6 +94,7 @@ public abstract class AbstractTreeModel implements TreeModel {
 
    /** Call when the path itself has changed, but no structure changes
    have occurred.
+     * @param path
     */
    protected void firePathChanged(TreePath path) {
       Object node = path.getLastPathComponent();
@@ -164,6 +168,7 @@ public abstract class AbstractTreeModel implements TreeModel {
       }
    }
 
+   @Override
    protected Object clone()
            throws CloneNotSupportedException {
       AbstractTreeModel clone = (AbstractTreeModel) super.clone();
@@ -173,10 +178,12 @@ public abstract class AbstractTreeModel implements TreeModel {
       return clone;
    }
 
+   @Override
    public void addTreeModelListener(TreeModelListener l) {
       listeners.add(TreeModelListener.class, l);
    }
 
+   @Override
    public void removeTreeModelListener(TreeModelListener l) {
       listeners.remove(TreeModelListener.class, l);
    }

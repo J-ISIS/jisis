@@ -10,11 +10,11 @@ package org.unesco.jisis.jisisutil.history;
  */
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import org.jdesktop.swingx.JXList;
 
 /**
@@ -63,12 +63,16 @@ public class ListSelectorDialog extends JDialog {
     * Create the list selection dialog.
     *
     * @param parentFrame the parent frame of the dialog
+     * @param title
+     * @param jxList
     * @param userList the JList component the user will select from
     */
    public ListSelectorDialog(Frame parentFrame, String title, JXList jxList) {
 
       super(parentFrame, title, true);
+      jxList.setBorder(new EmptyBorder(10,10, 10, 10));
       jxList_ = jxList;
+      
 
       /**
        * Allow selection by double click on a single element or last element
@@ -88,21 +92,15 @@ public class ListSelectorDialog extends JDialog {
 
       cancelButton_.setMnemonic(java.util.ResourceBundle.getBundle("org/unesco/jisis/jisisutil/history/Bundle")
                                   .getString("CANCEL_MNEMONIC").charAt(0));
-      cancelButton_.addActionListener(new ActionListener() {
-
-         public void actionPerformed(ActionEvent e) {
-            result_ = CANCEL_OPTION;
-            setVisible(false);
-         }
+      cancelButton_.addActionListener((ActionEvent e) -> {
+          result_ = CANCEL_OPTION;
+          setVisible(false);
       });
       okButton_.setMnemonic(java.util.ResourceBundle.getBundle("org/unesco/jisis/jisisutil/history/Bundle")
                                   .getString("OK_MNEMONIC").charAt(0));
-      okButton_.addActionListener(new ActionListener() {
-
-         public void actionPerformed(ActionEvent e) {
-            result_ = APPROVE_OPTION;
-            setVisible(false);
-         }
+      okButton_.addActionListener((ActionEvent e) -> {
+          result_ = APPROVE_OPTION;
+          setVisible(false);
       });
      
 
@@ -176,10 +174,11 @@ public class ListSelectorDialog extends JDialog {
          } else {
             System.err.println("Cancelled");
          }
-         System.exit(0);
-      } catch (Exception ex) {
-         ex.printStackTrace();
-         System.err.println(ex.getMessage());
-      }
+           System.exit(0);
+       } catch (Exception ex) {
+           System.err.println(ex.getMessage());
+           ex.printStackTrace();
+
+       }
    }
 }

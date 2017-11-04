@@ -1219,16 +1219,13 @@ public class DataEntryTopComponent extends TopComponent implements Observer {
    }
    @Override
    public boolean canClose() {
-      if (!checkModifiedRecordSaved()) {
-         return false;
-      }
+      checkModifiedRecordSaved();
       return true;
    }
    
    public boolean canChangeRecord() {
-      if (!checkModifiedRecordSaved()) {
-         return false;
-      }
+      checkModifiedRecordSaved();
+      
       return true;
    }
    

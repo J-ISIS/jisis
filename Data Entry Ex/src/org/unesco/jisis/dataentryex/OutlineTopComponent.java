@@ -144,7 +144,7 @@ final class OutlineTopComponent extends TopComponent implements Observer {
       try {
          wks_ = db_.getWorksheetDef(wksName);
          pickListDataList_ = db_.getPickListData(wksName);
-         validationDataList_ = db_.getValidationData(wksName);
+          validationDataList_ = db_.getValidationData(wksName);
       } catch (DbException ex) {
          Exceptions.printStackTrace(ex);
       }
@@ -173,9 +173,13 @@ final class OutlineTopComponent extends TopComponent implements Observer {
       tbtnHide.setMnemonic(KeyEvent.VK_I);
       btnVAL.setMnemonic(KeyEvent.VK_V);
       
-      
-      newRecord();
-      
+      /**
+       * Before an empty record was displayed for data entry
+       * This has been changed to display the current record
+       * The "New" button must be clicked to get an empty record for data entry
+       */
+      //newRecord();
+      tbtnShowActionPerformed(null);
    }
    public boolean getWksError() {
        return wksError;
@@ -382,10 +386,10 @@ final class OutlineTopComponent extends TopComponent implements Observer {
             .addGroup(browsePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblMFN)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtMFN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(42, 42, 42)
-                .addComponent(btnFirst, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnFirst, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPrev, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)

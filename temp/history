@@ -2,6 +2,7 @@
 PATR-test2.html
 PATR-test1.html
 [CDS_outputFileName]
+aa.html
 testsort2.txt
 testsort1.txt
 testsort.txt
@@ -66,6 +67,8 @@ _270:\"1966\"
 _270:1966
 [SciELO_FreeTextSearch]
 v0:\'Cristiano\'
+[bibliothek_FreeTextSearch]
+v0=\'africa\'
 [shreiber_txtOutputDir]
 C:\\J-ISIS 2016\\jisis\\work
 [jeanclaude_FreeTextSearch]
@@ -87,6 +90,7 @@ _120:\"tw\\=eastern\"
 _120:\"TW=EASTERN\"
 _120:EASTERN
 [CDS_txtOutputDir]
+C:\\temp j-isis
 K:\\J-ISIS 2015\\jisis\\work
 C:\\J-ISIS 2014\\jisis\\work
 [CDS_expertSearch]
