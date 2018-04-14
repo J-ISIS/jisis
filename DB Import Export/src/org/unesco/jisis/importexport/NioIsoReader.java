@@ -111,6 +111,7 @@ public class NioIsoReader implements MarcReader {
     private boolean permissive = false;
     /**
      * Constructs an instance with the specified input stream.
+     * @param file
      */
     public NioIsoReader(File file) {
         this(file, null, DEFAULT_LINE_LENGTH);
@@ -120,6 +121,7 @@ public class NioIsoReader implements MarcReader {
     /**
      * Constructs an instance with the specified input stream and character
      * encoding.
+     * @param file
      */
     public NioIsoReader(File file, String encoding, int lineLength) {
         if (lineLength == 0) {
@@ -535,7 +537,7 @@ public class NioIsoReader implements MarcReader {
    private String getMarc8Conversion(byte[] bytes) {
       String dataElement = null;
       if (converterAnsel == null) {
-         converterAnsel = new AnselToUnicode(errors);
+         converterAnsel = new AnselToUnicode();
       }
       if (permissive && (byteArrayContains(bytes, badEsc) || byteArrayContains(bytes, overbar))) {
          String newDataElement = null;

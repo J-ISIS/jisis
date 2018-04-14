@@ -118,6 +118,7 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
     private boolean permissive = false;
     /**
      * Constructs an instance with the specified input stream.
+     * @param file
      */
     public NoControlFieldsNioIsoReader(File file) {
         this(file, null, DEFAULT_LINE_LENGTH);
@@ -127,6 +128,9 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
     /**
      * Constructs an instance with the specified input stream and character
      * encoding.
+     * @param file
+     * @param encoding
+     * @param lineLength
      */
     public NoControlFieldsNioIsoReader(File file, String encoding, int lineLength) {
         if (lineLength == 0) {
@@ -173,6 +177,7 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
      * Returns true if the iteration has more records, false otherwise.
     * @return 
      */
+    @Override
     public boolean hasNext() {
         return nioBufferReader_.hasRemaining();
     }
@@ -195,6 +200,7 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
    byte[] bytesStart = new byte[5];
 
 
+    @Override
     public NoControlFieldsRecord next() {
        
         Leader ldr;
@@ -544,7 +550,7 @@ public class NoControlFieldsNioIsoReader implements MarcReader {
    private String getMarc8Conversion(byte[] bytes) {
       String dataElement = null;
       if (converterAnsel == null) {
-         converterAnsel = new AnselToUnicode(errors);
+         converterAnsel = new AnselToUnicode();
       }
       if (permissive && (byteArrayContains(bytes, badEsc) || byteArrayContains(bytes, overbar))) {
          String newDataElement = null;

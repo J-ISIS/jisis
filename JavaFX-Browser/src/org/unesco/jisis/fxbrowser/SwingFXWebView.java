@@ -130,16 +130,24 @@ public class SwingFXWebView extends JPanel {
 
       fxpath = getFXClassPath();
 
-       SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-               Platform.setImplicitExit(false);
-                initAndShowGUI();
-                System.out.println("System.getProperties - javafx.runtime.version: " + System.getProperties().get("javafx.runtime.version"));
-                String[] fxpath1 = getFXClassPath();
-                System.out.println("fxpath1: "+fxpath1);
-            }
-        });
+       if (!SwingUtilities.isEventDispatchThread()) {
+           SwingUtilities.invokeLater(new Runnable() {
+               @Override
+               public void run() {
+                   Platform.setImplicitExit(false);
+                   initAndShowGUI();
+                   System.out.println("System.getProperties - javafx.runtime.version: " + System.getProperties().get("javafx.runtime.version"));
+                   String[] fxpath1 = getFXClassPath();
+                   System.out.println("fxpath1: " + fxpath1);
+               }
+           });
+       } else {
+           Platform.setImplicitExit(false);
+           initAndShowGUI();
+           System.out.println("System.getProperties - javafx.runtime.version: " + System.getProperties().get("javafx.runtime.version"));
+           String[] fxpath1 = getFXClassPath();
+           System.out.println("fxpath1: " + fxpath1);
+       }
       
    }
 

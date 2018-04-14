@@ -15,12 +15,18 @@ package org.unesco.jisis.importexport;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+
+import org.marc4j.MarcError;
 import org.marc4j.marc.ControlField;
+import org.marc4j.marc.DataField;
 import org.marc4j.marc.IllegalAddException;
 import org.marc4j.marc.Leader;
 import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
+import org.marc4j.marc.impl.ControlFieldImpl;
 import org.marc4j.marc.impl.LeaderImpl;
 import org.marc4j.marc.impl.Verifier;
 
@@ -28,7 +34,7 @@ import org.marc4j.marc.impl.Verifier;
  * Represents a MARC record.
  * 
  * @author Bas Peters
- * @version $Revision: 1.5 $
+ * 
  */
 public class NoControlFieldsRecord implements Record {
 
@@ -36,9 +42,13 @@ public class NoControlFieldsRecord implements Record {
 
     private Leader leader;
 
-    private final List controlFields;
+    protected List<ControlField> controlFields;
 
-    private final List dataFields;
+    protected List<DataField> dataFields;
+
+    protected List<MarcError> errors = null;
+
+    protected int maxSeverity;
 
     private String type;
     
@@ -54,22 +64,46 @@ public class NoControlFieldsRecord implements Record {
      * Creates a new <code>Record</code>.
      */
     public NoControlFieldsRecord() {
-        controlFields = new ArrayList();
-        dataFields = new ArrayList();
+        controlFields = new ArrayList<>();
+        dataFields = new ArrayList<>();
     }
 
-    public void setType(String type) {
+    /**
+     * Sets the type of this {@link Record}.
+     *
+     * @param type A {@link Record} type
+     */
+    @Override
+    public void setType(final String type) {
         this.type = type;
     }
 
+    /**
+     * Gets the type of this {@link Record}.
+     *
+     * @return This {@link Record}'s type
+     */
+    @Override
     public String getType() {
         return type;
     }
 
-    public void setLeader(Leader leader) {
+    /**
+     * Sets this {@link Record}'s {@link Leader}.
+     *
+     * @param leader A {@link Leader} to use in this record
+     */
+    @Override
+    public void setLeader(final Leader leader) {
         this.leader = leader;
     }
 
+    /**
+     * Gets the {@link Leader} for this {@link Record}.
+     *
+     * @return The {@link Leader} for this {@link Record}
+     */
+    @Override
     public Leader getLeader() {
         return leader;
     }
@@ -88,9 +122,10 @@ public class NoControlFieldsRecord implements Record {
      *             when the parameter is not a <code>VariableField</code>
      *             instance
      */
-    public void addVariableField(VariableField field) {
-//        if (!(field instanceof VariableField))
-//            throw new IllegalAddException("Expected VariableField instance");
+    @Override
+    public void addVariableField(final VariableField field) {
+        if (!(field instanceof VariableField))
+            throw new IllegalAddException("Expected VariableField instance");
 //
 //        String tag = field.getTag();
 //        if (Verifier.isControlNumberField(tag)) {
@@ -103,18 +138,24 @@ public class NoControlFieldsRecord implements Record {
 //            controlFields.add(field);
 //            Collections.sort(controlFields);
 //        } else {
-            dataFields.add(field);
-            Collections.sort(dataFields);
-        //}
-
+//            dataFields.add((DataField)field);
+//            Collections.sort(dataFields);
+//          }
+        /**
+         * Always add as controlField
+         */
+           controlFields.add((ControlField) field);
+           Collections.sort(controlFields);
     }
 
-    public void removeVariableField(VariableField field) {
-        String tag = field.getTag();
-        if (Verifier.isControlField(tag))
+    @Override
+    public void removeVariableField(final VariableField field) {
+        final String tag = field.getTag();
+        if (Verifier.isControlField(tag)) {
             controlFields.remove(field);
-        else
+        } else {
             dataFields.remove(field);
+        }
     }
 
     /**
@@ -123,77 +164,147 @@ public class NoControlFieldsRecord implements Record {
      * 
      * @return ControlField - the control number field
      */
+    @Override
     public ControlField getControlNumberField() {
-        if (Verifier.hasControlNumberField(controlFields))
-            return (ControlField) controlFields.get(0);
-        else
+        if (Verifier.hasControlNumberField(controlFields)) {
+            return controlFields.get(0);
+        } else {
             return null;
+        }
     }
 
-    public List getControlFields() {
+    /**
+     * Gets a {@link List} of {@link ControlField}s from the {@link Record}.
+     * @return 
+     */
+    @Override
+    public List<ControlField> getControlFields() {
         return controlFields;
     }
 
-    public List getDataFields() {
+    /**
+     * Gets a {@link List} of {@link DataField}s from the {@link Record}.
+     * @return 
+     */
+    @Override
+    public List<DataField> getDataFields() {
         return dataFields;
     }
 
-    public VariableField getVariableField(String tag) {
-        Iterator i;
-        if (Verifier.isControlField(tag))
-            i = controlFields.iterator();
-        else
-            i = dataFields.iterator();
-        while (i.hasNext()) {
-            VariableField field = (VariableField) i.next();
-            if (field.getTag().equals(tag))
+    /**
+     * Gets the first {@link VariableField} with the supplied tag.
+     *
+     * @param tag The tag of the field to be returned
+     * @return 
+     */
+    @Override
+    public VariableField getVariableField(final String tag) {
+        final List<VariableField> fields = getVariableFieldsWithLeader();
+
+        for (final VariableField field : fields) {
+            if (fieldMatches(field, tag)) {
                 return field;
+            }
         }
+
         return null;
     }
-
-    public List getVariableFields(String tag) {
-        List fields = new ArrayList();
-        Iterator i;
-        if (Verifier.isControlField(tag))
-            i = controlFields.iterator();
-        else
-            i = dataFields.iterator();
-        while (i.hasNext()) {
-            VariableField field = (VariableField) i.next();
-            if (field.getTag().equals(tag))
-                fields.add(field);
+	
+ private boolean fieldMatches(final VariableField field, final String tag) {
+        if (field.getTag().equals(tag)) {
+            return true;
         }
+        if (tag.startsWith("LNK") && field.getTag().equals("880")) {
+            final DataField df = (DataField) field;
+            final Subfield link = df.getSubfield('6');
+            if (link != null && link.getData().equals(tag.substring(3))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gets a {@link List} of {@link VariableField}s with the supplied tag.
+     * @param tag
+     * @return 
+     */
+    @Override
+    public List<VariableField> getVariableFields(final String tag) {
+        final List<VariableField> result = new ArrayList<>();
+        final List<VariableField> fields = getVariableFieldsWithLeader();
+
+        for (final VariableField field : fields) {
+            if (fieldMatches(field, tag)) {
+                result.add(field);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Gets a {@link List} of {@link VariableField}s from the {@link Record}.
+     * @return 
+     */
+    @Override
+    public List<VariableField> getVariableFields() {
+        final List<VariableField> fields = new ArrayList<VariableField>();
+
+        fields.addAll(controlFields);
+        fields.addAll(dataFields);
+
+        return fields;
+    }
+    /**
+     * Gets a {@link List} of {@link VariableField}s from the {@link Record}
+     * including the LEADER recast as ControlField for field matching purposes.
+     * 
+     * @return a List of all VariableFields plus the Leader represented as a ControlField
+     */
+    public List<VariableField> getVariableFieldsWithLeader() {
+        final List<VariableField> fields = new ArrayList<>();
+        final ControlField leaderAsField = new ControlFieldImpl("000", this.getLeader().toString());
+        fields.add(leaderAsField);
+        fields.addAll(controlFields);
+        fields.addAll(dataFields);
         return fields;
     }
 
-    public List getVariableFields() {
-        List fields = new ArrayList();
-        Iterator i;
-        i = controlFields.iterator();
-        while (i.hasNext())
-            fields.add(i.next());
-        i = dataFields.iterator();
-        while (i.hasNext())
-            fields.add(i.next());
-        return fields;
-    }
-
+    /**
+     * Gets the {@link Record}'s control number.
+     * @return 
+     */
+    @Override
     public String getControlNumber() {
-        ControlField f = getControlNumberField();
-        String result = (f == null || f.getData() == null) ? null : new String(f.getData());
-        return(result);
+        final ControlField f = getControlNumberField();
+
+        if (f == null || f.getData() == null) {
+            return null;
+        } else {
+            return f.getData();
+        }
     }
 
-    public List getVariableFields(String[] tags) {
-        List list = new ArrayList();
-        for (int i = 0; i < tags.length; i++) {
-            String tag = tags[i];
-            List fields = getVariableFields(tag);
-            if (fields.size() > 0)
-                list.addAll(fields);
+    /**
+     * Gets the {@link VariableField}s in the {@link Record} with the supplied tags.
+     * @param tags
+     * @return 
+     */
+    @Override
+    public List<VariableField> getVariableFields(final String[] tags) {
+        final List<VariableField> result = new ArrayList<>();
+        final List<VariableField> fields = getVariableFieldsWithLeader();
+
+        for (final VariableField field : fields) {
+            for (final String tag : tags) {
+                if (fieldMatches(field, tag)) {
+                    result.add(field);
+                    break;
+                }
+            }
         }
-        return list;
+
+        return result;
     }
 
     /**
@@ -224,65 +335,170 @@ public class NoControlFieldsRecord implements Record {
      * 
      * @return String - a string representation of this record
      */
+    @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
+
         sb.append("LEADER ");
         sb.append(getLeader().toString());
         sb.append('\n');
-        Iterator i = getVariableFields().iterator();
-        while (i.hasNext()) {
-            VariableField field = (VariableField) i.next();
+
+        for (final VariableField field : getVariableFields()) {
             sb.append(field.toString());
             sb.append('\n');
         }
+
         return sb.toString();
     }
 
-    public List find(String pattern) {
-        List result = new ArrayList();
-        Iterator i = controlFields.iterator();
+    /**
+     * Finds all the {@link VariableField}s that match the supplied regular expression pattern.
+     * @param pattern
+     * @return 
+     */
+    @Override
+    public List<VariableField> find(final String pattern) {
+        final List<VariableField> result = new ArrayList<>();
+        Iterator<? extends VariableField> i = controlFields.iterator();
+
         while (i.hasNext()) {
-            VariableField field = (VariableField) i.next();
-            if (field.find(pattern))
+            final VariableField field = i.next();
+
+            if (field.find(pattern)) {
                 result.add(field);
+            }
         }
+
         i = dataFields.iterator();
+
         while (i.hasNext()) {
-            VariableField field = (VariableField) i.next();
-            if (field.find(pattern))
+            final VariableField field = i.next();
+
+            if (field.find(pattern)) {
                 result.add(field);
+            }
         }
+
         return result;
     }
 
-    public List find(String tag, String pattern) {
-        List result = new ArrayList();
-        Iterator i = getVariableFields(tag).iterator();
-        while (i.hasNext()) {
-            VariableField field = (VariableField) i.next();
-            if (field.find(pattern))
+    /**
+     * Finds all the {@link VariableField}s that match the supplied tag and regular expression pattern.
+     * @param tag
+     * @param pattern
+     * @return 
+     */
+    @Override
+    public List<VariableField> find(final String tag, final String pattern) {
+        final List<VariableField> result = new ArrayList<>();
+
+        for (final VariableField field : getVariableFields(tag)) {
+            if (field.find(pattern)) {
                 result.add(field);
+            }
         }
+
         return result;
     }
 
-    public List find(String[] tag, String pattern) {
-        List result = new ArrayList();
-        Iterator i = getVariableFields(tag).iterator();
-        while (i.hasNext()) {
-            VariableField field = (VariableField) i.next();
-            if (field.find(pattern))
+    /**
+     * Finds all the {@link VariableField}s that match the supplied tags and regular expression pattern.
+     * @param tag
+     * @param pattern
+     * @return 
+     */
+    @Override
+    public List<VariableField> find(final String[] tag, final String pattern) {
+        final List<VariableField> result = new ArrayList<>();
+
+        for (final VariableField field : getVariableFields(tag)) {
+            if (field.find(pattern)) {
                 result.add(field);
+            }
         }
+
         return result;
     }
 
-    public void setId(Long id) {
+    public boolean hasMatch(final String[] tag, final String pattern) {
+        for (final VariableField field : getVariableFields(tag)) {
+            if (field.find(pattern)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Sets the ID for this {@link Record}.
+     *
+     * @param id The ID for this {@link Record}
+     */
+    @Override
+    public void setId(final Long id) {
         this.id = id;
     }
 
+    /**
+     * Returns the ID for this {@link Record}.
+     *
+     * @return An ID for this {@link Record}
+     */
+    @Override
     public Long getId() {
         return id;
     }
 
+    /**
+     *  Logs an error message using the stated severity level.  Uses the values passed  
+     *  in id, field, and subfield to note the location of the error.
+     * 
+     * @param field - the tag of the field currently being processed
+     * @param subfield - the subfield tag of the subfield currently being processed
+     * @param severity - An indication of the relative severity of the error that was 
+     *                      encountered.
+     * @param message - A descriptive message about the error that was encountered.
+     */
+    @Override
+    public void addError(final String field, final String subfield, final int severity,
+            final String message) {
+        if (errors == null) {
+            errors = new LinkedList<MarcError>();
+        }
+        errors.add(new MarcError(field, subfield, severity, message));
+        if (severity > maxSeverity) {
+            maxSeverity = severity;
+        }
+    }
+
+    /**
+     *  Copies a List of errors into the current error handler
+     * 
+     * @param newErrors - A list of Errors.
+     */
+    @Override
+    public void addErrors(final List<MarcError> newErrors) {
+        if (newErrors == null || newErrors.isEmpty()) {
+            return;
+        }
+        if (errors == null) {
+            errors = new LinkedList<>();
+        }
+        for (final MarcError err : newErrors) {
+            errors.add(err);
+            if (err.severity > maxSeverity) {
+                maxSeverity = err.severity;
+            }
+        }
+    }
+
+    @Override
+    public boolean hasErrors() {
+        return errors != null && errors.size() > 0;
+    }
+
+    @Override
+    public List<MarcError> getErrors() {
+        return errors;
+    }
 }
