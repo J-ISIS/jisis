@@ -1107,7 +1107,7 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
             int index = j[k];
             assert (index >= 0 && index < luceneFields.size());
             String s = luceneFields.get(index).stringValue();
-            if (s.equals(previousKeys[k])) {
+            if (s.equals(previousKeys[k]) && !(hasUserHeadingFormat)) {
                 continue;
             }
             previousKeys[k] = s;
@@ -1267,6 +1267,13 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
                      * Make a dummy record with the result of the sort key fsts
                      */
                     Record dummyRecord = (Record) getDummyHeadingsRecord(iRec, sCombination);
+                    /**
+                     * bug fix 04/06/2019
+                     * If the mfn function is used in the heading format, the mfn was not set
+                     * in dummyRecord and therefore is equal to 0
+                     */
+                    dummyRecord.setMfn(mfn);
+                    
                     // GuiGlobal.output("Heading Dummy Record:" + dummyRecord.toString());
                     IContext context = null;
                     if (getOutputFormat().equals("HTML")) {
