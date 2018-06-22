@@ -1100,6 +1100,7 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
         IRecord dummyRecord = Record.createRecord();
         boolean hasUserHeadingFormat = hasUserHeadingFormat();
 
+        boolean sortKeyBreak = false;
         // Loop on the number of sort keys
         for (int k = 0; k < parsedSortKeys_.length; k++) {
             // Get the sort key value
@@ -1107,9 +1108,13 @@ final class PrintSortTopComponent extends TopComponent implements Observer {
             int index = j[k];
             assert (index >= 0 && index < luceneFields.size());
             String s = luceneFields.get(index).stringValue();
-            if (s.equals(previousKeys[k]) && !(hasUserHeadingFormat)) {
+            if (s.equals(previousKeys[k]) && !sortKeyBreak) {
                 continue;
             }
+            /**
+             * We have now a sort key break
+             */
+            sortKeyBreak = true;
             previousKeys[k] = s;
             List<ParsedFstEntry> parsedSortFstEntries
                 = parsedSortKeys_[k].parsedSortFstEntries_;
