@@ -272,10 +272,32 @@ public class JavaISIS extends ModuleInstall  {
         return DbServerService.getJIsisHome() + File.separator + "temp" ;
     }
        
-       public static boolean isJavaGE18() {
-          boolean b = Integer.parseInt(System.getProperty("java.version").split("\\.")[1]) >= 8;
-          return b;
-       }
+     public static boolean isJavaGE18() {
+        int iversion = getJavaVersion();
+        boolean b = iversion >= 8;
+        return b;
+    }
+       /**
+     * Returns the Java version as an int value.
+     * @return the Java version as an int value (8, 9, etc.)
+     * @since 12130
+     */
+    public static int getJavaVersion() {
+        String version = System.getProperty("java.version");
+        if (version.startsWith("1.")) {
+            version = version.substring(2);
+        }
+        // Allow these formats:
+        // 1.8.0_72-ea
+        // 9-ea
+        // 9
+        // 9.0.1
+        int dotPos = version.indexOf('.');
+        int dashPos = version.indexOf('-');
+        return Integer.parseInt(version.substring(0,
+                dotPos > -1 ? dotPos : dashPos > -1 ? dashPos : 1));
+    }
+
        
      public static void initSecurity() {
 

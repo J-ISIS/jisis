@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <attr name="Actions\Edit\org-netbeans-core-ui-sysopen-SystemOpenAction.instance\position" intvalue="200"/>
+    <attr name="Actions\Edit\org-openide-actions-CopyAction.instance\position" intvalue="300"/>
+    <attr name="Actions\Edit\org-openide-actions-CutAction.instance\position" intvalue="400"/>
+    <attr name="Actions\Edit\org-openide-actions-DeleteAction.instance\position" intvalue="500"/>
+    <attr name="Actions\Edit\org-openide-actions-FindAction.instance\position" intvalue="600"/>
+    <attr name="Actions\Edit\org-openide-actions-GotoAction.instance\position" intvalue="700"/>
+    <attr name="Actions\Edit\org-openide-actions-PasteAction.instance\position" intvalue="800"/>
+    <attr name="Actions\Edit\org-openide-actions-RedoAction.instance\position" intvalue="900"/>
+    <attr name="Actions\Edit\org-openide-actions-ReplaceAction.instance\position" intvalue="1000"/>
+    <attr name="Actions\Edit\org-openide-actions-UndoAction.instance\position" intvalue="1100"/>
+    <attr name="Actions\Edit\org-unesco-jisis-dataentry-DataEntryAction.instance\position" intvalue="187"/>
+    <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction-separatorAfter.instance\position" intvalue="382"/>
+    <attr name="Menu\Edit\DataEntryAction.shadow\position" intvalue="350"/>
+    <attr name="Menu\Edit\Separator1.instance\position" intvalue="900"/>
+    <attr name="Menu\Edit\Separator2.instance\position" intvalue="1400"/>
+    <attr name="Menu\Edit\Separator3.instance\position" intvalue="400"/>
+    <attr name="Menu\Edit\Separator3_1.instance\position" intvalue="375"/>
+    <attr name="Menu\Edit\org-netbeans-core-actions-JumpNextAction.shadow\position" intvalue="500"/>
+    <attr name="Menu\Edit\org-netbeans-core-actions-JumpPrevAction.shadow\position" intvalue="600"/>
+    <attr name="Menu\Edit\org-openide-actions-CopyAction.instance\position" intvalue="1100"/>
+    <attr name="Menu\Edit\org-openide-actions-CutAction.instance\position" intvalue="1000"/>
+    <attr name="Menu\Edit\org-openide-actions-DeleteAction.instance\position" intvalue="1300"/>
+    <attr name="Menu\Edit\org-openide-actions-FindAction.instance\position" intvalue="1500"/>
+    <attr name="Menu\Edit\org-openide-actions-PasteAction.instance\position" intvalue="1200"/>
+    <attr name="Menu\Edit\org-openide-actions-RedoAction.instance\position" intvalue="800"/>
+    <attr name="Menu\Edit\org-openide-actions-ReplaceAction.instance\position" intvalue="1600"/>
+    <attr name="Menu\Edit\org-openide-actions-UndoAction.instance\position" intvalue="700"/>
+    <attr name="Menu\Tools\org-unesco-jisis-database-explorer-separatorBefore.instance\position" intvalue="675"/>
+    <folder name="Actions">
+
+        <folder name="Edit">
+            <attr name="displayName" bundlevalue="org.unesco.jisis.datadefinition.Bundle_it_IT#Actions/Edit"/>
+            <file name="org-unesco-jisis-datadefinition-fdt-FDTEditAction.instance" url="org-unesco-jisis-datadefinition-fdt-FDTEditAction.instance">
+                <attr name="position" intvalue="100"/>
+            </file>
+            <file name="org-unesco-jisis-datadefinition-fst-FstEditAction.instance" url="org-unesco-jisis-datadefinition-fst-FstEditAction.instance">
+                <attr name="position" intvalue="150"/>
+            </file>
+            <file name="org-unesco-jisis-datadefinition-wks-WKSEditAction.instance" url="org-unesco-jisis-datadefinition-wks-WKSEditAction.instance">
+                <attr name="position" intvalue="175"/>
+            </file>
+
+            <file name="Actions/Edit/org-openide-actions-UndoAction.instance"/>
+            <file name="Actions/Edit/org-openide-actions-RedoAction.instance"/>
+
+            <file name="org-unesco-jisis-datadefinition-wksex-WKSEditExAction.instance" url="org-unesco-jisis-datadefinition-wksex-WKSEditExAction.instance">
+                <attr name="position" intvalue="185"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="org-unesco-jisis-datadefinition-wksex-WKSEditExAction.instance"/>
+
+
+        </folder>
+    </folder>
+    <folder name="Toolbars">
+        <folder name="QuickSearch_hidden"/>
+     </folder>
+    <folder name="Menu">
+        <folder name="Edit">
+            <attr name="displayName" bundlevalue="org.unesco.jisis.datadefinition.Bundle_it_IT#Menu/Edit"/>
+           <!-- attr name="SystemFileSystem.localizingBundle" stringvalue="org.unesco.jisis.datadefinition.Bundle_it_IT"/> -->
+            <file name="FDTEditAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/org-unesco-jisis-datadefinition-fdt-FDTEditAction.instance"/>
+                <attr name="position" intvalue="387"/>
+            </file>
+            <file name="FstEditAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/org-unesco-jisis-datadefinition-fst-FstEditAction.instance"/>
+                <attr name="position" intvalue="393"/>
+            </file>
+            <file name="WKSEditAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/org-unesco-jisis-datadefinition-wks-WKSEditAction.instance"/>
+                <attr name="position" intvalue="396"/>
+            </file>
+            <file name="org-unesco-jisis-datadefinition-wksex-WKSEditExAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/org-unesco-jisis-datadefinition-wksex-WKSEditExAction.instance"/>
+                <attr name="position" intvalue="648"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="WKSEditExAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/org-unesco-jisis-datadefinition-wksex-WKSEditExAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Shortcuts">
+       <file name="D-Z.shadow" url="D-Z.shadow">
+           <attr name="originalFile" stringvalue="Actions/Edit/org-openide-actions-UndoAction.instance"/>
+        </file>
+        <file name="D-Y.shadow" url="D-Y.shadow">
+           <attr name="originalFile" stringvalue="Actions/Edit/org-openide-actions-RedoAction.instance"/>
+        </file>
+    </folder>
+    <folder name="Services">
+        <folder name="JavaHelp">
+            <file name="datadefinition-helpset.xml" url="datadefinition-helpset.xml"/>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="FDTEditTopComponent.settings" url="FDTEditTopComponentSettings.xml"/>
+            <file name="FstEditTopComponent.settings" url="FstEditTopComponentSettings.xml"/>
+            <file name="WKSEditExTopComponent.settings" url="WKSEditExTopComponentSettings.xml"/>
+            <file name="WKSEditTopComponent.settings" url="WKSEditTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="FDTEditTopComponent.wstcref" url="FDTEditTopComponentWstcref.xml"/>
+                <file name="FstEditTopComponent.wstcref" url="FstEditTopComponentWstcref.xml"/>
+                <file name="WKSEditExTopComponent.wstcref" url="WKSEditExTopComponentWstcref.xml"/>
+                <file name="WKSEditTopComponent.wstcref" url="WKSEditTopComponentWstcref.xml"/>
+            </folder>
+            <folder name="explorer">
+                <file name="runtime.wstcref" url="runtimeWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>

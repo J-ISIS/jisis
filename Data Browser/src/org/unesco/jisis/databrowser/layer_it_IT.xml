@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <attr name="Menu\Database\org-unesco-jisis-mrudatabases-MRUDatabasesAction-separatorAfter.instance\position" intvalue="382"/>
+    <attr name="Menu\Database\position" intvalue="100"/>
+    <attr name="Menu\Edit\position" intvalue="400"/>
+    <attr name="Menu\File\position" intvalue="300"/>
+    <attr name="Menu\GoTo\position" intvalue="600"/>
+    <attr name="Menu\Help\position" intvalue="900"/>
+    <attr name="Menu\Tools\position" intvalue="700"/>
+    <attr name="Menu\View\position" intvalue="500"/>
+    <attr name="Menu\Window\position" intvalue="800"/>
+    <folder name="Actions">
+        <folder name="Browse">
+            <attr name="displayName" bundlevalue="org.unesco.jisis.databrowser.Bundle_it_IT#Actions/Browse"/>
+            <file name="org-unesco-jisis-databrowser-RecordDataBrowserAction.instance"/>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="Browse">
+            <attr name="displayName" bundlevalue="org.unesco.jisis.databrowser.Bundle_it_IT#Menu/Browse"/>
+            <attr name="position" intvalue="200"/>
+            <file name="RecordDataBrowserAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Browse/org-unesco-jisis-databrowser-RecordDataBrowserAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="RecordDataBrowserTopComponent.settings" url="RecordDataBrowserTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="RecordDataBrowserTopComponent.wstcref" url="RecordDataBrowserTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>
